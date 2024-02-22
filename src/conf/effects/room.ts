@@ -284,7 +284,15 @@ const publishVideo = (
   log(`publishVideo(${localRoomMember.id}, ${track.id})`);
 
   const stream = new LocalVideoStream(track);
-  localRoomMember.publish(stream);
+  localRoomMember.publish(stream, {
+    encodings:
+      localRoomMember.roomType === "sfu"
+        ? [
+            { scaleResolutionDownBy: 4, id: "low", maxBitrate: 100_000 },
+            { scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 },
+          ]
+        : [{ scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 }],
+  });
 };
 
 const subscribe = (
@@ -294,13 +302,20 @@ const subscribe = (
 ) => {
   log(`subscribe(${localRoomMember.id}, ${publication.id})`);
 
-  localRoomMember.subscribe(publication).catch((e) => {
-    switch (e.info.name) {
-      case "maxSubscribersExceededError":
-        showError(
-          "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
-        );
-        break;
-    }
-  });
+  localRoomMember
+    .subscribe(
+      publication,
+      publication.contentType === "video" && localRoomMember.roomType === "sfu"
+        ? { preferredEncodingId: "high" }
+        : undefined,
+    )
+    .catch((e) => {
+      switch (e.info.name) {
+        case "maxSubscribersExceededError":
+          showError(
+            "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
+          );
+          break;
+      }
+    });
 };
