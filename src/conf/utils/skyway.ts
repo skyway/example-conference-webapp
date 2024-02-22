@@ -21,7 +21,6 @@ export const initPeer = (forceTurn: boolean): Promise<Peer> => {
 
 export const getPeerConnectionFromSfuRoom = (
   room: SfuRoom
-): RTCPeerConnection => {
-  // @ts-ignore: to get private refs
-  return room._negotiator._pc;
+): RTCPeerConnection | null => {
+  return room.getPeerConnection();
 };

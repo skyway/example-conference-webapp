@@ -5,7 +5,7 @@ import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import Video from "../components/video";
 
-const PinnedStream: FunctionComponent<{}> = () => {
+const PinnedStream: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
   const { room } = store;

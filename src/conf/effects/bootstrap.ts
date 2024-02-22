@@ -1,4 +1,3 @@
-import { EffectCallback } from "react";
 import { toJS, reaction, observe } from "mobx";
 import debug from "debug";
 import {
@@ -13,10 +12,7 @@ import RootStore from "../stores";
 
 const log = debug("effect:bootstrap");
 
-export const checkRoomSetting = ({
-  ui,
-  room,
-}: RootStore): EffectCallback => () => {
+export const checkRoomSetting = ({ ui, room }: RootStore) => {
   log("checkRoomSetting()");
   const [, roomType, roomId] = location.hash.split("/");
   const params = new URLSearchParams(location.search);
@@ -54,11 +50,7 @@ export const checkRoomSetting = ({
   })();
 };
 
-export const initAudioDeviceAndClient = ({
-  ui,
-  client,
-  media,
-}: RootStore): EffectCallback => () => {
+export const initAudioDeviceAndClient = ({ ui, client, media }: RootStore) => {
   log("ensureAudioDevice()");
 
   (async () => {
@@ -118,7 +110,7 @@ export const listenStoreChanges = ({
   media,
   room,
   notification,
-}: RootStore): EffectCallback => () => {
+}: RootStore) => {
   log("listenStoreChanges()");
 
   const disposers = [
@@ -178,13 +170,12 @@ export const listenStoreChanges = ({
   return () => disposers.forEach((d) => d());
 };
 
-export const listenGlobalEvents = ({
-  media,
-  ui,
-}: RootStore): EffectCallback => () => {
+export const listenGlobalEvents = ({ media, ui }: RootStore) => {
   log("listenGlobalEvents()");
 
-  const reloadOnHashChange = () => location.reload(true);
+  const reloadOnHashChange = () => {
+    location.reload();
+  };
   const reloadOnDeviceAddOrRemoved = async () => {
     log("devicechange event fired");
     const { audioInDevices, videoInDevices } = await getUserDevices({
@@ -207,13 +198,13 @@ export const listenGlobalEvents = ({
       curAudioInDevices.length &&
       audioInDevices.length !== curAudioInDevices.length
     ) {
-      location.reload(true);
+      location.reload();
     }
     if (
       curVideoInDevices.length &&
       videoInDevices.length !== curVideoInDevices.length
     ) {
-      location.reload(true);
+      location.reload();
     }
   };
 

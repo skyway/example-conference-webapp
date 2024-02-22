@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FunctionComponent, SyntheticEvent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { fontSize, globalColors } from "../../shared/global-style";
 import { ClientBrowser } from "../utils/types";
 

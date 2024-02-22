@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FunctionComponent, ReactNode } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { globalColors, animation } from "../../shared/global-style";
 
 interface Props {

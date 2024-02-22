@@ -18,8 +18,8 @@ import RightMenu from "./components/right-menu";
 interface State {
   err: Error | null;
 }
-class App extends React.Component<{}, State> {
-  constructor(props: {}, state: State) {
+class App extends React.Component<Record<string, never>, State> {
+  constructor(props: Record<string, never>, state: State) {
     super(props, state);
     this.state = { err: null };
   }

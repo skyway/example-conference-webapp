@@ -1,15 +1,12 @@
 import * as React from "react";
-import { useContext, useCallback } from "react";
+import { useCallback } from "react";
 import { FunctionComponent } from "react";
 import { Observer } from "mobx-react";
-import { StoreContext } from "../contexts";
 import { IconButton } from "../components/icon";
 import { exitRoom } from "../effects/exit";
 
-export const ExitOpener: FunctionComponent<{}> = () => {
-  const store = useContext(StoreContext);
-
-  const onClickExitRoom = useCallback(exitRoom(), [store]);
+export const ExitOpener: FunctionComponent<Record<string, unknown>> = () => {
+  const onClickExitRoom = useCallback(() => exitRoom(), []);
 
   return (
     <Observer>

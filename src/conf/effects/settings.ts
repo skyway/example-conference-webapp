@@ -10,12 +10,12 @@ import { joinRoom } from "./room";
 
 const log = debug("effect:settings");
 
-export const changeDispName = ({ client }: RootStore) => (name: string) => {
+export const changeDispName = (name: string, { client }: RootStore) => {
   log("changeDispName()", `${client.displayName} => ${name}`);
   client.displayName = name;
 };
 
-export const enableUserVideo = ({ media, ui }: RootStore) => async () => {
+export const enableUserVideo = async ({ media, ui }: RootStore) => {
   log("enableUserVideo()");
 
   const { videoInDevices } = await getUserDevices({ video: true }).catch(
@@ -52,7 +52,7 @@ export const enableUserVideo = ({ media, ui }: RootStore) => async () => {
   log("video devices", devices.videoInDevices);
 };
 
-export const enableDisplayVideo = (store: RootStore) => async () => {
+export const enableDisplayVideo = async (store: RootStore) => {
   log("enableDisplayVideo()");
   const { media, ui, notification } = store;
 
@@ -71,7 +71,7 @@ export const enableDisplayVideo = (store: RootStore) => async () => {
     return;
   }
 
-  videoTrack.addEventListener("ended", disableDisplayVideo(store), {
+  videoTrack.addEventListener("ended", () => disableDisplayVideo(store), {
     once: true,
   });
 
@@ -80,18 +80,19 @@ export const enableDisplayVideo = (store: RootStore) => async () => {
   media.setVideoTrack(videoTrack, "display", videoTrack.label);
 };
 
-export const disableUserVideo = ({ media }: RootStore) => () => {
+export const disableUserVideo = ({ media }: RootStore) => {
   log("disableUserVideo()");
   media.deleteVideoTrack();
 };
 
-export const disableDisplayVideo = ({ media }: RootStore) => () => {
+export const disableDisplayVideo = ({ media }: RootStore) => {
   log("disableDisplayVideo()");
   media.deleteVideoTrack();
 };
 
-export const changeAudioDeviceId = ({ media, ui }: RootStore) => async (
-  deviceId: string
+export const changeAudioDeviceId = async (
+  deviceId: string,
+  { media, ui }: RootStore
 ) => {
   log("changeAudioDeviceId", deviceId);
 
@@ -101,8 +102,9 @@ export const changeAudioDeviceId = ({ media, ui }: RootStore) => async (
   });
   media.setAudioTrack(audioTrack, deviceId);
 };
-export const changeVideoDeviceId = ({ media, ui }: RootStore) => async (
-  deviceId: string
+export const changeVideoDeviceId = async (
+  deviceId: string,
+  { media, ui }: RootStore
 ) => {
   log("changeVideoDeviceId", deviceId);
 
@@ -115,22 +117,22 @@ export const changeVideoDeviceId = ({ media, ui }: RootStore) => async (
   media.setVideoTrack(videoTrack, "camera", deviceId);
 };
 
-export const toggleAudioMuted = ({ media }: RootStore) => () => {
+export const toggleAudioMuted = ({ media }: RootStore) => {
   log("toggleAudioMuted()");
   media.toggleMuted("audio");
 };
 
-export const toggleVideoMuted = ({ media }: RootStore) => () => {
+export const toggleVideoMuted = ({ media }: RootStore) => {
   log("toggleVideoMuted()");
   media.toggleMuted("video");
 };
 
-export const closeSettings = ({ ui }: RootStore) => () => {
+export const closeSettings = ({ ui }: RootStore) => {
   log("closeSettings()");
   ui.isSettingsOpen = false;
 };
 
-export const joinConference = (store: RootStore) => () => {
+export const joinConference = (store: RootStore) => {
   log("joinConference()");
   const { ui, room } = store;
 

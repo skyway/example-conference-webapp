@@ -6,7 +6,7 @@ import { StoreContext } from "../contexts";
 import NotificationLayout from "../components/notification-layout";
 import Toast from "../components/toast";
 
-const Notification: FunctionComponent<{}> = () => {
+const Notification: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
   const { notification } = store;

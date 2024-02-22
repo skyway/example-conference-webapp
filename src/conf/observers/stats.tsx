@@ -7,10 +7,10 @@ import { IconButton } from "../components/icon";
 import StatsLayout from "../components/stats-layout";
 import { openStats, closeStats } from "../effects/stats";
 
-export const StatsOpener: FunctionComponent<{}> = () => {
+export const StatsOpener: FunctionComponent<Record<string, unknown>> = () => {
   const store = useContext(StoreContext);
 
-  const onClickOpenStats = useCallback(openStats(store), [store]);
+  const onClickOpenStats = useCallback(() => openStats(store), [store]);
 
   return (
     <Observer>
@@ -19,10 +19,10 @@ export const StatsOpener: FunctionComponent<{}> = () => {
   );
 };
 
-export const Stats: FunctionComponent<{}> = () => {
+export const Stats: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
-  const onClickCloseStats = useCallback(closeStats(store), [store]);
+  const onClickCloseStats = useCallback(() => closeStats(store), [store]);
 
   const { ui, room } = store;
   return (

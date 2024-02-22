@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 
 interface Props {
   deviceId: string;

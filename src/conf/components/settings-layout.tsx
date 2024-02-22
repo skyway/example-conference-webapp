@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { VideoType, ClientBrowser } from "../utils/types";
 import { modalContentWidth } from "../utils/style";

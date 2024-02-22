@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { FunctionComponent } from "react";
 import { RoomStream } from "skyway-js";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { RoomStat } from "../utils/types";
 import { rightMenuWidth } from "../utils/style";

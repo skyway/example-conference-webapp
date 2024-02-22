@@ -18,10 +18,18 @@ interface Props {
 const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
   const store = useContext(StoreContext);
 
-  useEffect(checkRoomSetting(store), [store]);
-  useEffect(initAudioDeviceAndClient(store), [store]);
-  useEffect(listenStoreChanges(store), [store]);
-  useEffect(listenGlobalEvents(store), [store]);
+  useEffect(() => {
+    checkRoomSetting(store);
+  }, [store]);
+  useEffect(() => {
+    initAudioDeviceAndClient(store);
+  }, [store]);
+  useEffect(() => {
+    listenStoreChanges(store);
+  }, [store]);
+  useEffect(() => {
+    listenGlobalEvents(store);
+  }, [store]);
 
   const { ui, client, room, media } = store;
   return (

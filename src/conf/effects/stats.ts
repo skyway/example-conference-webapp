@@ -4,7 +4,7 @@ import RootStore from "../stores";
 
 const log = debug("effect:stats");
 
-export const openStats = ({ ui, room }: RootStore) => () => {
+export const openStats = ({ ui, room }: RootStore) => {
   log("openStats()");
   ui.isStatsOpen = true;
 
@@ -31,7 +31,7 @@ export const openStats = ({ ui, room }: RootStore) => () => {
   );
 };
 
-export const closeStats = ({ ui }: RootStore) => () => {
+export const closeStats = ({ ui }: RootStore) => {
   log("closeStats()");
   ui.isStatsOpen = false;
 };

@@ -40,11 +40,12 @@ const config = {
     },
   },
   devServer: {
-    contentBase: `${rootPath}/docs`,
-    watchContentBase: true,
+    static: {
+      directory: `${rootPath}/docs`,
+      watch: true,
+    },
     host: "0.0.0.0",
     port: 9000,
-    inline: false,
   },
 };
 

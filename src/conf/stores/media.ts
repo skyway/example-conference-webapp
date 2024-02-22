@@ -1,4 +1,4 @@
-import { decorate, observable, computed, action } from "mobx";
+import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
 import { UserDevices, VideoType } from "../utils/types";
 
@@ -14,10 +14,8 @@ class MediaStore {
   private videoTrack: MediaStreamTrack | null;
 
   constructor() {
-    // @ts-ignore: to type IObservableArray
-    this.audioInDevices = [];
-    // @ts-ignore: to type IObservableArray
-    this.videoInDevices = [];
+    this.audioInDevices = observable<MediaDeviceInfo>([]);
+    this.videoInDevices = observable<MediaDeviceInfo>([]);
     this.audioDeviceId = null;
     this.videoDeviceId = null;
     this.isVideoTrackMuted = false;
@@ -25,6 +23,29 @@ class MediaStore {
     this.videoType = null;
     this.audioTrack = null;
     this.videoTrack = null;
+
+    makeObservable<MediaStore, "audioTrack" | "videoTrack">(this, {
+      audioInDevices: observable.shallow,
+      videoInDevices: observable.shallow,
+      audioDeviceId: observable,
+      videoDeviceId: observable,
+      isAudioTrackMuted: observable,
+      isVideoTrackMuted: observable,
+      videoType: observable,
+      audioTrack: observable.ref,
+      videoTrack: observable.ref,
+      stat: computed,
+      isAudioEnabled: computed,
+      stream: computed,
+      setAudioTrack: action,
+      setVideoTrack: action,
+      releaseAudioDevice: action,
+      releaseVideoDevice: action,
+      deleteVideoTrack: action,
+      setAudioDevices: action,
+      setVideoDevices: action,
+      toggleMuted: action,
+    });
   }
 
   get isAudioEnabled(): boolean {
@@ -108,29 +129,5 @@ class MediaStore {
     }
   }
 }
-
-// @ts-ignore: to use private accessor
-decorate(MediaStore, {
-  audioInDevices: observable.shallow,
-  videoInDevices: observable.shallow,
-  audioDeviceId: observable,
-  videoDeviceId: observable,
-  isAudioTrackMuted: observable,
-  isVideoTrackMuted: observable,
-  videoType: observable,
-  audioTrack: observable.ref,
-  videoTrack: observable.ref,
-  stat: computed,
-  isAudioEnabled: computed,
-  stream: computed,
-  setAudioTrack: action,
-  setVideoTrack: action,
-  releaseAudioDevice: action,
-  releaseVideoDevice: action,
-  deleteVideoTrack: action,
-  setAudioDevices: action,
-  setVideoDevices: action,
-  toggleMuted: action,
-});
 
 export default MediaStore;

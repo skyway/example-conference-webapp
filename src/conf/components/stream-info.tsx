@@ -1,7 +1,7 @@
 import * as React from "react";
 import { memo, useEffect, useState } from "react";
 import { FunctionComponent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { ClientBrowser } from "../utils/types";
 import { globalColors } from "../../shared/global-style";
 

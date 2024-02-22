@@ -7,11 +7,19 @@ import { IconButton } from "../components/icon";
 import ReactionLayout from "../components/reaction-layout";
 import { toggleReaction, sendReaction } from "../effects/reaction";
 
-export const ReactionOpener: FunctionComponent<{}> = () => {
+export const ReactionOpener: FunctionComponent<
+  Record<string, unknown>
+> = () => {
   const store = useContext(StoreContext);
 
-  const onClickToggleReaction = useCallback(toggleReaction(store), [store]);
-  const onClickSendReaction = useCallback(sendReaction(store), [store]);
+  const onClickToggleReaction = useCallback(
+    () => toggleReaction(store),
+    [store]
+  );
+  const onClickSendReaction = useCallback(
+    (reaction: string) => sendReaction(reaction, store),
+    [store]
+  );
   const { ui } = store;
 
   return (

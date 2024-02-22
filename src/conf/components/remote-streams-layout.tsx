@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
 import { RoomStream } from "skyway-js";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 import { RoomStat } from "../utils/types";
 import { rightMenuWidth, rightMenuTogglerHeight } from "../utils/style";
 import RemoteStreamLayout from "./remote-stream-layout";
