@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState, FunctionComponent, ReactNode } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";

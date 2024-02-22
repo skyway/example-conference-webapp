@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useRef, useEffect, memo } from "react";
 import { FunctionComponent } from "react";
 import debug from "debug";

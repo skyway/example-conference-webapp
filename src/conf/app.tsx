@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Component } from "react";
 import Bootstrap from "./observers/bootstrap";
 import Settings from "./observers/settings";
 import Notification from "./observers/notification";
@@ -16,7 +16,7 @@ import RightMenu from "./components/right-menu";
 interface State {
   err: Error | null;
 }
-class App extends React.Component<Record<string, never>, State> {
+class App extends Component<Record<string, never>, State> {
   constructor(props: Record<string, never>, state: State) {
     super(props, state);
     this.state = { err: null };

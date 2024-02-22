@@ -1,4 +1,3 @@
-import * as React from "react";
 import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { RoomStat } from "../utils/types";

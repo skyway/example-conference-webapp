@@ -1,4 +1,3 @@
-import * as React from "react";
 import { FunctionComponent, ReactNode } from "react";
 import { css, keyframes } from "@emotion/react";
 import { zIndex } from "../utils/style";

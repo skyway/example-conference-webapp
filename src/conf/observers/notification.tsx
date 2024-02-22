@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useContext } from "react";
 import { FunctionComponent } from "react";
 import { Observer } from "mobx-react";

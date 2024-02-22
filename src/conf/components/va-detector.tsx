@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState, useEffect, memo } from "react";
 import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
