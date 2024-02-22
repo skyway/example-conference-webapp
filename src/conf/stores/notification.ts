@@ -11,7 +11,6 @@ class NotificationStore {
     makeObservable<NotificationStore, "show">(this, {
       items: observable.shallow,
       showInfo: action,
-      showReaction: action,
       showJoin: action,
       showLeave: action,
       show: action,
@@ -20,10 +19,6 @@ class NotificationStore {
 
   showInfo(text: string) {
     this.show("info", text, 1000);
-  }
-
-  showReaction(from: string, reaction: string) {
-    this.show("insert_emoticon", `${from}: ${reaction}`, 3000);
   }
 
   showJoin(name: string) {

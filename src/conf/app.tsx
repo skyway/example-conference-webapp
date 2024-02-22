@@ -2,7 +2,6 @@ import * as React from "react";
 import Bootstrap from "./observers/bootstrap";
 import Settings from "./observers/settings";
 import Notification from "./observers/notification";
-import { ReactionOpener } from "./observers/reaction";
 import { StatsOpener, Stats } from "./observers/stats";
 import { ExitOpener } from "./observers/exit";
 import PinnedStream from "./observers/pinned-stream";
@@ -43,11 +42,7 @@ class App extends React.Component<Record<string, never>, State> {
             <LocalStream />
           </LeftBottom>
           <RightMenu
-            openers={[
-              <ReactionOpener key="reaction" />,
-              <StatsOpener key="stats" />,
-              <ExitOpener key="exit" />,
-            ]}
+            openers={[<StatsOpener key="stats" />, <ExitOpener key="exit" />]}
           >
             <RemoteStreams />
           </RightMenu>

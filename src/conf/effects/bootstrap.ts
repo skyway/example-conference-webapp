@@ -157,12 +157,6 @@ export const listenStoreChanges = ({
       () => notification.showInfo("Your video was casted to everyone"),
     ),
     reaction(
-      () => room.myLastReaction,
-      (reaction) =>
-        reaction &&
-        notification.showInfo(`You reacted with ${reaction.reaction}`),
-    ),
-    reaction(
       () => client.displayName,
       (name) => {
         localStorage.setItem("SkyWayConf.dispName", name.trim());

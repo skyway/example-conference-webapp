@@ -1,5 +1,5 @@
 import { makeObservable, observable, computed, action } from "mobx";
-import { RoomInit, RoomStat, RoomReaction } from "../utils/types";
+import { RoomInit, RoomStat } from "../utils/types";
 import {
   Room,
   RemoteAudioStream,
@@ -20,7 +20,6 @@ class RoomStore {
   remoteAudioStreams: Map<string, RemoteAudioStream>;
   remoteVideoStreams: Map<string, RemoteVideoStream>;
   stats: Map<string, RoomStat>;
-  myLastReaction: RoomReaction | null;
   pinnedId: string | null;
   castRequestCount: number;
   rtcStats: WebRTCStats | null;
@@ -40,7 +39,6 @@ class RoomStore {
     this.remoteAudioStreams = new Map();
     this.remoteVideoStreams = new Map();
     this.stats = new Map();
-    this.myLastReaction = null;
     this.pinnedId = null;
     this.castRequestCount = 0;
     this.rtcStats = null;
@@ -53,7 +51,6 @@ class RoomStore {
       id: observable,
       streams: observable.shallow,
       stats: observable.shallow,
-      myLastReaction: observable.ref,
       pinnedId: observable,
       castRequestCount: observable,
       rtcStats: observable.ref,
@@ -90,11 +87,6 @@ class RoomStore {
     this.useH264 = useH264;
     this.peer = peer;
     this.isReady = true;
-  }
-
-  addReaction(from: string, reaction: string) {
-    // this triggers reaction to send reaction for remotes
-    this.myLastReaction = { from, reaction };
   }
 
   removeStream(peerId: string) {
