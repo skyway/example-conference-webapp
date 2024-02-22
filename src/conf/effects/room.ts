@@ -102,22 +102,69 @@ export const joinRoom = (store: RootStore) => {
       }
 
       // camera OR display was changed, not need to re-enter
+      const videoTracks = media.stream.getVideoTracks();
+      const videoPublications = localRoomMember.publications.filter(
+        (publication) => {
+          return publication.contentType === "video";
+        },
+      );
+      if (change.oldValue === null && change.newValue !== null) {
+        // video OFF => ON
+        videoTracks.forEach((track) => {
+          const stream = new LocalVideoStream(track);
+          localRoomMember.publish(stream);
+        });
+        return;
+      }
       if (change.oldValue !== null && change.newValue !== null) {
+        // video ON => ON (device change)
         log("just change video by replaceStream(), no need to re-enter");
-        confRoom.replaceStream(media.stream);
+        const track = videoTracks[0];
+        const stream = new LocalVideoStream(track);
+        videoPublications[0].replaceStream(stream);
+        return;
+      }
+      if (change.oldValue !== null && change.newValue === null) {
+        // video ON => OFF
+        localRoomMember.unpublish(videoPublications[0].id);
+        return;
+      }
+    }),
+    observe(media, "audioDeviceId", (change) => {
+      log("observe(media.audioDeviceId)");
+      if (!room.isJoined) {
+        log("do nothing before room join");
         return;
       }
 
-      // camera OR display was enabled, need to re-enter
-      // camera OR display was disabled, need to re-enter
-      log("need to re-enter the room to add/remove video");
-      if (room.room === null) {
-        throw ui.showError(new Error("Room is null!"));
+      // camera OR display was changed, not need to re-enter
+      const audioTracks = media.stream.getAudioTracks();
+      const audioPublications = localRoomMember.publications.filter(
+        (publication) => {
+          return publication.contentType === "audio";
+        },
+      );
+      if (change.oldValue === null && change.newValue !== null) {
+        // audio OFF => ON
+        audioTracks.forEach((track) => {
+          const stream = new LocalAudioStream(track);
+          localRoomMember.publish(stream);
+        });
+        return;
       }
-      // force close the room, triggers re-entering
-      ui.isReEntering = true;
-      room.room.close();
-      notification.showInfo("Re-enter the room to add/remove video");
+      if (change.oldValue !== null && change.newValue !== null) {
+        // audio ON => ON (device change)
+        log("just change audio by replaceStream(), no need to re-enter");
+        const track = audioTracks[0];
+        const stream = new LocalAudioStream(track);
+        audioPublications[0].replaceStream(stream);
+        return;
+      }
+      if (change.oldValue !== null && change.newValue === null) {
+        // audio ON => OFF
+        localRoomMember.unpublish(audioPublications[0].id);
+        return;
+      }
     }),
   ];
 
