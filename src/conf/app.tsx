@@ -1,4 +1,3 @@
-import { Component } from "react";
 import Bootstrap from "./observers/bootstrap";
 import Settings from "./observers/settings";
 import Notification from "./observers/notification";
@@ -12,26 +11,19 @@ import ErrorDetail from "./components/error-detail";
 import Main from "./components/main";
 import LeftBottom from "./components/left-bottom";
 import RightMenu from "./components/right-menu";
+import { ErrorBoundary } from "react-error-boundary";
 
-interface State {
-  err: Error | null;
-}
-class App extends Component<Record<string, never>, State> {
-  constructor(props: Record<string, never>, state: State) {
-    super(props, state);
-    this.state = { err: null };
+function App() {
+  function fallbackRender({ error }: { error: Error }) {
+    return (
+      <Layout>
+        <ErrorDetail error={error} />
+      </Layout>
+    );
   }
 
-  render() {
-    if (this.state.err !== null) {
-      return (
-        <Layout>
-          <ErrorDetail error={this.state.err} />
-        </Layout>
-      );
-    }
-
-    return (
+  return (
+    <ErrorBoundary fallbackRender={fallbackRender}>
       <Layout>
         <Bootstrap>
           {/* Base Layer */}
@@ -53,12 +45,8 @@ class App extends Component<Record<string, never>, State> {
           <Notification />
         </Bootstrap>
       </Layout>
-    );
-  }
-
-  componentDidCatch(err: Error) {
-    this.setState({ err });
-  }
+    </ErrorBoundary>
+  );
 }
 
 export default App;
