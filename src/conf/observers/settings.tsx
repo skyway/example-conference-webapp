@@ -1,4 +1,4 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import SettingsLayout from "../components/settings-layout";
@@ -72,7 +72,7 @@ function Settings() {
     <Observer>
       {() => {
         if (!ui.isSettingsOpen) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return (

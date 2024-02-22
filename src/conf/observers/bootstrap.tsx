@@ -1,4 +1,4 @@
-import { useContext, useEffect, ReactNode } from "react";
+import { useContext, useEffect, ReactNode, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import {
@@ -34,16 +34,16 @@ function Bootstrap({ children }: Props) {
 
         if (!(client.isReady && room.isReady && media.isAudioEnabled)) {
           return (
-            <>
+            <Fragment>
               {/* Base Layer */}
               <Loader />
               {/* Modal Layer */}
               <Notification />
-            </>
+            </Fragment>
           );
         }
 
-        return <>{children}</>;
+        return <Fragment>{children}</Fragment>;
       }}
     </Observer>
   );

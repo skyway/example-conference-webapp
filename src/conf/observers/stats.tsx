@@ -1,4 +1,4 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import { IconButton } from "../components/icon";
@@ -27,7 +27,7 @@ export function Stats() {
     <Observer>
       {() => {
         if (!ui.isStatsOpen) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return (

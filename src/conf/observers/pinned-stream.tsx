@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import Video from "../components/video";
@@ -11,7 +11,7 @@ function PinnedStream() {
     <Observer>
       {() => {
         if (room.pinnedStream === null) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return <Video stream={room.pinnedStream} isVideoOnly={true} />;

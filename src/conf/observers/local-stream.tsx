@@ -1,4 +1,4 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import LocalStreamLayout from "../components/local-stream-layout";
@@ -28,7 +28,7 @@ function LocalStream() {
     <Observer>
       {() => {
         if (ui.isSettingsOpen) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return (

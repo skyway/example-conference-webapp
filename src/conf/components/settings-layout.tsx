@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { VideoType, ClientBrowser } from "../utils/types";
@@ -88,7 +89,7 @@ function SettingsLayout({
               displayName={`v${browser.version}`}
               browser={browser}
               controllers={
-                <>
+                <Fragment>
                   {videoType === null ? null : (
                     <IconButton
                       name={isVideoTrackMuted ? "videocam_off" : "videocam"}
@@ -101,7 +102,7 @@ function SettingsLayout({
                     title={isAudioTrackMuted ? "Unmute audio" : "Mute audio"}
                     onClick={onClickToggleAudioMuted}
                   />
-                </>
+                </Fragment>
               }
             />
           </div>
@@ -126,7 +127,7 @@ function SettingsLayout({
           {hasUserVideoDevice ? (
             <SettingsItemDevice label="CAMERA">
               {videoType === "camera" ? (
-                <>
+                <Fragment>
                   <SettingsDeviceToggler
                     label="Disable"
                     onClick={onClickDisableUserVideo}
@@ -143,7 +144,7 @@ function SettingsLayout({
                     onChangeVideoEffect={onChangeVideoEffect}
                     canUseVideoEffect={canUseBlurOrVirtualBackground()}
                   />
-                </>
+                </Fragment>
               ) : (
                 <SettingsDeviceToggler
                   label="Enable"
@@ -155,7 +156,7 @@ function SettingsLayout({
           {hasGetDisplayMedia ? (
             <SettingsItemDevice label="DISPLAY">
               {videoType === "display" ? (
-                <>
+                <Fragment>
                   <SettingsDeviceToggler
                     label="Disable"
                     onClick={onClickDisableDisplayVideo}
@@ -164,7 +165,7 @@ function SettingsLayout({
                     label="Use another dispaly"
                     onClick={onClickEnableDisplayVideo}
                   />
-                </>
+                </Fragment>
               ) : (
                 <SettingsDeviceToggler
                   label="Enable"
@@ -181,10 +182,10 @@ function SettingsLayout({
             onClick={isJoined ? onClickCloseSettings : onClickJoinConference}
             disabled={!isDisplayNameValid}
           >
-            <>
+            <Fragment>
               <Icon name={isJoined ? "done" : "meeting_room"} />
               <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
-            </>
+            </Fragment>
           </button>
         </div>
       </div>

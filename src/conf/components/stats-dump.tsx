@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { css } from "@emotion/react";
 import { WebRTCStats } from "@skyway-sdk/room";
 
@@ -11,7 +11,7 @@ function StatsDump({ rtcStats }: Props) {
     rtcStats === null ? null : filterStats(rtcStats, searchKey.trim());
 
   return (
-    <>
+    <Fragment>
       <input
         type="text"
         placeholder="filter stat reports"
@@ -28,7 +28,7 @@ function StatsDump({ rtcStats }: Props) {
               2,
             )}`}
       </pre>
-    </>
+    </Fragment>
   );
 }
 

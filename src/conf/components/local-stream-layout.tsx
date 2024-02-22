@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { ClientBrowser, VideoType } from "../utils/types";
@@ -91,7 +91,7 @@ function LocalStreamLayout({
             displayName={displayName}
             browser={browser}
             controllers={
-              <>
+              <Fragment>
                 {videoType === null ? null : (
                   <IconButton
                     name={isVideoTrackMuted ? "videocam_off" : "videocam"}
@@ -104,7 +104,7 @@ function LocalStreamLayout({
                   title={isAudioTrackMuted ? "Unmute audio" : "Mute audio"}
                   onClick={onClickToggleAudioMuted}
                 />
-              </>
+              </Fragment>
             }
           />
         </div>
