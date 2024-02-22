@@ -11,12 +11,14 @@ import {
   enableDisplayVideo,
   disableDisplayVideo,
   changeVideoDeviceId,
+  changeVideoEffect,
   changeAudioDeviceId,
   closeSettings,
   joinConference,
   toggleVideoMuted,
   toggleAudioMuted,
 } from "../effects/settings";
+import { VideoEffectId } from "../utils/types";
 
 const Settings: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
@@ -43,6 +45,10 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
   );
   const onChangeVideoDeviceId = useCallback(
     (deviceId: string) => changeVideoDeviceId(deviceId, store),
+    [store],
+  );
+  const onChangeVideoEffect = useCallback(
+    (effectId: VideoEffectId) => changeVideoEffect(effectId, store),
     [store],
   );
   const onChangeAudioDeviceId = useCallback(
@@ -85,10 +91,12 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
             onClickEnableDisplayVideo={onClickEnableDisplayVideo}
             onClickDisableDisplayVideo={onClickDisableDisplayVideo}
             videoDeviceId={media.videoDeviceId || ""}
+            videoEffectId={media.videoEffectId || ""}
             audioDeviceId={media.audioDeviceId || ""}
             videoInDevices={media.videoInDevices.slice()}
             audioInDevices={media.audioInDevices.slice()}
             onChangeVideoDeviceId={onChangeVideoDeviceId}
+            onChangeVideoEffect={onChangeVideoEffect}
             onChangeAudioDeviceId={onChangeAudioDeviceId}
             isVideoTrackMuted={media.isVideoTrackMuted}
             isAudioTrackMuted={media.isAudioTrackMuted}

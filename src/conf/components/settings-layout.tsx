@@ -12,8 +12,11 @@ import SettingsNameEdit from "./settings-name-edit";
 import {
   SettingsDeviceSelector,
   SettingsDeviceToggler,
+  SettingsVideoEffectSelector,
 } from "./settings-device-selector";
 import StreamController from "./stream-controller";
+
+import { canUseBlurOrVirtualBackground } from "../utils/webrtc";
 
 interface Props {
   stream: MediaStream;
@@ -25,12 +28,14 @@ interface Props {
   isVideoTrackMuted: boolean;
   isAudioTrackMuted: boolean;
   videoDeviceId: string;
+  videoEffectId: string;
   audioDeviceId: string;
   videoInDevices: MediaDeviceInfo[];
   audioInDevices: MediaDeviceInfo[];
   isJoined: boolean;
   isDisplayNameValid: boolean;
   onChangeVideoDeviceId: (deviceId: string) => void;
+  onChangeVideoEffect: (effectId: string) => void;
   onChangeAudioDeviceId: (deviceId: string) => void;
   onClickToggleVideoMuted: () => void;
   onClickToggleAudioMuted: () => void;
@@ -52,12 +57,14 @@ const SettingsLayout: FunctionComponent<Props> = ({
   isVideoTrackMuted,
   isAudioTrackMuted,
   videoDeviceId,
+  videoEffectId,
   audioDeviceId,
   videoInDevices,
   audioInDevices,
   isJoined,
   isDisplayNameValid,
   onChangeVideoDeviceId,
+  onChangeVideoEffect,
   onChangeAudioDeviceId,
   onClickToggleVideoMuted,
   onClickToggleAudioMuted,
@@ -129,6 +136,13 @@ const SettingsLayout: FunctionComponent<Props> = ({
                   deviceId={videoDeviceId || ""}
                   inDevices={videoInDevices}
                   onChangeDeviceId={onChangeVideoDeviceId}
+                />
+                <div></div>
+                <div>Effect</div>
+                <SettingsVideoEffectSelector
+                  effectId={videoEffectId || ""}
+                  onChangeVideoEffect={onChangeVideoEffect}
+                  canUseVideoEffect={canUseBlurOrVirtualBackground()}
                 />
               </>
             ) : (

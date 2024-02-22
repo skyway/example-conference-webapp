@@ -1,5 +1,6 @@
 import debug from "debug";
 import RootStore from "../stores";
+import { VideoEffectId } from "../utils/types";
 import {
   getUserDevices,
   getUserVideoTrack,
@@ -35,13 +36,21 @@ export const enableUserVideo = async ({ media, ui }: RootStore) => {
 
   // keep video track
   const [{ deviceId }] = videoInDevices;
-  const videoTrack = await getUserVideoTrack(deviceId).catch((err) => {
+  const videoTrack = await getUserVideoTrack(
+    deviceId,
+    media.videoEffectId ?? "none",
+  ).catch((err) => {
     throw ui.showError(err);
   });
 
   media.releaseVideoDevice();
   // may trigger replaceStream()
-  media.setVideoTrack(videoTrack, "camera", deviceId);
+  media.setVideoTrack(
+    videoTrack,
+    "camera",
+    deviceId,
+    media.videoEffectId ?? "none",
+  );
 
   // and get valid labels...
   const devices = await getUserDevices({ video: true }).catch((err) => {
@@ -77,7 +86,7 @@ export const enableDisplayVideo = async (store: RootStore) => {
 
   media.releaseVideoDevice();
   // may trigger replaceStream()
-  media.setVideoTrack(videoTrack, "display", videoTrack.label);
+  media.setVideoTrack(videoTrack, "display", videoTrack.label, "none");
 };
 
 export const disableUserVideo = ({ media }: RootStore) => {
@@ -111,10 +120,41 @@ export const changeVideoDeviceId = async (
   // release current device first
   media.releaseVideoDevice();
   // then get another device, otherwise some Android will crash
-  const videoTrack = await getUserVideoTrack(deviceId).catch((err) => {
+  const videoTrack = await getUserVideoTrack(
+    deviceId,
+    media.videoEffectId ?? "none",
+  ).catch((err) => {
     throw ui.showError(err);
   });
-  media.setVideoTrack(videoTrack, "camera", deviceId);
+  media.setVideoTrack(
+    videoTrack,
+    "camera",
+    deviceId,
+    media.videoEffectId ?? "none",
+  );
+};
+
+export const changeVideoEffect = async (
+  effectId: VideoEffectId,
+  { media, ui }: RootStore,
+) => {
+  log("changeVideoEffect", effectId);
+
+  // release current device first
+  media.releaseVideoDevice();
+  // then get another device, otherwise some Android will crash
+  const videoTrack = await getUserVideoTrack(
+    media.videoDeviceId ?? "",
+    effectId,
+  ).catch((err) => {
+    throw ui.showError(err);
+  });
+  media.setVideoTrack(
+    videoTrack,
+    "camera",
+    media.videoDeviceId ?? "",
+    effectId,
+  );
 };
 
 export const toggleAudioMuted = ({ media }: RootStore) => {

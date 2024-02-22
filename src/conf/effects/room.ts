@@ -113,6 +113,39 @@ export const joinRoom = async (store: RootStore) => {
         return;
       }
     }),
+    observe(media, "videoEffectId", (change) => {
+      log("observe(media.videoEffectId)");
+      if (!room.isJoined) {
+        log("do nothing before room join");
+        return;
+      }
+
+      // camera OR display was changed, not need to re-enter
+      const videoTracks = media.stream.getVideoTracks();
+      const videoPublications = localRoomMember.publications.filter(
+        (publication) => {
+          return publication.contentType === "video";
+        },
+      );
+      if (change.oldValue === null && change.newValue !== null) {
+        // video OFF => ON
+        // - 処理はvideoDeviceIdのobserve側に任せる
+        return;
+      }
+      if (change.oldValue !== null && change.newValue !== null) {
+        // video ON => ON (device change)
+        log("just change video by replaceStream(), no need to re-enter");
+        const track = videoTracks[0];
+        const stream = new LocalVideoStream(track);
+        videoPublications[0].replaceStream(stream);
+        return;
+      }
+      if (change.oldValue !== null && change.newValue === null) {
+        // video ON => OFF
+        // - 処理はvideoDeviceIdのobserve側に任せる
+        return;
+      }
+    }),
     observe(media, "audioDeviceId", (change) => {
       log("observe(media.audioDeviceId)");
       if (!room.isJoined) {

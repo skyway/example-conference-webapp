@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
+import { VideoEffects } from "../utils/types";
 
 interface Props {
   deviceId: string;
@@ -38,6 +39,32 @@ export const SettingsDeviceToggler: FunctionComponent<TogglerProps> = ({
   <button css={formStyle} disabled={disabled ? true : false} onClick={onClick}>
     {label}
   </button>
+);
+
+interface VideoEffectProps {
+  effectId: string;
+  onChangeVideoEffect: (effectId: string) => void;
+  canUseVideoEffect: boolean;
+}
+export const SettingsVideoEffectSelector: FunctionComponent<
+  VideoEffectProps
+> = ({
+  effectId,
+  onChangeVideoEffect,
+  canUseVideoEffect,
+}: VideoEffectProps) => (
+  <select
+    value={effectId || ""}
+    onChange={(ev) => onChangeVideoEffect(ev.target.value)}
+    disabled={!canUseVideoEffect}
+    css={formStyle}
+  >
+    {Object.keys(VideoEffects).map((effectId) => (
+      <option key={effectId} value={effectId}>
+        {VideoEffects[effectId].label}
+      </option>
+    ))}
+  </select>
 );
 
 const formStyle = css({
