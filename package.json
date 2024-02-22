@@ -44,8 +44,7 @@
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "skyway-js": "^4.4.5"
+    "react-dom": "^18.2.0"
   },
   "babel": {
     "presets": [
