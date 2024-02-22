@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "skyway-conference-dev",
-  "version": "3.0.1",
+  "name": "skyway-example-conference",
+  "version": "1.0.0",
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --mode=production",
