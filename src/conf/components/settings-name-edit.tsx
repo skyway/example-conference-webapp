@@ -5,22 +5,22 @@ import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 
 interface Props {
-  defaultDispName: string;
+  defaultDisplayName: string;
   isInvalid: boolean;
-  onChangeDispName: (name: string) => void;
+  onChangeDisplayName: (name: string) => void;
 }
 const SettingsNameEdit: FunctionComponent<Props> = ({
-  defaultDispName,
+  defaultDisplayName,
   isInvalid,
-  onChangeDispName,
+  onChangeDisplayName,
 }: Props) => {
-  const [dispName, setDispName] = useState(defaultDispName);
+  const [displayName, setDisplayName] = useState(defaultDisplayName);
 
   return (
     <div>
       <input
         type="text"
-        value={dispName}
+        value={displayName}
         maxLength={10}
         placeholder="Enter your name"
         onChange={(ev) => {
@@ -29,8 +29,8 @@ const SettingsNameEdit: FunctionComponent<Props> = ({
             return;
           }
           const name = ev.target.value;
-          setDispName(name);
-          onChangeDispName(name);
+          setDisplayName(name);
+          onChangeDisplayName(name);
         }}
         css={isInvalid ? [nameStyle, invalidStyle] : nameStyle}
       />

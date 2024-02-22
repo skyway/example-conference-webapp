@@ -10,8 +10,8 @@ import { joinRoom } from "./room";
 
 const log = debug("effect:settings");
 
-export const changeDispName = (name: string, { client }: RootStore) => {
-  log("changeDispName()", `${client.displayName} => ${name}`);
+export const changeDisplayName = (name: string, { client }: RootStore) => {
+  log("changeDisplayName()", `${client.displayName} => ${name}`);
   client.displayName = name;
 };
 

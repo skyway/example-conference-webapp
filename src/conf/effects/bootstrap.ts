@@ -146,7 +146,7 @@ export const initAudioDeviceAndClient = ({ ui, client, media }: RootStore) => {
       hasUserVideoDevice: videoInDevices.length !== 0,
       hasGetDisplayMedia:
         typeof navigator.mediaDevices.getDisplayMedia === "function",
-      name: (localStorage.getItem("SkyWayConf.dispName") || "").trim(),
+      name: (localStorage.getItem("SkyWayConf.displayName") || "").trim(),
     });
     log("client loaded", toJS(client));
   })();
@@ -201,7 +201,7 @@ export const listenStoreChanges = ({
     reaction(
       () => client.displayName,
       (name) => {
-        localStorage.setItem("SkyWayConf.dispName", name.trim());
+        localStorage.setItem("SkyWayConf.displayName", name.trim());
         notification.showInfo("Display name saved");
       },
       { delay: 2000 },

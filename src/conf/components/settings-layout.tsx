@@ -17,7 +17,7 @@ import StreamController from "./stream-controller";
 
 interface Props {
   stream: MediaStream;
-  defaultDispName: string;
+  defaultDisplayName: string;
   browser: ClientBrowser;
   hasGetDisplayMedia: boolean;
   hasUserVideoDevice: boolean;
@@ -38,13 +38,13 @@ interface Props {
   onClickDisableUserVideo: () => void;
   onClickEnableDisplayVideo: () => void;
   onClickDisableDisplayVideo: () => void;
-  onChangeDispName: (name: string) => void;
+  onChangeDisplayName: (name: string) => void;
   onClickCloseSettings: () => void;
   onClickJoinConference: () => void;
 }
 const SettingsLayout: FunctionComponent<Props> = ({
   stream,
-  defaultDispName,
+  defaultDisplayName,
   browser,
   hasGetDisplayMedia,
   hasUserVideoDevice,
@@ -65,7 +65,7 @@ const SettingsLayout: FunctionComponent<Props> = ({
   onClickDisableUserVideo,
   onClickEnableDisplayVideo,
   onClickDisableDisplayVideo,
-  onChangeDispName,
+  onChangeDisplayName,
   onClickCloseSettings,
   onClickJoinConference,
 }: Props) => (
@@ -104,9 +104,9 @@ const SettingsLayout: FunctionComponent<Props> = ({
       <div css={settingsStyle}>
         <SettingsItemName label="NAME">
           <SettingsNameEdit
-            defaultDispName={defaultDispName}
+            defaultDisplayName={defaultDisplayName}
             isInvalid={!isDisplayNameValid}
-            onChangeDispName={onChangeDispName}
+            onChangeDisplayName={onChangeDisplayName}
           />
         </SettingsItemName>
         <SettingsItemDevice label="MIC.">
