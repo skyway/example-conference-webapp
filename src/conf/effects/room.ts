@@ -143,12 +143,15 @@ export const joinRoom = (store: RootStore) => {
     }),
   ];
 
+  const showError = (errorMessage: string) =>
+    notification.showError(errorMessage);
+
   // auto subscribe設定
   confRoom.onStreamPublished.add(({ publication }) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("onStreamPublished", publication);
-    subscribe(localRoomMember, publication, notification.showError);
+    subscribe(localRoomMember, publication, showError);
   });
 
   // Subscribed時の対応
@@ -253,7 +256,7 @@ export const joinRoom = (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("subscribe published remote stream", publication);
-    subscribe(localRoomMember, publication, notification.showError);
+    subscribe(localRoomMember, publication, showError);
   });
 };
 
