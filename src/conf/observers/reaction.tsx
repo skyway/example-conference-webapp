@@ -14,11 +14,11 @@ export const ReactionOpener: FunctionComponent<
 
   const onClickToggleReaction = useCallback(
     () => toggleReaction(store),
-    [store]
+    [store],
   );
   const onClickSendReaction = useCallback(
     (reaction: string) => sendReaction(reaction, store),
-    [store]
+    [store],
   );
   const { ui } = store;
 

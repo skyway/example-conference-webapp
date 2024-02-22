@@ -26,7 +26,7 @@ const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
           : `${filteredStats.size} report(s) found.\n${JSON.stringify(
               filteredStats.reports,
               null,
-              2
+              2,
             )}`}
       </pre>
     </>

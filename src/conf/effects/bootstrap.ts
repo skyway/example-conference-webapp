@@ -19,14 +19,14 @@ export const checkRoomSetting = ({ ui, room }: RootStore) => {
 
   if (!isValidRoomType(roomType)) {
     throw ui.showError(
-      new Error("Invalid room type! it should be `sfu` or `mesh`.")
+      new Error("Invalid room type! it should be `sfu` or `mesh`."),
     );
   }
   if (!isValidRoomId(roomId)) {
     throw ui.showError(
       new Error(
-        `Invalid room name! it should be match \`${roomIdRe.toString()}\`.`
-      )
+        `Invalid room name! it should be match \`${roomIdRe.toString()}\`.`,
+      ),
     );
   }
 
@@ -42,7 +42,7 @@ export const checkRoomSetting = ({ ui, room }: RootStore) => {
         id: roomId,
         useH264: params.has("h264"),
       },
-      peer
+      peer,
     );
 
     log(`room: ${roomType}/${roomId}`);
@@ -76,7 +76,7 @@ export const initAudioDeviceAndClient = ({ ui, client, media }: RootStore) => {
     log(
       "%s audio + %s video builtin devices are found",
       audioInDevices.length,
-      videoInDevices.length
+      videoInDevices.length,
     );
 
     // keep audio track
@@ -117,17 +117,17 @@ export const listenStoreChanges = ({
     reaction(
       () => room.isJoined,
       (isJoined) =>
-        isJoined && notification.showInfo(`You joined the room ${room.name}`)
+        isJoined && notification.showInfo(`You joined the room ${room.name}`),
     ),
     reaction(
       () => media.isAudioTrackMuted,
       (muted) =>
-        notification.showInfo(`Mic input was ${muted ? "muted" : "unmuted"}`)
+        notification.showInfo(`Mic input was ${muted ? "muted" : "unmuted"}`),
     ),
     reaction(
       () => media.isVideoTrackMuted,
       (muted) =>
-        notification.showInfo(`Video was ${muted ? "muted" : "unmuted"}`)
+        notification.showInfo(`Video was ${muted ? "muted" : "unmuted"}`),
     ),
     observe(media, "audioDeviceId", (change) => {
       if (change.oldValue === null) {
@@ -149,13 +149,13 @@ export const listenStoreChanges = ({
     }),
     reaction(
       () => room.castRequestCount,
-      () => notification.showInfo("Your video was casted to everyone")
+      () => notification.showInfo("Your video was casted to everyone"),
     ),
     reaction(
       () => room.myLastReaction,
       (reaction) =>
         reaction &&
-        notification.showInfo(`You reacted with ${reaction.reaction}`)
+        notification.showInfo(`You reacted with ${reaction.reaction}`),
     ),
     reaction(
       () => client.displayName,
@@ -163,7 +163,7 @@ export const listenStoreChanges = ({
         localStorage.setItem("SkyWayConf.dispName", name.trim());
         notification.showInfo("Display name saved");
       },
-      { delay: 2000 }
+      { delay: 2000 },
     ),
   ];
 
@@ -212,7 +212,7 @@ export const listenGlobalEvents = ({ media, ui }: RootStore) => {
   navigator.mediaDevices.addEventListener(
     "devicechange",
     reloadOnDeviceAddOrRemoved,
-    false
+    false,
   );
 
   return () => {
@@ -220,7 +220,7 @@ export const listenGlobalEvents = ({ media, ui }: RootStore) => {
     window.removeEventListener("hashchange", reloadOnHashChange);
     navigator.mediaDevices.removeEventListener(
       "devicechange",
-      reloadOnDeviceAddOrRemoved
+      reloadOnDeviceAddOrRemoved,
     );
   };
 };

@@ -17,6 +17,6 @@ const log = debug("main");
       <Global styles={globalStyle} />
       <App />
     </React.StrictMode>,
-    document.getElementById("app-root")
+    document.getElementById("app-root"),
   );
 })().catch((err) => console.error(err));

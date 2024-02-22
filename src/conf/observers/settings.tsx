@@ -23,44 +23,44 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
 
   const onChangeDispName = useCallback(
     (name: string) => changeDispName(name, store),
-    [store]
+    [store],
   );
   const onClickEnableUserVideo = useCallback(
     () => enableUserVideo(store),
-    [store]
+    [store],
   );
   const onClickDisableUserVideo = useCallback(
     () => disableUserVideo(store),
-    [store]
+    [store],
   );
   const onClickEnableDisplayVideo = useCallback(
     () => enableDisplayVideo(store),
-    [store]
+    [store],
   );
   const onClickDisableDisplayVideo = useCallback(
     () => disableDisplayVideo(store),
-    [store]
+    [store],
   );
   const onChangeVideoDeviceId = useCallback(
     (deviceId: string) => changeVideoDeviceId(deviceId, store),
-    [store]
+    [store],
   );
   const onChangeAudioDeviceId = useCallback(
     (deviceId: string) => changeAudioDeviceId(deviceId, store),
-    [store]
+    [store],
   );
   const onClickJoinConference = useCallback(
     () => joinConference(store),
-    [store]
+    [store],
   );
   const onClickCloseSettings = useCallback(() => closeSettings(store), [store]);
   const onClickToggleAudioMuted = useCallback(
     () => toggleAudioMuted(store),
-    [store]
+    [store],
   );
   const onClickToggleVideoMuted = useCallback(
     () => toggleVideoMuted(store),
-    [store]
+    [store],
   );
 
   const { ui, media, room, client } = store;

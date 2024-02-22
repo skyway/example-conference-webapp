@@ -11,7 +11,7 @@ const RemoteStreams: FunctionComponent<Record<string, never>> = () => {
 
   const onClickSetPinned = useCallback(
     (id: string) => setPinned(id, store),
-    [store]
+    [store],
   );
 
   const { room } = store;

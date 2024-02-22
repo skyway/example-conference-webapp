@@ -137,7 +137,7 @@ class RoomStore {
     }
 
     [...this.streams.values()].forEach((stream) =>
-      stream.getTracks().forEach((track) => track.stop())
+      stream.getTracks().forEach((track) => track.stop()),
     );
     this.streams.clear();
     this.stats.clear();

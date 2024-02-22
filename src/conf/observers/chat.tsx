@@ -25,7 +25,7 @@ export const Chat: FunctionComponent<Record<string, never>> = () => {
   const onClickCloseChat = useCallback(() => closeChat(store), [store]);
   const onClickSendChat = useCallback(
     (text: string) => sendChat(text, store),
-    [store]
+    [store],
   );
 
   const { ui, room } = store;

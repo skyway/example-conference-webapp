@@ -21,7 +21,7 @@ export const enableUserVideo = async ({ media, ui }: RootStore) => {
   const { videoInDevices } = await getUserDevices({ video: true }).catch(
     (err) => {
       throw ui.showError(err);
-    }
+    },
   );
 
   // must not be happened
@@ -92,7 +92,7 @@ export const disableDisplayVideo = ({ media }: RootStore) => {
 
 export const changeAudioDeviceId = async (
   deviceId: string,
-  { media, ui }: RootStore
+  { media, ui }: RootStore,
 ) => {
   log("changeAudioDeviceId", deviceId);
 
@@ -104,7 +104,7 @@ export const changeAudioDeviceId = async (
 };
 export const changeVideoDeviceId = async (
   deviceId: string,
-  { media, ui }: RootStore
+  { media, ui }: RootStore,
 ) => {
   log("changeVideoDeviceId", deviceId);
 

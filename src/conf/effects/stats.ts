@@ -27,7 +27,7 @@ export const openStats = ({ ui, room }: RootStore) => {
       log("stop stats collector");
       clearInterval(timer);
       room.rtcStats = null;
-    }
+    },
   );
 };
 

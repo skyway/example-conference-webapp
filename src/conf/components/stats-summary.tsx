@@ -41,7 +41,7 @@ ${candidatePairs
 - remote: ${remoteCandidate.type} ${remoteCandidate.protocol}://${
       remoteCandidate.address
     }:${remoteCandidate.port}
-`.trim()
+`.trim(),
   )
   .join("\n")
   .trim()}
@@ -76,7 +76,7 @@ ${audioInbounds.items
 - Audio ${idx + 1}: ${item.ssrc}
   - ${item.bytesReceived} bytes(${item.packetsReceived} packets)
   - PacketsLost: ${item.packetsLost}
-`.trim()
+`.trim(),
   )
   .join("\n")
   .trim()}
@@ -88,7 +88,7 @@ ${videoInbounds.items
   - PacketsLost: ${item.packetsLost} / NACK: ${item.nackCount} / FIR: ${
       item.firCount
     } / PLI: ${item.pliCount}
-`.trim()
+`.trim(),
   )
   .join("\n")
   .trim()}

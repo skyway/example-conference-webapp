@@ -5,7 +5,7 @@ interface StatsItem {
 
 export const extractCandidatePairs = (stats: RTCStatsReport) => {
   const candidatePairs = [...stats.values()].filter(
-    (stat) => stat.type === "candidate-pair"
+    (stat) => stat.type === "candidate-pair",
   );
   // find candidates using now
   const selectedPairs = candidatePairs.filter((stat) => {
@@ -49,7 +49,7 @@ export const extractCandidatePairs = (stats: RTCStatsReport) => {
 
 export const extractOutboundRtps = (stats: RTCStatsReport) => {
   const outboundRtps = [...stats.values()].filter(
-    (stat) => stat.type === "outbound-rtp"
+    (stat) => stat.type === "outbound-rtp",
   );
   // this app allows only audio / video / audio+video, max outbounds is 2
   if (outboundRtps.length > 2) {
@@ -85,7 +85,7 @@ export const extractOutboundRtps = (stats: RTCStatsReport) => {
 
 export const extractInboundRtps = (stats: RTCStatsReport) => {
   const inboundRtps = [...stats.values()].filter(
-    (stat) => stat.type === "inbound-rtp"
+    (stat) => stat.type === "inbound-rtp",
   );
 
   const videoInbounds = {

@@ -20,7 +20,7 @@ export const initPeer = (forceTurn: boolean): Promise<Peer> => {
 };
 
 export const getPeerConnectionFromSfuRoom = (
-  room: SfuRoom
+  room: SfuRoom,
 ): RTCPeerConnection | null => {
   return room.getPeerConnection();
 };

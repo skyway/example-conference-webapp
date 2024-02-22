@@ -9,7 +9,7 @@ import RemoteStreamLayout from "./remote-stream-layout";
 type StreamEntry = [string, RoomStream];
 const sortByVideo: (a: StreamEntry, b: StreamEntry) => number = (
   [, aStream],
-  [, bStream]
+  [, bStream],
 ) =>
   aStream.getVideoTracks().length > bStream.getVideoTracks().length ? -1 : 1;
 

@@ -18,11 +18,11 @@ const LocalStream: FunctionComponent<Record<string, never>> = () => {
   const onClickOpenSettings = useCallback(() => openSettings(store), [store]);
   const onClickToggleAudioMuted = useCallback(
     () => toggleAudioMuted(store),
-    [store]
+    [store],
   );
   const onClickToggleVideoMuted = useCallback(
     () => toggleVideoMuted(store),
-    [store]
+    [store],
   );
 
   const { media, client, ui } = store;
