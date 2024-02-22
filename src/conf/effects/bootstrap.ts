@@ -10,11 +10,15 @@ import { initPeer } from "../utils/skyway";
 import { getToken } from "../utils/skyway-auth-token";
 import { RoomInit } from "../utils/types";
 import RootStore from "../stores";
-import { LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
+import {
+  LocalP2PRoomMember,
+  LocalSFURoomMember,
+  SkyWayError,
+} from "@skyway-sdk/room";
 
 const log = debug("effect:bootstrap");
 
-export const checkRoomSetting = ({ ui, room }: RootStore) => {
+export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   log("checkRoomSetting()");
   const [, roomType, roomId] = location.hash.split("/");
   const params = new URLSearchParams(location.search);
@@ -32,14 +36,41 @@ export const checkRoomSetting = ({ ui, room }: RootStore) => {
     );
   }
 
+  const handleGetTokenError = (err: Error) => {
+    if (err.message === "Failed to fetch") {
+      notification.showError("認証トークンの取得に失敗しました。");
+      return null;
+    }
+
+    notification.showError("想定外のエラーが発生しました。");
+    throw err;
+  };
+
+  const handleSetTokenError = (err: Error) => {
+    if (err instanceof SkyWayError) {
+      switch (err.info.name) {
+        case "invalidParameter": // from SkyWayContext.Create, context.updateAuthToken
+          notification.showError(err.info.detail);
+          return;
+      }
+    }
+
+    notification.showError("想定外のエラーが発生しました。");
+    throw err;
+  };
+
   (async () => {
-    const peer: LocalP2PRoomMember | LocalSFURoomMember = await initPeer(
+    const peer: LocalP2PRoomMember | LocalSFURoomMember | null = await initPeer(
       roomType,
       roomId,
       getToken,
+      handleGetTokenError,
+      handleSetTokenError,
     ).catch((err) => {
       throw ui.showError(err);
     });
+    if (peer === null) return;
+
     // just log it, do not trust them
     room.load(
       {

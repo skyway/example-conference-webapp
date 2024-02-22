@@ -10,19 +10,29 @@ export const initPeer = async (
   _roomType: string,
   roomId: string,
   getToken: (channelName: string, memberName: string) => Promise<string>,
-): Promise<LocalP2PRoomMember | LocalSFURoomMember> => {
+  handleGetTokenError: (err: Error) => null,
+  handleSetTokenError: (err: Error) => void,
+): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
   const roomType = _roomType === "sfu" ? "sfu" : "p2p";
   const roomName = `${roomType}_${roomId}`;
   const memberName = uuidV4();
 
-  const token = await getToken(roomName, memberName);
+  const token = await getToken(roomName, memberName).catch(handleGetTokenError);
+  if (token === null) return null;
 
-  const context = await SkyWayContext.Create(token);
+  const context = await SkyWayContext.Create(token).catch((err) => {
+    handleSetTokenError(err);
+    return null;
+  });
+  if (context === null) return null;
 
   context.onTokenUpdateReminder.add(async () => {
-    const token = await getToken(roomName, memberName);
+    const token = await getToken(roomName, memberName).catch(
+      handleGetTokenError,
+    );
+    if (token === null) return;
 
-    context.updateAuthToken(token);
+    context.updateAuthToken(token).catch(handleSetTokenError);
   });
 
   const room = await SkyWayRoom.FindOrCreate(context, {
