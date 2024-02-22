@@ -6,7 +6,11 @@ import {
   roomIdRe,
 } from "../../shared/validate";
 import { getUserDevices, getUserAudioTrack } from "../utils/webrtc";
-import { initMember } from "../utils/skyway";
+import {
+  generateMemberNameInRtcRoom,
+  initRtcContext,
+  initRtcRoom,
+} from "../utils/skyway";
 import { getToken } from "../utils/skyway-auth-token";
 import { RoomInit } from "../utils/types";
 import RootStore from "../stores";
@@ -56,16 +60,27 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   };
 
   (async () => {
-    const member = await initMember(
+    const roomName = `${roomType}_${roomId}`;
+    const memberName = generateMemberNameInRtcRoom();
+
+    const rtcContext = await initRtcContext(
       roomType,
-      roomId,
+      roomName,
+      memberName,
       getToken,
       handleGetTokenError,
       handleSetTokenError,
     ).catch((err) => {
       throw ui.showError(err);
     });
-    if (member === null) return;
+    if (rtcContext === null) return;
+
+    const rtcRoom = await initRtcRoom(rtcContext, roomType, roomName).catch(
+      (err) => {
+        throw ui.showError(err);
+      },
+    );
+    if (rtcRoom === null) return;
 
     // just log it, do not trust them
     room.load(
@@ -74,11 +89,11 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
         id: roomId,
         useH264: params.has("h264"),
       },
-      member,
+      rtcRoom,
+      memberName,
     );
 
     log(`room: ${roomType}/${roomId}`);
-    log("member instance created");
   })();
 };
 

@@ -1,6 +1,7 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
 import { RoomData, RoomStat, RoomCast } from "../utils/types";
+import { joinRtcRoom } from "../utils/skyway";
 import RootStore from "../stores";
 import {
   LocalAudioStream,
@@ -11,20 +12,31 @@ import {
 
 const log = debug("effect:room");
 
-export const joinRoom = (store: RootStore) => {
+export const joinRoom = async (store: RootStore) => {
   log("joinRoom()");
   const { room, ui, media, client, notification } = store;
 
   if (room.name === null || room.mode === null) {
     throw ui.showError(new Error("Room name or mode is undefined!"));
   }
-  const localRoomMember = room.member;
-  if (localRoomMember === null) {
-    throw ui.showError(new Error("Member is not created!"));
+  if (room.room === null) {
+    throw ui.showError(new Error("Room instance is undefined!"));
+  }
+  if (room.memberName === null) {
+    throw ui.showError(new Error("Room member name is undefined!"));
   }
 
-  // メディアをpublish/subscribeしない状態で入室済み
-  room.room = localRoomMember.room;
+  const localRoomMember = await joinRtcRoom(room.room, room.memberName).catch(
+    (err) => {
+      throw ui.showError(err);
+    },
+  );
+  if (localRoomMember === null) {
+    throw ui.showError(new Error("Member is not joined!"));
+  }
+  room.loadMember(localRoomMember);
+
+  log("member instance created");
 
   // publishする
   media.stream.getAudioTracks().forEach((track) => {

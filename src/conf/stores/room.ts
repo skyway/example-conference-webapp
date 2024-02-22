@@ -1,7 +1,8 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { RoomInit, RoomStat } from "../utils/types";
 import {
-  Room,
+  P2PRoom,
+  SfuRoom,
   RemoteAudioStream,
   RemoteVideoStream,
   LocalP2PRoomMember,
@@ -10,9 +11,10 @@ import {
 } from "@skyway-sdk/room";
 
 class RoomStore {
+  memberName: string | null;
   member: LocalP2PRoomMember | LocalSFURoomMember | null;
   isReady: boolean;
-  room: Room | null;
+  room: P2PRoom | SfuRoom | null;
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
@@ -26,6 +28,7 @@ class RoomStore {
 
   constructor() {
     // Member instance
+    this.memberName = null;
     this.member = null;
     this.isReady = false;
     // (SFU|P2P)Room instance
@@ -58,6 +61,7 @@ class RoomStore {
       isJoined: computed,
       pinnedStream: computed,
       load: action,
+      loadMember: action,
       removeStream: action,
       cleanUp: action,
     });
@@ -68,7 +72,7 @@ class RoomStore {
   }
 
   get isJoined(): boolean {
-    return this.room !== null;
+    return this.member !== null;
   }
 
   get pinnedStream(): MediaStream | null {
@@ -80,13 +84,19 @@ class RoomStore {
 
   load(
     { mode, id, useH264 }: RoomInit,
-    member: LocalP2PRoomMember | LocalSFURoomMember,
+    skywayRoom: P2PRoom | SfuRoom,
+    memberName: string,
   ) {
     this.mode = mode;
     this.id = id;
     this.useH264 = useH264;
-    this.member = member;
+    this.room = skywayRoom;
+    this.memberName = memberName;
     this.isReady = true;
+  }
+
+  loadMember(member: LocalP2PRoomMember | LocalSFURoomMember) {
+    this.member = member;
   }
 
   removeStream(memberId: string) {

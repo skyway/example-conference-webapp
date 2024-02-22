@@ -1,5 +1,7 @@
 import {
   RoomType,
+  P2PRoom,
+  SfuRoom,
   LocalP2PRoomMember,
   LocalSFURoomMember,
   SkyWayContext,
@@ -7,17 +9,18 @@ import {
   uuidV4,
 } from "@skyway-sdk/room";
 
-export const initMember = async (
+export const generateMemberNameInRtcRoom = () => {
+  return uuidV4();
+};
+
+export const initRtcContext = async (
   _roomType: string,
-  roomId: string,
+  roomName: string,
+  memberName: string,
   getToken: (channelName: string, memberName: string) => Promise<string>,
   handleGetTokenError: (err: Error) => null,
   handleSetTokenError: (err: Error) => void,
-): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
-  const roomType: RoomType = _roomType === "SFU" ? "sfu" : "p2p";
-  const roomName = `${roomType}_${roomId}`;
-  const memberName = uuidV4();
-
+): Promise<SkyWayContext | null> => {
   const token = await getToken(roomName, memberName).catch(handleGetTokenError);
   if (token === null) return null;
 
@@ -36,10 +39,25 @@ export const initMember = async (
     context.updateAuthToken(token).catch(handleSetTokenError);
   });
 
-  const room = await SkyWayRoom.FindOrCreate(context, {
+  return context;
+};
+
+export const initRtcRoom = async (
+  context: SkyWayContext,
+  _roomType: string,
+  roomName: string,
+): Promise<P2PRoom | SfuRoom | null> => {
+  const roomType: RoomType = _roomType === "SFU" ? "sfu" : "p2p";
+
+  return SkyWayRoom.FindOrCreate(context, {
     type: roomType,
     name: roomName,
   });
+};
 
+export const joinRtcRoom = async (
+  room: P2PRoom | SfuRoom,
+  memberName: string,
+): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
   return room.join({ name: memberName });
 };
