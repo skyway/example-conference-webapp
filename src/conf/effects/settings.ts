@@ -30,7 +30,7 @@ export const enableUserVideo = async ({ media, ui }: RootStore) => {
   }
   // must not be happened
   if (videoInDevices.length === 0) {
-    throw ui.showError(new Error("At leaset one video input device needed!"));
+    throw ui.showError(new Error("At least one video input device needed!"));
   }
 
   // keep video track
