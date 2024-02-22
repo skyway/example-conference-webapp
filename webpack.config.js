@@ -2,6 +2,10 @@
 const path = require("path");
 const { dependencies } = require("./package");
 
+const webpack = require("webpack");
+const dotenv = require("dotenv-flow");
+const env = dotenv.config().parsed;
+
 const rootPath = path.resolve(".");
 
 const config = {
@@ -19,6 +23,12 @@ const config = {
   resolve: {
     extensions: [".json", ".js", ".ts", ".tsx"],
   },
+  plugins: [
+    // .envの設定値はbuild時に埋め込まれるので、アプリケーションのシークレットキーなどを.envに記載する際は注意
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(env),
+    }),
+  ],
   module: {
     rules: [
       {

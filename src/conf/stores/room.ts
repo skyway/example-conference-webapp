@@ -1,11 +1,12 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
-import Peer, { RoomStream, SfuRoom, MeshRoom } from "skyway-js";
+import { RoomStream, SfuRoom, MeshRoom } from "skyway-js";
 import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
 import { getPeerConnectionFromSfuRoom } from "../utils/skyway";
+import { LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
 
 class RoomStore {
-  peer: Peer | null;
+  peer: LocalP2PRoomMember | LocalSFURoomMember | null;
   isReady: boolean;
   room: SfuRoom | MeshRoom | null;
   mode: RoomInit["mode"] | null;
@@ -81,7 +82,10 @@ class RoomStore {
     return this.streams.get(this.pinnedId) || null;
   }
 
-  load({ mode, id, useH264 }: RoomInit, peer: Peer) {
+  load(
+    { mode, id, useH264 }: RoomInit,
+    peer: LocalP2PRoomMember | LocalSFURoomMember,
+  ) {
     this.mode = mode;
     this.id = id;
     this.useH264 = useH264;
