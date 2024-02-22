@@ -28,7 +28,7 @@ class RoomStore {
     // Peer instance
     this.peer = null;
     this.isReady = false;
-    // (Sfu|P2p)Room instance
+    // (SFU|P2P)Room instance
     this.room = null;
     // room name = mode + id
     this.mode = null;

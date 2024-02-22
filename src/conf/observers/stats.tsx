@@ -34,7 +34,7 @@ export const Stats: FunctionComponent<Record<string, never>> = () => {
 
         return (
           <StatsLayout
-            isSfu={room.mode === "sfu"}
+            isSFU={room.mode === "SFU"}
             rtcStats={room.rtcStats}
             onClickCloser={onClickCloseStats}
           />

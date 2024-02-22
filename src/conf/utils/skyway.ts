@@ -1,4 +1,5 @@
 import {
+  RoomType,
   LocalP2PRoomMember,
   LocalSFURoomMember,
   SkyWayContext,
@@ -13,7 +14,7 @@ export const initPeer = async (
   handleGetTokenError: (err: Error) => null,
   handleSetTokenError: (err: Error) => void,
 ): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
-  const roomType = _roomType === "sfu" ? "sfu" : "p2p";
+  const roomType: RoomType = _roomType === "SFU" ? "sfu" : "p2p";
   const roomName = `${roomType}_${roomId}`;
   const memberName = uuidV4();
 

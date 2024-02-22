@@ -1,5 +1,5 @@
 export interface RoomInit {
-  mode: "sfu" | "p2p";
+  mode: "SFU" | "P2P";
   id: string;
   useH264: boolean;
 }

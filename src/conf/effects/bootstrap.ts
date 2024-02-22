@@ -25,7 +25,7 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
 
   if (!isValidRoomType(roomType)) {
     throw ui.showError(
-      new Error("Invalid room type! it should be `sfu` or `p2p`."),
+      new Error("Invalid room type! it should be `SFU` or `P2P`."),
     );
   }
   if (!isValidRoomId(roomId)) {

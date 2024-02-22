@@ -15,7 +15,7 @@ interface Props {
 }
 const RoomCreate: FunctionComponent<Props> = (props) => {
   const [roomId, setRoomId] = useState("");
-  const [roomType, setRoomType] = useState("sfu");
+  const [roomType, setRoomType] = useState("SFU");
   const [isRoomIdValid, setRoomIdValid] = useState(true);
 
   return (
@@ -47,7 +47,7 @@ const RoomCreate: FunctionComponent<Props> = (props) => {
       <div css={itemStyle}>
         <div>ROOM TYPE</div>
         <div>
-          {["sfu", "p2p"].map((type) => (
+          {["SFU", "P2P"].map((type) => (
             <label key={type} css={roomTypeStyle}>
               <input
                 type="radio"

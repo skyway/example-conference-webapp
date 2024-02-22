@@ -10,12 +10,12 @@ import StatsDump from "./stats-dump";
 import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
-  isSfu: boolean;
+  isSFU: boolean;
   rtcStats: WebRTCStats | null;
   onClickCloser: () => void;
 }
 const StatsLayout: FunctionComponent<Props> = ({
-  isSfu,
+  isSFU,
   rtcStats,
   onClickCloser,
 }: Props) => (
@@ -24,7 +24,7 @@ const StatsLayout: FunctionComponent<Props> = ({
       <div css={headStyle}>
         <IconButton name="close" onClick={onClickCloser} />
       </div>
-      {isSfu ? (
+      {isSFU ? (
         <div css={scrollerStyle}>
           <details open>
             <summary>Stats summary</summary>
