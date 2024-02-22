@@ -1,6 +1,6 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
-import { MeshRoom, SfuRoom, RoomStream } from "skyway-js";
+import { RoomStream } from "skyway-js";
 import {
   RoomData,
   RoomStat,
@@ -19,25 +19,13 @@ export const joinRoom = (store: RootStore) => {
   if (room.name === null || room.mode === null) {
     throw ui.showError(new Error("Room name or mode is undefined!"));
   }
-  if (room.peer === null) {
+  const localRoomMember = room.peer;
+  if (localRoomMember === null) {
     throw ui.showError(new Error("Peer is not created!"));
   }
 
-  const roomOptions = {
-    mode: room.mode,
-    stream: media.stream,
-    // this app requires audio, but video is optional
-    videoReceiveEnabled: true,
-  };
-  if (room.useH264) {
-    Object.assign(roomOptions, { videoCodec: "H264" });
-  }
-
-  if (room.mode === "mesh") {
-    room.room = room.peer.joinRoom<MeshRoom>(room.name, roomOptions);
-  } else if (room.mode === "sfu") {
-    room.room = room.peer.joinRoom<SfuRoom>(room.name, roomOptions);
-  }
+  // メディアをpublish/subscribeしない状態で入室済み
+  room.room = localRoomMember.room;
 
   const confRoom = room.room;
   // must not be happened
@@ -46,7 +34,6 @@ export const joinRoom = (store: RootStore) => {
   }
 
   log("joined room", confRoom);
-  log("w/ options:", roomOptions);
 
   // force set to false
   ui.isReEntering = false;

@@ -1,14 +1,14 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
-import { RoomStream, SfuRoom, MeshRoom } from "skyway-js";
+import { RoomStream, SfuRoom } from "skyway-js";
 import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
 import { getPeerConnectionFromSfuRoom } from "../utils/skyway";
-import { LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
+import { Room, LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
 
 class RoomStore {
   peer: LocalP2PRoomMember | LocalSFURoomMember | null;
   isReady: boolean;
-  room: SfuRoom | MeshRoom | null;
+  room: Room | null;
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
