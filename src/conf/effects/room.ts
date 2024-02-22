@@ -226,4 +226,12 @@ export const joinRoom = (store: RootStore) => {
     // re-enter the same room automatically but with delay to ensure leave -> join
     setTimeout(() => joinRoom(store), 500);
   });
+
+  // 既存のpublicationをsubscribeする
+  confRoom.publications.forEach((publication) => {
+    if (publication.publisher.id === localRoomMember.id) return;
+
+    log("subscribe published remote stream", publication);
+    localRoomMember.subscribe(publication);
+  });
 };
