@@ -45,7 +45,7 @@ export interface RoomCast {
   from: string;
 }
 
-export type NotificationType = "info" | "person";
+export type NotificationType = "info" | "person" | "warning";
 export interface NotificationItem {
   id: number;
   type: NotificationType;
