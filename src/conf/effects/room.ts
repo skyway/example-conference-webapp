@@ -9,6 +9,7 @@ import {
   RoomCast,
 } from "../utils/types";
 import RootStore from "../stores";
+import { LocalAudioStream, LocalVideoStream } from "@skyway-sdk/room";
 
 const log = debug("effect:room");
 
@@ -26,6 +27,16 @@ export const joinRoom = (store: RootStore) => {
 
   // メディアをpublish/subscribeしない状態で入室済み
   room.room = localRoomMember.room;
+
+  // publishする
+  media.stream.getAudioTracks().forEach((track) => {
+    const stream = new LocalAudioStream(track);
+    localRoomMember.publish(stream);
+  });
+  media.stream.getVideoTracks().forEach((track) => {
+    const stream = new LocalVideoStream(track);
+    localRoomMember.publish(stream);
+  });
 
   const confRoom = room.room;
   // must not be happened
