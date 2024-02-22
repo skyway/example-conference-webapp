@@ -62,9 +62,9 @@ const pStyle = css({
 
 const logoStyle = css({
   position: "absolute",
-  bottom: 10,
+  bottom: 4,
   right: 10,
   "& > img": {
-    height: 40,
+    height: 60,
   },
 });
