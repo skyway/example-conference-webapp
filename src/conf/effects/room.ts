@@ -158,8 +158,21 @@ export const joinRoom = (store: RootStore) => {
     });
   });
 
-  confRoom.on("peerLeave", (peerId: string) => {
-    log("on('peerLeave')", peerId);
+  // 退出時の処理
+  confRoom.onMemberLeft.add(({ member }) => {
+    const peerId = member.id;
+    log("onMemberLeft", peerId);
+
+    if (peerId === localRoomMember.id) {
+      // 意図した退出の場合はindexに遷移する
+      // ここでは意図しない退出のためリロードしてダイアログを表示させる
+      log("I left! please re-enter..");
+      notification.showInfo("I left! please re-enter..");
+
+      disposers.forEach((d) => d());
+
+      setTimeout(() => location.reload(), 500);
+    }
 
     const stat = room.stats.get(peerId);
     if (stat) {
@@ -208,23 +221,6 @@ export const joinRoom = (store: RootStore) => {
         log(`on('data/unknown') discard...`);
       }
     }
-  });
-
-  confRoom.once("close", () => {
-    log("on('close')");
-    notification.showInfo("room closed! trying re-connect..");
-
-    disposers.forEach((d) => d());
-
-    try {
-      confRoom.removeAllListeners();
-      room.cleanUp();
-    } catch (err) {
-      if (err instanceof Error) throw ui.showError(err);
-    }
-
-    // re-enter the same room automatically but with delay to ensure leave -> join
-    setTimeout(() => joinRoom(store), 500);
   });
 
   // 既存のpublicationをsubscribeする
