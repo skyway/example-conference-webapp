@@ -47,8 +47,12 @@ export const getUserAudioTrack = async (
 export const getUserVideoTrack = async (
   deviceId: string,
 ): Promise<MediaStreamTrack> => {
-  const constraints =
-    deviceId === "" ? true : { deviceId: { exact: deviceId } };
+  const constraints = {
+    height: 360,
+    width: 640,
+    frameRate: 15,
+    ...(deviceId === "" ? {} : { deviceId: { exact: deviceId } }),
+  };
 
   const stream = await navigator.mediaDevices.getUserMedia({
     video: constraints,
