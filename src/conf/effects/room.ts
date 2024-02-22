@@ -2,7 +2,12 @@ import debug from "debug";
 import { reaction, observe } from "mobx";
 import { RoomData, RoomStat, RoomCast } from "../utils/types";
 import RootStore from "../stores";
-import { LocalAudioStream, LocalVideoStream } from "@skyway-sdk/room";
+import {
+  LocalAudioStream,
+  LocalVideoStream,
+  LocalRoomMember,
+  RoomPublication,
+} from "@skyway-sdk/room";
 
 const log = debug("effect:room");
 
@@ -138,12 +143,15 @@ export const joinRoom = (store: RootStore) => {
     }),
   ];
 
+  const showError = (errorMessage: string) =>
+    notification.showError(errorMessage);
+
   // auto subscribe設定
   confRoom.onStreamPublished.add(({ publication }) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("onStreamPublished", publication);
-    localRoomMember.subscribe(publication);
+    subscribe(localRoomMember, publication, showError);
   });
 
   // Subscribed時の対応
@@ -248,6 +256,24 @@ export const joinRoom = (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("subscribe published remote stream", publication);
-    localRoomMember.subscribe(publication);
+    subscribe(localRoomMember, publication, showError);
+  });
+};
+
+const subscribe = (
+  localRoomMember: LocalRoomMember,
+  publication: RoomPublication,
+  showError: (errorMessage: string) => void,
+) => {
+  log(`subscribe(${localRoomMember.id}, ${publication.id})`);
+
+  localRoomMember.subscribe(publication).catch((e) => {
+    switch (e.info.name) {
+      case "maxSubscribersExceededError":
+        showError(
+          "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
+        );
+        break;
+    }
   });
 };

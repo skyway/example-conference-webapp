@@ -11,6 +11,7 @@ import {
 } from "../effects/bootstrap";
 import ErrorDetail from "../components/error-detail";
 import Loader from "../components/loader";
+import Notification from "../observers/notification";
 
 interface Props {
   children: ReactNode;
@@ -40,7 +41,14 @@ const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
         }
 
         if (!(client.isReady && room.isReady && media.isAudioEnabled)) {
-          return <Loader />;
+          return (
+            <>
+              {/* Base Layer */}
+              <Loader />
+              {/* Modal Layer */}
+              <Notification />
+            </>
+          );
         }
 
         return <>{children}</>;

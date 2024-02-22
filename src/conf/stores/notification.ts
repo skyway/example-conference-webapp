@@ -29,6 +29,10 @@ class NotificationStore {
     this.show("person", `${name} left`, 2000);
   }
 
+  showError(text: string) {
+    this.show("warning", text, 6000);
+  }
+
   private show(type: NotificationType, text: string, duration: number) {
     const item: NotificationItem = { id: Math.random(), type, text };
     this.items.push(item);
