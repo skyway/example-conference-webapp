@@ -22,6 +22,10 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
+    "prettier/prettier": [
+      "error",
+      { trailingComma: "all", singleQuote: false, semi: true },
+    ],
     "no-console": "off",
     "no-debugger": "off",
     "no-dupe-class-members": "off",
@@ -37,7 +41,6 @@ module.exports = {
       "error",
       { accessibility: "no-public" },
     ],
-    "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/no-use-before-define": "off",
 
     "react/prop-types": "off",
