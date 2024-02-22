@@ -21,14 +21,8 @@ const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
 
   useEffect(() => {
     checkRoomSetting(store);
-  }, [store]);
-  useEffect(() => {
     initAudioDeviceAndClient(store);
-  }, [store]);
-  useEffect(() => {
     listenStoreChanges(store);
-  }, [store]);
-  useEffect(() => {
     listenGlobalEvents(store);
   }, [store]);
 
