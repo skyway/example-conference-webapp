@@ -7,8 +7,10 @@ import {
 } from "../../shared/validate";
 import { getUserDevices, getUserAudioTrack } from "../utils/webrtc";
 import { initPeer } from "../utils/skyway";
+import { getToken } from "../utils/skyway-auth-token";
 import { RoomInit } from "../utils/types";
 import RootStore from "../stores";
+import { LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
 
 const log = debug("effect:bootstrap");
 
@@ -31,11 +33,14 @@ export const checkRoomSetting = ({ ui, room }: RootStore) => {
   }
 
   (async () => {
-    const peer = await initPeer(params.has("turn")).catch((err) => {
+    const peer: LocalP2PRoomMember | LocalSFURoomMember = await initPeer(
+      roomType,
+      roomId,
+      getToken,
+    ).catch((err) => {
       throw ui.showError(err);
     });
     // just log it, do not trust them
-    peer.on("error", console.error);
     room.load(
       {
         mode: roomType as RoomInit["mode"],
@@ -150,12 +155,6 @@ export const listenStoreChanges = ({
     reaction(
       () => room.castRequestCount,
       () => notification.showInfo("Your video was casted to everyone"),
-    ),
-    reaction(
-      () => room.myLastReaction,
-      (reaction) =>
-        reaction &&
-        notification.showInfo(`You reacted with ${reaction.reaction}`),
     ),
     reaction(
       () => client.displayName,

@@ -7,10 +7,11 @@ import Modal from "./modal";
 import { IconButton } from "./icon";
 import StatsSummary from "./stats-summary";
 import StatsDump from "./stats-dump";
+import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
   isSfu: boolean;
-  rtcStats: RTCStatsReport | null;
+  rtcStats: WebRTCStats | null;
   onClickCloser: () => void;
 }
 const StatsLayout: FunctionComponent<Props> = ({

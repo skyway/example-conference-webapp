@@ -1,24 +1,28 @@
 import { makeObservable, observable, computed, action } from "mobx";
-import { IObservableArray } from "mobx";
-import Peer, { RoomStream, SfuRoom, MeshRoom } from "skyway-js";
-import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
-import { getPeerConnectionFromSfuRoom } from "../utils/skyway";
+import { RoomInit, RoomStat } from "../utils/types";
+import {
+  Room,
+  RemoteAudioStream,
+  RemoteVideoStream,
+  LocalP2PRoomMember,
+  LocalSFURoomMember,
+  WebRTCStats,
+} from "@skyway-sdk/room";
 
 class RoomStore {
-  peer: Peer | null;
+  peer: LocalP2PRoomMember | LocalSFURoomMember | null;
   isReady: boolean;
-  room: SfuRoom | MeshRoom | null;
+  room: Room | null;
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
-  streams: Map<string, RoomStream>;
+  streams: Map<string, MediaStream>;
+  remoteAudioStreams: Map<string, RemoteAudioStream>;
+  remoteVideoStreams: Map<string, RemoteVideoStream>;
   stats: Map<string, RoomStat>;
-  chats: IObservableArray<RoomChat>;
-  myLastChat: RoomChat | null;
-  myLastReaction: RoomReaction | null;
   pinnedId: string | null;
   castRequestCount: number;
-  rtcStats: RTCStatsReport | null;
+  rtcStats: WebRTCStats | null;
 
   constructor() {
     // Peer instance
@@ -32,10 +36,9 @@ class RoomStore {
     this.useH264 = false;
 
     this.streams = new Map();
+    this.remoteAudioStreams = new Map();
+    this.remoteVideoStreams = new Map();
     this.stats = new Map();
-    this.chats = observable<RoomChat>([]);
-    this.myLastChat = null;
-    this.myLastReaction = null;
     this.pinnedId = null;
     this.castRequestCount = 0;
     this.rtcStats = null;
@@ -48,9 +51,6 @@ class RoomStore {
       id: observable,
       streams: observable.shallow,
       stats: observable.shallow,
-      chats: observable.shallow,
-      myLastChat: observable.ref,
-      myLastReaction: observable.ref,
       pinnedId: observable,
       castRequestCount: observable,
       rtcStats: observable.ref,
@@ -58,10 +58,7 @@ class RoomStore {
       isJoined: computed,
       pinnedStream: computed,
       load: action,
-      addLocalChat: action,
-      addRemoteChat: action,
       removeStream: action,
-      getPeerConnection: action,
       cleanUp: action,
     });
   }
@@ -74,42 +71,22 @@ class RoomStore {
     return this.room !== null;
   }
 
-  get pinnedStream(): RoomStream | null {
+  get pinnedStream(): MediaStream | null {
     if (this.pinnedId === null) {
       return null;
     }
     return this.streams.get(this.pinnedId) || null;
   }
 
-  load({ mode, id, useH264 }: RoomInit, peer: Peer) {
+  load(
+    { mode, id, useH264 }: RoomInit,
+    peer: LocalP2PRoomMember | LocalSFURoomMember,
+  ) {
     this.mode = mode;
     this.id = id;
     this.useH264 = useH264;
     this.peer = peer;
     this.isReady = true;
-  }
-
-  addLocalChat(from: string, text: string) {
-    const chat = {
-      id: Math.random(),
-      time: Date.now(),
-      isMine: true,
-      from,
-      text,
-    };
-    this.chats.push(chat);
-    // this triggers reaction to send chat for remotes
-    this.myLastChat = chat;
-  }
-
-  addRemoteChat(chat: RoomChat) {
-    chat.isMine = false;
-    this.chats.push(chat);
-  }
-
-  addReaction(from: string, reaction: string) {
-    // this triggers reaction to send reaction for remotes
-    this.myLastReaction = { from, reaction };
   }
 
   removeStream(peerId: string) {
@@ -118,17 +95,6 @@ class RoomStore {
     if (this.pinnedId === peerId) {
       this.pinnedId = null;
     }
-  }
-
-  getPeerConnection(): RTCPeerConnection | null {
-    if (this.mode !== "sfu") {
-      return null;
-    }
-    if (this.room === null) {
-      return null;
-    }
-
-    return getPeerConnectionFromSfuRoom(this.room as SfuRoom);
   }
 
   cleanUp() {
@@ -141,8 +107,6 @@ class RoomStore {
     );
     this.streams.clear();
     this.stats.clear();
-    this.chats.clear();
-    this.myLastChat = null;
     this.room = null;
   }
 }

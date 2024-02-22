@@ -1,14 +1,8 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
-import { MeshRoom, SfuRoom, RoomStream } from "skyway-js";
-import {
-  RoomData,
-  RoomStat,
-  RoomChat,
-  RoomReaction,
-  RoomCast,
-} from "../utils/types";
+import { RoomData, RoomStat, RoomCast } from "../utils/types";
 import RootStore from "../stores";
+import { LocalAudioStream, LocalVideoStream } from "@skyway-sdk/room";
 
 const log = debug("effect:room");
 
@@ -19,25 +13,23 @@ export const joinRoom = (store: RootStore) => {
   if (room.name === null || room.mode === null) {
     throw ui.showError(new Error("Room name or mode is undefined!"));
   }
-  if (room.peer === null) {
+  const localRoomMember = room.peer;
+  if (localRoomMember === null) {
     throw ui.showError(new Error("Peer is not created!"));
   }
 
-  const roomOptions = {
-    mode: room.mode,
-    stream: media.stream,
-    // this app requires audio, but video is optional
-    videoReceiveEnabled: true,
-  };
-  if (room.useH264) {
-    Object.assign(roomOptions, { videoCodec: "H264" });
-  }
+  // メディアをpublish/subscribeしない状態で入室済み
+  room.room = localRoomMember.room;
 
-  if (room.mode === "mesh") {
-    room.room = room.peer.joinRoom<MeshRoom>(room.name, roomOptions);
-  } else if (room.mode === "sfu") {
-    room.room = room.peer.joinRoom<SfuRoom>(room.name, roomOptions);
-  }
+  // publishする
+  media.stream.getAudioTracks().forEach((track) => {
+    const stream = new LocalAudioStream(track);
+    localRoomMember.publish(stream);
+  });
+  media.stream.getVideoTracks().forEach((track) => {
+    const stream = new LocalVideoStream(track);
+    localRoomMember.publish(stream);
+  });
 
   const confRoom = room.room;
   // must not be happened
@@ -46,7 +38,6 @@ export const joinRoom = (store: RootStore) => {
   }
 
   log("joined room", confRoom);
-  log("w/ options:", roomOptions);
 
   // force set to false
   ui.isReEntering = false;
@@ -56,34 +47,21 @@ export const joinRoom = (store: RootStore) => {
       () => ({ ...media.stat, ...client.stat }),
       (stat) => {
         log("reaction:send(stat)");
-        confRoom.send({ type: "stat", payload: stat });
-      },
-    ),
-    reaction(
-      () => room.myLastChat,
-      (chat) => {
-        if (chat === null) {
-          return;
-        }
-        log("reaction:send(chat)");
-        confRoom.send({ type: "chat", payload: chat });
-      },
-    ),
-    reaction(
-      () => room.myLastReaction,
-      (reaction) => {
-        if (reaction === null) {
-          return;
-        }
-        log("reaction:send(reaction)");
-        confRoom.send({ type: "reaction", payload: reaction });
+        localRoomMember.updateMetadata(
+          JSON.stringify({ type: "stat", payload: stat }),
+        );
       },
     ),
     reaction(
       () => room.castRequestCount,
       () => {
         log("reaction:send(cast)");
-        confRoom.send({ type: "cast", payload: { from: client.displayName } });
+        localRoomMember.updateMetadata(
+          JSON.stringify({
+            type: "cast",
+            payload: { from: client.displayName },
+          }),
+        );
       },
     ),
     observe(media, "videoDeviceId", (change) => {
@@ -94,38 +72,137 @@ export const joinRoom = (store: RootStore) => {
       }
 
       // camera OR display was changed, not need to re-enter
+      const videoTracks = media.stream.getVideoTracks();
+      const videoPublications = localRoomMember.publications.filter(
+        (publication) => {
+          return publication.contentType === "video";
+        },
+      );
+      if (change.oldValue === null && change.newValue !== null) {
+        // video OFF => ON
+        videoTracks.forEach((track) => {
+          const stream = new LocalVideoStream(track);
+          localRoomMember.publish(stream);
+        });
+        return;
+      }
       if (change.oldValue !== null && change.newValue !== null) {
+        // video ON => ON (device change)
         log("just change video by replaceStream(), no need to re-enter");
-        confRoom.replaceStream(media.stream);
+        const track = videoTracks[0];
+        const stream = new LocalVideoStream(track);
+        videoPublications[0].replaceStream(stream);
+        return;
+      }
+      if (change.oldValue !== null && change.newValue === null) {
+        // video ON => OFF
+        localRoomMember.unpublish(videoPublications[0].id);
+        return;
+      }
+    }),
+    observe(media, "audioDeviceId", (change) => {
+      log("observe(media.audioDeviceId)");
+      if (!room.isJoined) {
+        log("do nothing before room join");
         return;
       }
 
-      // camera OR display was enabled, need to re-enter
-      // camera OR display was disabled, need to re-enter
-      log("need to re-enter the room to add/remove video");
-      if (room.room === null) {
-        throw ui.showError(new Error("Room is null!"));
+      // camera OR display was changed, not need to re-enter
+      const audioTracks = media.stream.getAudioTracks();
+      const audioPublications = localRoomMember.publications.filter(
+        (publication) => {
+          return publication.contentType === "audio";
+        },
+      );
+      if (change.oldValue === null && change.newValue !== null) {
+        // audio OFF => ON
+        audioTracks.forEach((track) => {
+          const stream = new LocalAudioStream(track);
+          localRoomMember.publish(stream);
+        });
+        return;
       }
-      // force close the room, triggers re-entering
-      ui.isReEntering = true;
-      room.room.close();
-      notification.showInfo("Re-enter the room to add/remove video");
+      if (change.oldValue !== null && change.newValue !== null) {
+        // audio ON => ON (device change)
+        log("just change audio by replaceStream(), no need to re-enter");
+        const track = audioTracks[0];
+        const stream = new LocalAudioStream(track);
+        audioPublications[0].replaceStream(stream);
+        return;
+      }
+      if (change.oldValue !== null && change.newValue === null) {
+        // audio ON => OFF
+        localRoomMember.unpublish(audioPublications[0].id);
+        return;
+      }
     }),
   ];
 
-  confRoom.on("stream", (stream: RoomStream) => {
-    log("on('stream')", stream);
-    room.streams.set(stream.peerId, stream);
+  // auto subscribe設定
+  confRoom.onStreamPublished.add(({ publication }) => {
+    if (publication.publisher.id === localRoomMember.id) return;
 
-    // send back stat as welcome message
-    confRoom.send({
-      type: "stat",
-      payload: { ...client.stat, ...media.stat },
-    });
+    log("onStreamPublished", publication);
+    localRoomMember.subscribe(publication);
   });
 
-  confRoom.on("peerLeave", (peerId: string) => {
-    log("on('peerLeave')", peerId);
+  // Subscribed時の対応
+  // - confRoom.onPublicationSubscribedでは、subscription.streamはundefined
+  localRoomMember.onPublicationSubscribed.add(({ subscription }) => {
+    if (subscription.subscriber.id !== localRoomMember.id) return;
+
+    log("onPublicationSubscribed", subscription);
+
+    const remoteStream = subscription.stream;
+    if (remoteStream === undefined) return;
+
+    const publisherId = subscription.publication.publisher.id;
+    if (remoteStream.contentType === "audio") {
+      room.remoteAudioStreams.set(publisherId, remoteStream);
+
+      const remoteVideoStream = room.remoteVideoStreams.get(publisherId);
+      const mediaStream = new MediaStream(
+        remoteVideoStream === undefined ? [] : [remoteVideoStream.track],
+      );
+      mediaStream.addTrack(remoteStream.track);
+      room.streams.set(publisherId, mediaStream);
+    }
+
+    if (remoteStream.contentType === "video") {
+      room.remoteVideoStreams.set(publisherId, remoteStream);
+
+      const remoteAudioStream = room.remoteAudioStreams.get(publisherId);
+      const mediaStream = new MediaStream(
+        remoteAudioStream === undefined ? [] : [remoteAudioStream.track],
+      );
+      mediaStream.addTrack(remoteStream.track);
+      room.streams.set(publisherId, mediaStream);
+    }
+
+    // send back stat as welcome message
+    localRoomMember.updateMetadata(
+      JSON.stringify({
+        type: "stat",
+        payload: { ...client.stat, ...media.stat },
+      }),
+    );
+  });
+
+  // 退出時の処理
+  confRoom.onMemberLeft.add(({ member }) => {
+    const peerId = member.id;
+    log("onMemberLeft", peerId);
+
+    if (peerId === localRoomMember.id) {
+      // 意図した退出の場合はindexに遷移する
+      // ここでは意図しない退出のためリロードしてダイアログを表示させる
+      log("I left! please re-enter..");
+      notification.showInfo("I left! please re-enter..");
+
+      disposers.forEach((d) => d());
+
+      setTimeout(() => location.reload(), 500);
+    }
 
     const stat = room.stats.get(peerId);
     if (stat) {
@@ -134,7 +211,11 @@ export const joinRoom = (store: RootStore) => {
     room.removeStream(peerId);
   });
 
-  confRoom.on("data", ({ src, data }) => {
+  confRoom.onMemberMetadataUpdated.add(({ member, metadata }) => {
+    const src = member.id;
+    if (src === localRoomMember.id) return;
+
+    const data = JSON.parse(metadata);
     const { type, payload }: RoomData = data;
 
     switch (type) {
@@ -147,20 +228,6 @@ export const joinRoom = (store: RootStore) => {
           notification.showJoin(stat.displayName);
         }
         room.stats.set(src, stat);
-        break;
-      }
-      case "chat": {
-        const chat = payload as RoomChat;
-        log("on('data/chat')", chat);
-
-        // notify only when chat is closed
-        ui.isChatOpen || notification.showChat(chat.from, chat.text);
-        room.addRemoteChat(chat);
-        break;
-      }
-      case "reaction": {
-        const reaction = payload as RoomReaction;
-        notification.showReaction(reaction.from, reaction.reaction);
         break;
       }
       case "cast": {
@@ -176,20 +243,11 @@ export const joinRoom = (store: RootStore) => {
     }
   });
 
-  confRoom.once("close", () => {
-    log("on('close')");
-    notification.showInfo("room closed! trying re-connect..");
+  // 既存のpublicationをsubscribeする
+  confRoom.publications.forEach((publication) => {
+    if (publication.publisher.id === localRoomMember.id) return;
 
-    disposers.forEach((d) => d());
-
-    try {
-      confRoom.removeAllListeners();
-      room.cleanUp();
-    } catch (err) {
-      if (err instanceof Error) throw ui.showError(err);
-    }
-
-    // re-enter the same room automatically but with delay to ensure leave -> join
-    setTimeout(() => joinRoom(store), 500);
+    log("subscribe published remote stream", publication);
+    localRoomMember.subscribe(publication);
   });
 };

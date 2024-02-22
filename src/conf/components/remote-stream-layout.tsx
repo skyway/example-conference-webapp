@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import { FunctionComponent } from "react";
-import { RoomStream } from "skyway-js";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { RoomStat } from "../utils/types";
@@ -13,7 +12,7 @@ import StreamInfo from "./stream-info";
 import VADetector from "./va-detector";
 
 interface Props {
-  stream: RoomStream;
+  stream: MediaStream;
   stat: RoomStat | null;
   isPinned: boolean;
   onClickSetPinned: () => void;
