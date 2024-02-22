@@ -52,7 +52,7 @@ const RoomCreate: FunctionComponent<Props> = (props) => {
               <input
                 type="radio"
                 onChange={() => setRoomType(type)}
-                value={roomType}
+                value={type}
                 checked={roomType === type}
                 name="room-type"
               />{" "}
