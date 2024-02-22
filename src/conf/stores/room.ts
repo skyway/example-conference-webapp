@@ -1,9 +1,15 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
-import { RoomStream, SfuRoom } from "skyway-js";
+import { SfuRoom } from "skyway-js";
 import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
 import { getPeerConnectionFromSfuRoom } from "../utils/skyway";
-import { Room, LocalP2PRoomMember, LocalSFURoomMember } from "@skyway-sdk/room";
+import {
+  Room,
+  RemoteAudioStream,
+  RemoteVideoStream,
+  LocalP2PRoomMember,
+  LocalSFURoomMember,
+} from "@skyway-sdk/room";
 
 class RoomStore {
   peer: LocalP2PRoomMember | LocalSFURoomMember | null;
@@ -12,7 +18,9 @@ class RoomStore {
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
-  streams: Map<string, RoomStream>;
+  streams: Map<string, MediaStream>;
+  remoteAudioStreams: Map<string, RemoteAudioStream>;
+  remoteVideoStreams: Map<string, RemoteVideoStream>;
   stats: Map<string, RoomStat>;
   chats: IObservableArray<RoomChat>;
   myLastChat: RoomChat | null;
@@ -33,6 +41,8 @@ class RoomStore {
     this.useH264 = false;
 
     this.streams = new Map();
+    this.remoteAudioStreams = new Map();
+    this.remoteVideoStreams = new Map();
     this.stats = new Map();
     this.chats = observable<RoomChat>([]);
     this.myLastChat = null;
@@ -75,7 +85,7 @@ class RoomStore {
     return this.room !== null;
   }
 
-  get pinnedStream(): RoomStream | null {
+  get pinnedStream(): MediaStream | null {
     if (this.pinnedId === null) {
       return null;
     }

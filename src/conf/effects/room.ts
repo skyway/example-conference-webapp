@@ -1,6 +1,5 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
-import { RoomStream } from "skyway-js";
 import {
   RoomData,
   RoomStat,
@@ -111,9 +110,46 @@ export const joinRoom = (store: RootStore) => {
     }),
   ];
 
-  confRoom.on("stream", (stream: RoomStream) => {
-    log("on('stream')", stream);
-    room.streams.set(stream.peerId, stream);
+  // auto subscribe設定
+  confRoom.onStreamPublished.add(({ publication }) => {
+    if (publication.publisher.id === localRoomMember.id) return;
+
+    log("onStreamPublished", publication);
+    localRoomMember.subscribe(publication);
+  });
+
+  // Subscribed時の対応
+  // - confRoom.onPublicationSubscribedでは、subscription.streamはundefined
+  localRoomMember.onPublicationSubscribed.add(({ subscription }) => {
+    if (subscription.subscriber.id !== localRoomMember.id) return;
+
+    log("onPublicationSubscribed", subscription);
+
+    const remoteStream = subscription.stream;
+    if (remoteStream === undefined) return;
+
+    const publisherId = subscription.publication.publisher.id;
+    if (remoteStream.contentType === "audio") {
+      room.remoteAudioStreams.set(publisherId, remoteStream);
+
+      const remoteVideoStream = room.remoteVideoStreams.get(publisherId);
+      const mediaStream = new MediaStream(
+        remoteVideoStream === undefined ? [] : [remoteVideoStream.track],
+      );
+      mediaStream.addTrack(remoteStream.track);
+      room.streams.set(publisherId, mediaStream);
+    }
+
+    if (remoteStream.contentType === "video") {
+      room.remoteVideoStreams.set(publisherId, remoteStream);
+
+      const remoteAudioStream = room.remoteAudioStreams.get(publisherId);
+      const mediaStream = new MediaStream(
+        remoteAudioStream === undefined ? [] : [remoteAudioStream.track],
+      );
+      mediaStream.addTrack(remoteStream.track);
+      room.streams.set(publisherId, mediaStream);
+    }
 
     // send back stat as welcome message
     confRoom.send({
