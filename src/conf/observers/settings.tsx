@@ -94,7 +94,6 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
             isAudioTrackMuted={media.isAudioTrackMuted}
             onClickToggleVideoMuted={onClickToggleVideoMuted}
             onClickToggleAudioMuted={onClickToggleAudioMuted}
-            isReEntering={ui.isReEntering}
             isJoined={room.isJoined}
             isDisplayNameValid={client.isDisplayNameValid}
             onClickCloseSettings={onClickCloseSettings}

@@ -28,7 +28,6 @@ interface Props {
   audioDeviceId: string;
   videoInDevices: MediaDeviceInfo[];
   audioInDevices: MediaDeviceInfo[];
-  isReEntering: boolean;
   isJoined: boolean;
   isDisplayNameValid: boolean;
   onChangeVideoDeviceId: (deviceId: string) => void;
@@ -56,7 +55,6 @@ const SettingsLayout: FunctionComponent<Props> = ({
   audioDeviceId,
   videoInDevices,
   audioInDevices,
-  isReEntering,
   isJoined,
   isDisplayNameValid,
   onChangeVideoDeviceId,
@@ -168,16 +166,12 @@ const SettingsLayout: FunctionComponent<Props> = ({
         <button
           css={doneButtonStyle}
           onClick={isJoined ? onClickCloseSettings : onClickJoinConference}
-          disabled={isReEntering || !isDisplayNameValid}
+          disabled={!isDisplayNameValid}
         >
-          {isReEntering ? (
-            "RE-ENTERING THE ROOM"
-          ) : (
-            <>
-              <Icon name={isJoined ? "done" : "meeting_room"} />
-              <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
-            </>
-          )}
+          <>
+            <Icon name={isJoined ? "done" : "meeting_room"} />
+            <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
+          </>
         </button>
       </div>
     </div>

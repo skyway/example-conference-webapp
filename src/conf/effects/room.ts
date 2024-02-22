@@ -44,9 +44,6 @@ export const joinRoom = (store: RootStore) => {
 
   log("joined room", confRoom);
 
-  // force set to false
-  ui.isReEntering = false;
-
   const disposers = [
     reaction(
       () => ({ ...media.stat, ...client.stat }),
