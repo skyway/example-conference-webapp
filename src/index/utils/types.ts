@@ -1,4 +1,4 @@
 export interface RoomInit {
-  mode: "sfu" | "mesh";
+  mode: "sfu" | "p2p";
   id: string;
 }

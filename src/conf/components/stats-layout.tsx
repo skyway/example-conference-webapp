@@ -36,7 +36,7 @@ const StatsLayout: FunctionComponent<Props> = ({
           </details>
         </div>
       ) : (
-        <div css={naStyle}>Stats view is not available in mesh room type.</div>
+        <div css={naStyle}>Stats view is not available in p2p room type.</div>
       )}
     </div>
   </Modal>

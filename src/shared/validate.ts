@@ -1,5 +1,5 @@
 export const isValidRoomType = (type: string): boolean => {
-  if (type === "sfu" || type === "mesh") {
+  if (type === "sfu" || type === "p2p") {
     return true;
   }
   return false;
