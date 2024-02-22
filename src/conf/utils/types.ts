@@ -23,18 +23,10 @@ export interface UserDevices {
 
 export type VideoType = "camera" | "display" | null;
 
-export type RoomData =
-  | RoomDataStat
-  | RoomDataChat
-  | RoomDataReaction
-  | RoomDataCast;
+export type RoomData = RoomDataStat | RoomDataReaction | RoomDataCast;
 interface RoomDataStat {
   type: "stat";
   payload: RoomStat;
-}
-interface RoomDataChat {
-  type: "chat";
-  payload: RoomChat;
 }
 interface RoomDataReaction {
   type: "reaction";
@@ -53,14 +45,6 @@ export interface RoomStat {
   isAudioMuted: boolean;
 }
 
-export interface RoomChat {
-  id: number;
-  text: string;
-  from: string;
-  time: number;
-  isMine: boolean;
-}
-
 export interface RoomReaction {
   from: string;
   reaction: string;
@@ -70,7 +54,7 @@ export interface RoomCast {
   from: string;
 }
 
-export type NotificationType = "info" | "person" | "chat" | "insert_emoticon";
+export type NotificationType = "info" | "person" | "insert_emoticon";
 export interface NotificationItem {
   id: number;
   type: NotificationType;

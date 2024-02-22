@@ -3,7 +3,6 @@ import Bootstrap from "./observers/bootstrap";
 import Settings from "./observers/settings";
 import Notification from "./observers/notification";
 import { ReactionOpener } from "./observers/reaction";
-import { ChatOpener, Chat } from "./observers/chat";
 import { StatsOpener, Stats } from "./observers/stats";
 import { ExitOpener } from "./observers/exit";
 import PinnedStream from "./observers/pinned-stream";
@@ -45,7 +44,6 @@ class App extends React.Component<Record<string, never>, State> {
           </LeftBottom>
           <RightMenu
             openers={[
-              <ChatOpener key="chat" />,
               <ReactionOpener key="reaction" />,
               <StatsOpener key="stats" />,
               <ExitOpener key="exit" />,
@@ -56,7 +54,6 @@ class App extends React.Component<Record<string, never>, State> {
 
           {/* Modal Layer */}
           <Settings />
-          <Chat />
           <Stats />
           <Notification />
         </Bootstrap>

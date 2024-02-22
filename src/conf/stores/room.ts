@@ -1,6 +1,5 @@
 import { makeObservable, observable, computed, action } from "mobx";
-import { IObservableArray } from "mobx";
-import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
+import { RoomInit, RoomStat, RoomReaction } from "../utils/types";
 import {
   Room,
   RemoteAudioStream,
@@ -21,8 +20,6 @@ class RoomStore {
   remoteAudioStreams: Map<string, RemoteAudioStream>;
   remoteVideoStreams: Map<string, RemoteVideoStream>;
   stats: Map<string, RoomStat>;
-  chats: IObservableArray<RoomChat>;
-  myLastChat: RoomChat | null;
   myLastReaction: RoomReaction | null;
   pinnedId: string | null;
   castRequestCount: number;
@@ -43,8 +40,6 @@ class RoomStore {
     this.remoteAudioStreams = new Map();
     this.remoteVideoStreams = new Map();
     this.stats = new Map();
-    this.chats = observable<RoomChat>([]);
-    this.myLastChat = null;
     this.myLastReaction = null;
     this.pinnedId = null;
     this.castRequestCount = 0;
@@ -58,8 +53,6 @@ class RoomStore {
       id: observable,
       streams: observable.shallow,
       stats: observable.shallow,
-      chats: observable.shallow,
-      myLastChat: observable.ref,
       myLastReaction: observable.ref,
       pinnedId: observable,
       castRequestCount: observable,
@@ -68,8 +61,6 @@ class RoomStore {
       isJoined: computed,
       pinnedStream: computed,
       load: action,
-      addLocalChat: action,
-      addRemoteChat: action,
       removeStream: action,
       cleanUp: action,
     });
@@ -101,24 +92,6 @@ class RoomStore {
     this.isReady = true;
   }
 
-  addLocalChat(from: string, text: string) {
-    const chat = {
-      id: Math.random(),
-      time: Date.now(),
-      isMine: true,
-      from,
-      text,
-    };
-    this.chats.push(chat);
-    // this triggers reaction to send chat for remotes
-    this.myLastChat = chat;
-  }
-
-  addRemoteChat(chat: RoomChat) {
-    chat.isMine = false;
-    this.chats.push(chat);
-  }
-
   addReaction(from: string, reaction: string) {
     // this triggers reaction to send reaction for remotes
     this.myLastReaction = { from, reaction };
@@ -142,8 +115,6 @@ class RoomStore {
     );
     this.streams.clear();
     this.stats.clear();
-    this.chats.clear();
-    this.myLastChat = null;
     this.room = null;
   }
 }

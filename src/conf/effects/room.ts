@@ -1,12 +1,6 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
-import {
-  RoomData,
-  RoomStat,
-  RoomChat,
-  RoomReaction,
-  RoomCast,
-} from "../utils/types";
+import { RoomData, RoomStat, RoomReaction, RoomCast } from "../utils/types";
 import RootStore from "../stores";
 import { LocalAudioStream, LocalVideoStream } from "@skyway-sdk/room";
 
@@ -55,18 +49,6 @@ export const joinRoom = (store: RootStore) => {
         log("reaction:send(stat)");
         localRoomMember.updateMetadata(
           JSON.stringify({ type: "stat", payload: stat }),
-        );
-      },
-    ),
-    reaction(
-      () => room.myLastChat,
-      (chat) => {
-        if (chat === null) {
-          return;
-        }
-        log("reaction:send(chat)");
-        localRoomMember.updateMetadata(
-          JSON.stringify({ type: "chat", payload: chat }),
         );
       },
     ),
@@ -258,15 +240,6 @@ export const joinRoom = (store: RootStore) => {
           notification.showJoin(stat.displayName);
         }
         room.stats.set(src, stat);
-        break;
-      }
-      case "chat": {
-        const chat = payload as RoomChat;
-        log("on('data/chat')", chat);
-
-        // notify only when chat is closed
-        ui.isChatOpen || notification.showChat(chat.from, chat.text);
-        room.addRemoteChat(chat);
         break;
       }
       case "reaction": {
