@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, memo } from "react";
 import { FunctionComponent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const hark = require("hark") as Hark;
 import { Hark } from "../utils/types";

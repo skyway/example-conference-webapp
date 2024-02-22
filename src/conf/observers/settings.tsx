@@ -18,28 +18,50 @@ import {
   toggleAudioMuted,
 } from "../effects/settings";
 
-const Settings: FunctionComponent<{}> = () => {
+const Settings: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
-  const onChangeDispName = useCallback(changeDispName(store), [store]);
-  const onClickEnableUserVideo = useCallback(enableUserVideo(store), [store]);
-  const onClickDisableUserVideo = useCallback(disableUserVideo(store), [store]);
-  const onClickEnableDisplayVideo = useCallback(enableDisplayVideo(store), [
-    store,
-  ]);
-  const onClickDisableDisplayVideo = useCallback(disableDisplayVideo(store), [
-    store,
-  ]);
-  const onChangeVideoDeviceId = useCallback(changeVideoDeviceId(store), [
-    store,
-  ]);
-  const onChangeAudioDeviceId = useCallback(changeAudioDeviceId(store), [
-    store,
-  ]);
-  const onClickJoinConference = useCallback(joinConference(store), [store]);
-  const onClickCloseSettings = useCallback(closeSettings(store), [store]);
-  const onClickToggleAudioMuted = useCallback(toggleAudioMuted(store), [store]);
-  const onClickToggleVideoMuted = useCallback(toggleVideoMuted(store), [store]);
+  const onChangeDispName = useCallback(
+    (name: string) => changeDispName(name, store),
+    [store],
+  );
+  const onClickEnableUserVideo = useCallback(
+    () => enableUserVideo(store),
+    [store],
+  );
+  const onClickDisableUserVideo = useCallback(
+    () => disableUserVideo(store),
+    [store],
+  );
+  const onClickEnableDisplayVideo = useCallback(
+    () => enableDisplayVideo(store),
+    [store],
+  );
+  const onClickDisableDisplayVideo = useCallback(
+    () => disableDisplayVideo(store),
+    [store],
+  );
+  const onChangeVideoDeviceId = useCallback(
+    (deviceId: string) => changeVideoDeviceId(deviceId, store),
+    [store],
+  );
+  const onChangeAudioDeviceId = useCallback(
+    (deviceId: string) => changeAudioDeviceId(deviceId, store),
+    [store],
+  );
+  const onClickJoinConference = useCallback(
+    () => joinConference(store),
+    [store],
+  );
+  const onClickCloseSettings = useCallback(() => closeSettings(store), [store]);
+  const onClickToggleAudioMuted = useCallback(
+    () => toggleAudioMuted(store),
+    [store],
+  );
+  const onClickToggleVideoMuted = useCallback(
+    () => toggleVideoMuted(store),
+    [store],
+  );
 
   const { ui, media, room, client } = store;
   return (

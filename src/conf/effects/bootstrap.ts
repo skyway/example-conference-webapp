@@ -1,4 +1,3 @@
-import { EffectCallback } from "react";
 import { toJS, reaction, observe } from "mobx";
 import debug from "debug";
 import {
@@ -13,24 +12,21 @@ import RootStore from "../stores";
 
 const log = debug("effect:bootstrap");
 
-export const checkRoomSetting = ({
-  ui,
-  room,
-}: RootStore): EffectCallback => () => {
+export const checkRoomSetting = ({ ui, room }: RootStore) => {
   log("checkRoomSetting()");
   const [, roomType, roomId] = location.hash.split("/");
   const params = new URLSearchParams(location.search);
 
   if (!isValidRoomType(roomType)) {
     throw ui.showError(
-      new Error("Invalid room type! it should be `sfu` or `mesh`.")
+      new Error("Invalid room type! it should be `sfu` or `mesh`."),
     );
   }
   if (!isValidRoomId(roomId)) {
     throw ui.showError(
       new Error(
-        `Invalid room name! it should be match \`${roomIdRe.toString()}\`.`
-      )
+        `Invalid room name! it should be match \`${roomIdRe.toString()}\`.`,
+      ),
     );
   }
 
@@ -46,7 +42,7 @@ export const checkRoomSetting = ({
         id: roomId,
         useH264: params.has("h264"),
       },
-      peer
+      peer,
     );
 
     log(`room: ${roomType}/${roomId}`);
@@ -54,11 +50,7 @@ export const checkRoomSetting = ({
   })();
 };
 
-export const initAudioDeviceAndClient = ({
-  ui,
-  client,
-  media,
-}: RootStore): EffectCallback => () => {
+export const initAudioDeviceAndClient = ({ ui, client, media }: RootStore) => {
   log("ensureAudioDevice()");
 
   (async () => {
@@ -84,7 +76,7 @@ export const initAudioDeviceAndClient = ({
     log(
       "%s audio + %s video builtin devices are found",
       audioInDevices.length,
-      videoInDevices.length
+      videoInDevices.length,
     );
 
     // keep audio track
@@ -118,24 +110,24 @@ export const listenStoreChanges = ({
   media,
   room,
   notification,
-}: RootStore): EffectCallback => () => {
+}: RootStore) => {
   log("listenStoreChanges()");
 
   const disposers = [
     reaction(
       () => room.isJoined,
       (isJoined) =>
-        isJoined && notification.showInfo(`You joined the room ${room.name}`)
+        isJoined && notification.showInfo(`You joined the room ${room.name}`),
     ),
     reaction(
       () => media.isAudioTrackMuted,
       (muted) =>
-        notification.showInfo(`Mic input was ${muted ? "muted" : "unmuted"}`)
+        notification.showInfo(`Mic input was ${muted ? "muted" : "unmuted"}`),
     ),
     reaction(
       () => media.isVideoTrackMuted,
       (muted) =>
-        notification.showInfo(`Video was ${muted ? "muted" : "unmuted"}`)
+        notification.showInfo(`Video was ${muted ? "muted" : "unmuted"}`),
     ),
     observe(media, "audioDeviceId", (change) => {
       if (change.oldValue === null) {
@@ -157,13 +149,13 @@ export const listenStoreChanges = ({
     }),
     reaction(
       () => room.castRequestCount,
-      () => notification.showInfo("Your video was casted to everyone")
+      () => notification.showInfo("Your video was casted to everyone"),
     ),
     reaction(
       () => room.myLastReaction,
       (reaction) =>
         reaction &&
-        notification.showInfo(`You reacted with ${reaction.reaction}`)
+        notification.showInfo(`You reacted with ${reaction.reaction}`),
     ),
     reaction(
       () => client.displayName,
@@ -171,20 +163,19 @@ export const listenStoreChanges = ({
         localStorage.setItem("SkyWayConf.dispName", name.trim());
         notification.showInfo("Display name saved");
       },
-      { delay: 2000 }
+      { delay: 2000 },
     ),
   ];
 
   return () => disposers.forEach((d) => d());
 };
 
-export const listenGlobalEvents = ({
-  media,
-  ui,
-}: RootStore): EffectCallback => () => {
+export const listenGlobalEvents = ({ media, ui }: RootStore) => {
   log("listenGlobalEvents()");
 
-  const reloadOnHashChange = () => location.reload(true);
+  const reloadOnHashChange = () => {
+    location.reload();
+  };
   const reloadOnDeviceAddOrRemoved = async () => {
     log("devicechange event fired");
     const { audioInDevices, videoInDevices } = await getUserDevices({
@@ -207,13 +198,13 @@ export const listenGlobalEvents = ({
       curAudioInDevices.length &&
       audioInDevices.length !== curAudioInDevices.length
     ) {
-      location.reload(true);
+      location.reload();
     }
     if (
       curVideoInDevices.length &&
       videoInDevices.length !== curVideoInDevices.length
     ) {
-      location.reload(true);
+      location.reload();
     }
   };
 
@@ -221,7 +212,7 @@ export const listenGlobalEvents = ({
   navigator.mediaDevices.addEventListener(
     "devicechange",
     reloadOnDeviceAddOrRemoved,
-    false
+    false,
   );
 
   return () => {
@@ -229,7 +220,7 @@ export const listenGlobalEvents = ({
     window.removeEventListener("hashchange", reloadOnHashChange);
     navigator.mediaDevices.removeEventListener(
       "devicechange",
-      reloadOnDeviceAddOrRemoved
+      reloadOnDeviceAddOrRemoved,
     );
   };
 };

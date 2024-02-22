@@ -1,7 +1,7 @@
 import { UserDevices } from "./types";
 
 export const getUserDevices = async (
-  options: MediaStreamConstraints
+  options: MediaStreamConstraints,
 ): Promise<UserDevices> => {
   const devices = (await navigator.mediaDevices.enumerateDevices()) || [];
 
@@ -33,7 +33,7 @@ export const getUserDevices = async (
 };
 
 export const getUserAudioTrack = async (
-  deviceId: string
+  deviceId: string,
 ): Promise<MediaStreamTrack> => {
   const constraints =
     deviceId === "" ? true : { deviceId: { exact: deviceId } };
@@ -44,7 +44,7 @@ export const getUserAudioTrack = async (
 };
 
 export const getUserVideoTrack = async (
-  deviceId: string
+  deviceId: string,
 ): Promise<MediaStreamTrack> => {
   const constraints =
     deviceId === "" ? true : { deviceId: { exact: deviceId } };

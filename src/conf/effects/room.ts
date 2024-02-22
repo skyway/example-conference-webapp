@@ -57,7 +57,7 @@ export const joinRoom = (store: RootStore) => {
       (stat) => {
         log("reaction:send(stat)");
         confRoom.send({ type: "stat", payload: stat });
-      }
+      },
     ),
     reaction(
       () => room.myLastChat,
@@ -67,7 +67,7 @@ export const joinRoom = (store: RootStore) => {
         }
         log("reaction:send(chat)");
         confRoom.send({ type: "chat", payload: chat });
-      }
+      },
     ),
     reaction(
       () => room.myLastReaction,
@@ -77,14 +77,14 @@ export const joinRoom = (store: RootStore) => {
         }
         log("reaction:send(reaction)");
         confRoom.send({ type: "reaction", payload: reaction });
-      }
+      },
     ),
     reaction(
       () => room.castRequestCount,
       () => {
         log("reaction:send(cast)");
         confRoom.send({ type: "cast", payload: { from: client.displayName } });
-      }
+      },
     ),
     observe(media, "videoDeviceId", (change) => {
       log("observe(media.videoDeviceId)");
@@ -186,7 +186,7 @@ export const joinRoom = (store: RootStore) => {
       confRoom.removeAllListeners();
       room.cleanUp();
     } catch (err) {
-      throw ui.showError(err);
+      if (err instanceof Error) throw ui.showError(err);
     }
 
     // re-enter the same room automatically but with delay to ensure leave -> join

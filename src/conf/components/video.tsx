@@ -2,7 +2,7 @@ import * as React from "react";
 import { useRef, useEffect, memo } from "react";
 import { FunctionComponent } from "react";
 import debug from "debug";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 
 const _log = debug("component:video");
 

@@ -20,10 +20,12 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
-    "prettier/react",
   ],
   rules: {
+    "prettier/prettier": [
+      "error",
+      { trailingComma: "all", singleQuote: false, semi: true },
+    ],
     "no-console": "off",
     "no-debugger": "off",
     "no-dupe-class-members": "off",
@@ -39,11 +41,11 @@ module.exports = {
       "error",
       { accessibility: "no-public" },
     ],
-    "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/no-use-before-define": "off",
 
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
+    "react/no-unknown-property": ["error", { ignore: ["css"] }],
   },
 };

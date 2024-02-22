@@ -1,8 +1,8 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import { css } from "@emotion/core";
+import { css } from "@emotion/react";
 
-const Loader: FunctionComponent<{}> = () => (
+const Loader: FunctionComponent<Record<string, never>> = () => (
   <img css={wrapperStyle} src="./images/conf/icon-loading.svg" />
 );
 

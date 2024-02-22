@@ -1,4 +1,4 @@
-import { decorate, observable, action } from "mobx";
+import { makeObservable, observable, action } from "mobx";
 
 class UiStore {
   error: Error | null;
@@ -15,6 +15,16 @@ class UiStore {
     this.isReactionOpen = false;
     this.isStatsOpen = false;
     this.isReEntering = false;
+
+    makeObservable(this, {
+      error: observable.ref,
+      isSettingsOpen: observable,
+      isChatOpen: observable,
+      isReactionOpen: observable,
+      isStatsOpen: observable,
+      isReEntering: observable,
+      showError: action,
+    });
   }
 
   showError(err: Error): Error {
@@ -22,14 +32,5 @@ class UiStore {
     return err;
   }
 }
-decorate(UiStore, {
-  error: observable.ref,
-  isSettingsOpen: observable,
-  isChatOpen: observable,
-  isReactionOpen: observable,
-  isStatsOpen: observable,
-  isReEntering: observable,
-  showError: action,
-});
 
 export default UiStore;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import { css, keyframes } from "@emotion/core";
+import { css, keyframes } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { Icon } from "./icon";
 
