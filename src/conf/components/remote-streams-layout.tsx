@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { RoomStat } from "../utils/types";
 import { rightMenuWidth, rightMenuTogglerHeight } from "../utils/style";
@@ -17,32 +16,34 @@ interface Props {
   pinnedMemberId: string;
   onClickSetPinned: (memberId: string) => void;
 }
-const RemoteStreamsLayout: FunctionComponent<Props> = ({
+function RemoteStreamsLayout({
   streams,
   stats,
   pinnedMemberId,
   onClickSetPinned,
-}: Props) => (
-  <div css={wrapperStyle}>
-    <div css={headStyle}>
-      <span css={numberStyle}>{streams.length}</span> participant(s)
+}: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <div css={headStyle}>
+        <span css={numberStyle}>{streams.length}</span> participant(s)
+      </div>
+      {streams.sort(sortByVideo).map(([memberId, stream]) => {
+        const entry = stats.find(([id]) => id === memberId);
+        const stat = entry ? entry[1] : null;
+        const isPinned = memberId === pinnedMemberId;
+        return (
+          <RemoteStreamLayout
+            key={memberId}
+            stream={stream}
+            stat={stat}
+            isPinned={isPinned}
+            onClickSetPinned={() => onClickSetPinned(memberId)}
+          />
+        );
+      })}
     </div>
-    {streams.sort(sortByVideo).map(([memberId, stream]) => {
-      const entry = stats.find(([id]) => id === memberId);
-      const stat = entry ? entry[1] : null;
-      const isPinned = memberId === pinnedMemberId;
-      return (
-        <RemoteStreamLayout
-          key={memberId}
-          stream={stream}
-          stat={stat}
-          isPinned={isPinned}
-          onClickSetPinned={() => onClickSetPinned(memberId)}
-        />
-      );
-    })}
-  </div>
-);
+  );
+}
 
 export default RemoteStreamsLayout;
 

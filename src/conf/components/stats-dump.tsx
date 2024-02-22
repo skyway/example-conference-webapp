@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
   rtcStats: WebRTCStats | null;
 }
-const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
+function StatsDump({ rtcStats }: Props) {
   const [searchKey, setSearchKey] = useState("");
   const filteredStats =
     rtcStats === null ? null : filterStats(rtcStats, searchKey.trim());
@@ -31,7 +30,7 @@ const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
       </pre>
     </>
   );
-};
+}
 
 export default StatsDump;
 

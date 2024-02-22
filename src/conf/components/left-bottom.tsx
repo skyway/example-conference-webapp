@@ -1,15 +1,17 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 import { zIndex } from "../utils/style";
 
 interface Props {
   children: ReactNode;
 }
-const LeftBottom: FunctionComponent<Props> = ({ children }: Props) => (
-  <div css={wrapperStyle}>
-    <div css={bottomStyle}>{children}</div>
-  </div>
-);
+function LeftBottom({ children }: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <div css={bottomStyle}>{children}</div>
+    </div>
+  );
+}
 
 export default LeftBottom;
 

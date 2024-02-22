@@ -1,5 +1,4 @@
 import { memo, useEffect, useState } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { ClientBrowser } from "../utils/types";
 import { globalColors } from "../../shared/global-style";
@@ -8,7 +7,7 @@ interface Props {
   stream: MediaStream;
   browser: ClientBrowser;
 }
-const StreamInfo: FunctionComponent<Props> = ({ stream, browser }) => {
+function StreamInfo({ stream, browser }: Props) {
   const [info, setInfo] = useState({});
   useEffect(() => {
     let timer = 0;
@@ -45,7 +44,7 @@ const StreamInfo: FunctionComponent<Props> = ({ stream, browser }) => {
   }, [stream, browser, setInfo]);
 
   return <pre css={wrapperStyle}>{JSON.stringify(info, null, 2)}</pre>;
-};
+}
 
 export default memo(StreamInfo);
 

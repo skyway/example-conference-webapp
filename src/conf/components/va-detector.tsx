@@ -1,5 +1,4 @@
 import { useState, useEffect, memo } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const hark = require("hark") as Hark;
@@ -9,7 +8,7 @@ import { globalColors } from "../../shared/global-style";
 interface Props {
   stream: MediaStream;
 }
-const VADetector: FunctionComponent<Props> = ({ stream }) => {
+function VADetector({ stream }: Props) {
   const [decibel, setDecibel] = useState(-Infinity);
   useEffect(() => {
     // if audio source is changing
@@ -23,7 +22,7 @@ const VADetector: FunctionComponent<Props> = ({ stream }) => {
   }, [stream]);
 
   return <div style={decibelToStyle(decibel)} css={wrapperStyle} />;
-};
+}
 
 export default memo(VADetector);
 

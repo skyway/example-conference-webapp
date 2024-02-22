@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { zIndex, rightMenuWidth, rightMenuTogglerHeight } from "../utils/style";
@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode;
   openers: ReactNode[];
 }
-const RightMenu: FunctionComponent<Props> = ({ children, openers }: Props) => {
+function RightMenu({ children, openers }: Props) {
   const [isVisible, setVisible] = useState(true);
 
   return (
@@ -30,7 +30,7 @@ const RightMenu: FunctionComponent<Props> = ({ children, openers }: Props) => {
       ))}
     </div>
   );
-};
+}
 
 export default RightMenu;
 

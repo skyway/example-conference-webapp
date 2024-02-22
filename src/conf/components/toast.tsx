@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import { css, keyframes } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { Icon } from "./icon";
@@ -7,12 +6,14 @@ interface Props {
   type: string;
   text: string;
 }
-const Toast: FunctionComponent<Props> = ({ type, text }: Props) => (
-  <div css={wrapperStyle}>
-    <Icon name={type} />
-    <span css={textStyle}>{text}</span>
-  </div>
-);
+function Toast({ type, text }: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <Icon name={type} />
+      <span css={textStyle}>{text}</span>
+    </div>
+  );
+}
 
 export default Toast;
 

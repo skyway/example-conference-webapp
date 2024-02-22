@@ -1,30 +1,32 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 import { globalColors, animation } from "../../shared/global-style";
 
 interface Props {
   children: ReactNode;
 }
-const Layout: FunctionComponent<Props> = ({ children }: Props) => (
-  <div css={wrapperStyle}>
-    <h1 css={headStyle}>SkyWay Conference</h1>
-    <p css={pStyle}>Video conference on web browser</p>
+function Layout({ children }: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <h1 css={headStyle}>SkyWay Conference</h1>
+      <p css={pStyle}>Video conference on web browser</p>
 
-    <div css={contentStyle}>{children}</div>
+      <div css={contentStyle}>{children}</div>
 
-    <p css={pStyle}>
-      No registration or installs! Just create a room and share the link.
-    </p>
-    <a
-      css={logoStyle}
-      href="https://webrtc.ecl.ntt.com/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <img src="./images/logo.svg" alt="SkyWay" />
-    </a>
-  </div>
-);
+      <p css={pStyle}>
+        No registration or installs! Just create a room and share the link.
+      </p>
+      <a
+        css={logoStyle}
+        href="https://webrtc.ecl.ntt.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="./images/logo.svg" alt="SkyWay" />
+      </a>
+    </div>
+  );
+}
 
 export default Layout;
 

@@ -1,29 +1,27 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 
 interface Props {
   label: string;
   children: ReactNode;
 }
-export const SettingsItemDevice: FunctionComponent<Props> = ({
-  label,
-  children,
-}: Props) => (
-  <div css={[wrapperStyle, deviceStyle]}>
-    <div css={labelStyle}>{label}</div>
-    {children}
-  </div>
-);
+export function SettingsItemDevice({ label, children }: Props) {
+  return (
+    <div css={[wrapperStyle, deviceStyle]}>
+      <div css={labelStyle}>{label}</div>
+      {children}
+    </div>
+  );
+}
 
-export const SettingsItemName: FunctionComponent<Props> = ({
-  label,
-  children,
-}: Props) => (
-  <div css={[wrapperStyle, nameStyle]}>
-    <div css={labelStyle}>{label}</div>
-    <div>{children}</div>
-  </div>
-);
+export function SettingsItemName({ label, children }: Props) {
+  return (
+    <div css={[wrapperStyle, nameStyle]}>
+      <div css={labelStyle}>{label}</div>
+      <div>{children}</div>
+    </div>
+  );
+}
 
 const wrapperStyle = css({
   margin: "8px auto",

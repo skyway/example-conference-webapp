@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { RoomStat } from "../utils/types";
@@ -16,12 +15,12 @@ interface Props {
   isPinned: boolean;
   onClickSetPinned: () => void;
 }
-const RemoteStreamLayout: FunctionComponent<Props> = ({
+function RemoteStreamLayout({
   stream,
   stat,
   isPinned,
   onClickSetPinned,
-}: Props) => {
+}: Props) {
   const isVideoDisabled = stat && stat.isVideoDisabled ? true : false;
   const [isInfoShown, setInfoShown] = useState(false);
 
@@ -74,7 +73,7 @@ const RemoteStreamLayout: FunctionComponent<Props> = ({
       </div>
     </>
   );
-};
+}
 
 export default RemoteStreamLayout;
 

@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { ClientBrowser } from "../utils/types";
@@ -9,20 +9,18 @@ interface Props {
   browser: ClientBrowser;
   controllers: ReactNode;
 }
-const StreamController: FunctionComponent<Props> = ({
-  displayName,
-  browser,
-  controllers,
-}: Props) => (
-  <div css={wrapperStyle}>
-    <div css={rowStyle}>
-      <BrowserIcon {...browser} />
-      &nbsp;
-      {displayName}
+function StreamController({ displayName, browser, controllers }: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <div css={rowStyle}>
+        <BrowserIcon {...browser} />
+        &nbsp;
+        {displayName}
+      </div>
+      <div css={rowStyle}>{controllers}</div>
     </div>
-    <div css={rowStyle}>{controllers}</div>
-  </div>
-);
+  );
+}
 
 export default StreamController;
 

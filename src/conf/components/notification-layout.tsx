@@ -1,13 +1,13 @@
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 import { zIndex } from "../utils/style";
 
 interface Props {
   children: ReactNode;
 }
-const NotificationLayout: FunctionComponent<Props> = ({ children }: Props) => (
-  <div css={wrapperStyle}>{children}</div>
-);
+function NotificationLayout({ children }: Props) {
+  return <div css={wrapperStyle}>{children}</div>;
+}
 
 const wrapperStyle = css({
   position: "absolute",

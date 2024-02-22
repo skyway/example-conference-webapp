@@ -1,18 +1,19 @@
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 
 interface Props {
   error: Error;
 }
-const Error: FunctionComponent<Props> = ({ error }) => (
-  <div css={wrapperStyle}>
-    <h2 css={headStyle}>{error.message || error.name}</h2>
-    <pre css={detailStyle}>
-      {error.stack || "Stack trace is not available."}
-    </pre>
-  </div>
-);
+function Error({ error }: Props) {
+  return (
+    <div css={wrapperStyle}>
+      <h2 css={headStyle}>{error.message || error.name}</h2>
+      <pre css={detailStyle}>
+        {error.stack || "Stack trace is not available."}
+      </pre>
+    </div>
+  );
+}
 
 export default Error;
 

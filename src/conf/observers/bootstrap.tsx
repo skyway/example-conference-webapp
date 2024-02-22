@@ -1,4 +1,4 @@
-import { useContext, useEffect, FunctionComponent, ReactNode } from "react";
+import { useContext, useEffect, ReactNode } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import {
@@ -14,7 +14,7 @@ import Notification from "../observers/notification";
 interface Props {
   children: ReactNode;
 }
-const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
+function Bootstrap({ children }: Props) {
   const store = useContext(StoreContext);
 
   useEffect(() => {
@@ -47,6 +47,6 @@ const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
       }}
     </Observer>
   );
-};
+}
 
 export default Bootstrap;

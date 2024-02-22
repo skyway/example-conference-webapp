@@ -1,5 +1,4 @@
 import { useContext, useCallback } from "react";
-import { FunctionComponent } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import LocalStreamLayout from "../components/local-stream-layout";
@@ -10,7 +9,7 @@ import {
   toggleVideoMuted,
 } from "../effects/local-stream";
 
-const LocalStream: FunctionComponent<Record<string, never>> = () => {
+function LocalStream() {
   const store = useContext(StoreContext);
 
   const onClickCastVideo = useCallback(() => castVideo(store), [store]);
@@ -49,6 +48,6 @@ const LocalStream: FunctionComponent<Record<string, never>> = () => {
       }}
     </Observer>
   );
-};
+}
 
 export default LocalStream;
