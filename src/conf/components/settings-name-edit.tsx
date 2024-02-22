@@ -1,6 +1,4 @@
-import * as React from "react";
 import { useState } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 
@@ -9,11 +7,11 @@ interface Props {
   isInvalid: boolean;
   onChangeDisplayName: (name: string) => void;
 }
-const SettingsNameEdit: FunctionComponent<Props> = ({
+function SettingsNameEdit({
   defaultDisplayName,
   isInvalid,
   onChangeDisplayName,
-}: Props) => {
+}: Props) {
   const [displayName, setDisplayName] = useState(defaultDisplayName);
 
   return (
@@ -36,7 +34,7 @@ const SettingsNameEdit: FunctionComponent<Props> = ({
       />
     </div>
   );
-};
+}
 
 export default SettingsNameEdit;
 

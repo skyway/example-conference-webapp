@@ -1,5 +1,4 @@
-import * as React from "react";
-import { FunctionComponent } from "react";
+import { Fragment } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { VideoType, ClientBrowser } from "../utils/types";
@@ -47,7 +46,7 @@ interface Props {
   onClickCloseSettings: () => void;
   onClickJoinConference: () => void;
 }
-const SettingsLayout: FunctionComponent<Props> = ({
+function SettingsLayout({
   stream,
   defaultDisplayName,
   browser,
@@ -75,122 +74,124 @@ const SettingsLayout: FunctionComponent<Props> = ({
   onChangeDisplayName,
   onClickCloseSettings,
   onClickJoinConference,
-}: Props) => (
-  <Modal>
-    <div css={wrapperStyle}>
-      <div css={videoStyle}>
-        <Video
-          stream={stream}
-          isReverse={videoType === "camera"}
-          isVideoOnly={true}
-        />
-        <div css={controllerStyle}>
-          <StreamController
-            displayName={`v${browser.version}`}
-            browser={browser}
-            controllers={
-              <>
-                {videoType === null ? null : (
+}: Props) {
+  return (
+    <Modal>
+      <div css={wrapperStyle}>
+        <div css={videoStyle}>
+          <Video
+            stream={stream}
+            isReverse={videoType === "camera"}
+            isVideoOnly={true}
+          />
+          <div css={controllerStyle}>
+            <StreamController
+              displayName={`v${browser.version}`}
+              browser={browser}
+              controllers={
+                <Fragment>
+                  {videoType === null ? null : (
+                    <IconButton
+                      name={isVideoTrackMuted ? "videocam_off" : "videocam"}
+                      title={isVideoTrackMuted ? "Unmute video" : "Mute video"}
+                      onClick={onClickToggleVideoMuted}
+                    />
+                  )}
                   <IconButton
-                    name={isVideoTrackMuted ? "videocam_off" : "videocam"}
-                    title={isVideoTrackMuted ? "Unmute video" : "Mute video"}
-                    onClick={onClickToggleVideoMuted}
+                    name={isAudioTrackMuted ? "mic_off" : "mic"}
+                    title={isAudioTrackMuted ? "Unmute audio" : "Mute audio"}
+                    onClick={onClickToggleAudioMuted}
                   />
-                )}
-                <IconButton
-                  name={isAudioTrackMuted ? "mic_off" : "mic"}
-                  title={isAudioTrackMuted ? "Unmute audio" : "Mute audio"}
-                  onClick={onClickToggleAudioMuted}
-                />
-              </>
-            }
-          />
+                </Fragment>
+              }
+            />
+          </div>
         </div>
-      </div>
 
-      <div css={settingsStyle}>
-        <SettingsItemName label="NAME">
-          <SettingsNameEdit
-            defaultDisplayName={defaultDisplayName}
-            isInvalid={!isDisplayNameValid}
-            onChangeDisplayName={onChangeDisplayName}
-          />
-        </SettingsItemName>
-        <SettingsItemDevice label="MIC.">
-          <SettingsDeviceToggler label="Disable" disabled={true} />
-          <SettingsDeviceSelector
-            deviceId={audioDeviceId || ""}
-            inDevices={audioInDevices}
-            onChangeDeviceId={onChangeAudioDeviceId}
-          />
-        </SettingsItemDevice>
-        {hasUserVideoDevice ? (
-          <SettingsItemDevice label="CAMERA">
-            {videoType === "camera" ? (
-              <>
-                <SettingsDeviceToggler
-                  label="Disable"
-                  onClick={onClickDisableUserVideo}
-                />
-                <SettingsDeviceSelector
-                  deviceId={videoDeviceId || ""}
-                  inDevices={videoInDevices}
-                  onChangeDeviceId={onChangeVideoDeviceId}
-                />
-                <div></div>
-                <div>Effect</div>
-                <SettingsVideoEffectSelector
-                  effectId={videoEffectId || ""}
-                  onChangeVideoEffect={onChangeVideoEffect}
-                  canUseVideoEffect={canUseBlurOrVirtualBackground()}
-                />
-              </>
-            ) : (
-              <SettingsDeviceToggler
-                label="Enable"
-                onClick={onClickEnableUserVideo}
-              />
-            )}
+        <div css={settingsStyle}>
+          <SettingsItemName label="NAME">
+            <SettingsNameEdit
+              defaultDisplayName={defaultDisplayName}
+              isInvalid={!isDisplayNameValid}
+              onChangeDisplayName={onChangeDisplayName}
+            />
+          </SettingsItemName>
+          <SettingsItemDevice label="MIC.">
+            <SettingsDeviceToggler label="Disable" disabled={true} />
+            <SettingsDeviceSelector
+              deviceId={audioDeviceId || ""}
+              inDevices={audioInDevices}
+              onChangeDeviceId={onChangeAudioDeviceId}
+            />
           </SettingsItemDevice>
-        ) : null}
-        {hasGetDisplayMedia ? (
-          <SettingsItemDevice label="DISPLAY">
-            {videoType === "display" ? (
-              <>
+          {hasUserVideoDevice ? (
+            <SettingsItemDevice label="CAMERA">
+              {videoType === "camera" ? (
+                <Fragment>
+                  <SettingsDeviceToggler
+                    label="Disable"
+                    onClick={onClickDisableUserVideo}
+                  />
+                  <SettingsDeviceSelector
+                    deviceId={videoDeviceId || ""}
+                    inDevices={videoInDevices}
+                    onChangeDeviceId={onChangeVideoDeviceId}
+                  />
+                  <div></div>
+                  <div>Effect</div>
+                  <SettingsVideoEffectSelector
+                    effectId={videoEffectId || ""}
+                    onChangeVideoEffect={onChangeVideoEffect}
+                    canUseVideoEffect={canUseBlurOrVirtualBackground()}
+                  />
+                </Fragment>
+              ) : (
                 <SettingsDeviceToggler
-                  label="Disable"
-                  onClick={onClickDisableDisplayVideo}
+                  label="Enable"
+                  onClick={onClickEnableUserVideo}
                 />
+              )}
+            </SettingsItemDevice>
+          ) : null}
+          {hasGetDisplayMedia ? (
+            <SettingsItemDevice label="DISPLAY">
+              {videoType === "display" ? (
+                <Fragment>
+                  <SettingsDeviceToggler
+                    label="Disable"
+                    onClick={onClickDisableDisplayVideo}
+                  />
+                  <SettingsDeviceToggler
+                    label="Use another dispaly"
+                    onClick={onClickEnableDisplayVideo}
+                  />
+                </Fragment>
+              ) : (
                 <SettingsDeviceToggler
-                  label="Use another dispaly"
+                  label="Enable"
                   onClick={onClickEnableDisplayVideo}
                 />
-              </>
-            ) : (
-              <SettingsDeviceToggler
-                label="Enable"
-                onClick={onClickEnableDisplayVideo}
-              />
-            )}
-          </SettingsItemDevice>
-        ) : null}
-      </div>
+              )}
+            </SettingsItemDevice>
+          ) : null}
+        </div>
 
-      <div css={buttonWrapStyle}>
-        <button
-          css={doneButtonStyle}
-          onClick={isJoined ? onClickCloseSettings : onClickJoinConference}
-          disabled={!isDisplayNameValid}
-        >
-          <>
-            <Icon name={isJoined ? "done" : "meeting_room"} />
-            <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
-          </>
-        </button>
+        <div css={buttonWrapStyle}>
+          <button
+            css={doneButtonStyle}
+            onClick={isJoined ? onClickCloseSettings : onClickJoinConference}
+            disabled={!isDisplayNameValid}
+          >
+            <Fragment>
+              <Icon name={isJoined ? "done" : "meeting_room"} />
+              <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
+            </Fragment>
+          </button>
+        </div>
       </div>
-    </div>
-  </Modal>
-);
+    </Modal>
+  );
+}
 
 export default SettingsLayout;
 

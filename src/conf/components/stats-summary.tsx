@@ -1,5 +1,3 @@
-import * as React from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import {
   extractCandidatePairs,
@@ -11,7 +9,7 @@ import { WebRTCStats } from "@skyway-sdk/room";
 interface Props {
   rtcStats: WebRTCStats | null;
 }
-const StatsSummary: FunctionComponent<Props> = ({ rtcStats }: Props) => {
+function StatsSummary({ rtcStats }: Props) {
   const summarizedStats = rtcStats === null ? null : summarizeStats(rtcStats);
 
   return (
@@ -21,7 +19,7 @@ const StatsSummary: FunctionComponent<Props> = ({ rtcStats }: Props) => {
       </pre>
     </div>
   );
-};
+}
 
 export default StatsSummary;
 

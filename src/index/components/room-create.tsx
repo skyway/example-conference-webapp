@@ -1,6 +1,4 @@
-import * as React from "react";
 import { useState } from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import {
@@ -13,7 +11,7 @@ import { RoomInit } from "../utils/types";
 interface Props {
   onSubmit: (init: RoomInit) => void;
 }
-const RoomCreate: FunctionComponent<Props> = (props) => {
+function RoomCreate(props: Props) {
   const [roomId, setRoomId] = useState("");
   const [roomType, setRoomType] = useState("SFU");
   const [isRoomIdValid, setRoomIdValid] = useState(true);
@@ -73,7 +71,7 @@ const RoomCreate: FunctionComponent<Props> = (props) => {
       </div>
     </form>
   );
-};
+}
 
 export default RoomCreate;
 

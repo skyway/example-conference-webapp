@@ -1,6 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
-import { FunctionComponent } from "react";
+import { useState, Fragment } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { ClientBrowser, VideoType } from "../utils/types";
@@ -22,7 +20,7 @@ interface Props {
   onClickCastVideo: () => void;
   onClickOpenSettings: () => void;
 }
-const LocalStreamLayout: FunctionComponent<Props> = ({
+function LocalStreamLayout({
   stream,
   displayName,
   browser,
@@ -33,7 +31,7 @@ const LocalStreamLayout: FunctionComponent<Props> = ({
   onClickToggleVideoMuted,
   onClickCastVideo,
   onClickOpenSettings,
-}: Props) => {
+}: Props) {
   const [isMinimize, setMinimize] = useState(false);
   const [isInfoShown, setInfoShown] = useState(false);
 
@@ -93,7 +91,7 @@ const LocalStreamLayout: FunctionComponent<Props> = ({
             displayName={displayName}
             browser={browser}
             controllers={
-              <>
+              <Fragment>
                 {videoType === null ? null : (
                   <IconButton
                     name={isVideoTrackMuted ? "videocam_off" : "videocam"}
@@ -106,14 +104,14 @@ const LocalStreamLayout: FunctionComponent<Props> = ({
                   title={isAudioTrackMuted ? "Unmute audio" : "Mute audio"}
                   onClick={onClickToggleAudioMuted}
                 />
-              </>
+              </Fragment>
             }
           />
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default LocalStreamLayout;
 

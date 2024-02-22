@@ -1,6 +1,4 @@
-import * as React from "react";
-import { useContext, useCallback } from "react";
-import { FunctionComponent } from "react";
+import { useContext, useCallback, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import SettingsLayout from "../components/settings-layout";
@@ -20,7 +18,7 @@ import {
 } from "../effects/settings";
 import { VideoEffectId } from "../utils/types";
 
-const Settings: FunctionComponent<Record<string, never>> = () => {
+function Settings() {
   const store = useContext(StoreContext);
 
   const onChangeDisplayName = useCallback(
@@ -74,7 +72,7 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
     <Observer>
       {() => {
         if (!ui.isSettingsOpen) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return (
@@ -111,6 +109,6 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
       }}
     </Observer>
   );
-};
+}
 
 export default Settings;

@@ -1,5 +1,3 @@
-import * as React from "react";
-import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { modalContentWidth } from "../utils/style";
@@ -14,33 +12,31 @@ interface Props {
   rtcStats: WebRTCStats | null;
   onClickCloser: () => void;
 }
-const StatsLayout: FunctionComponent<Props> = ({
-  isSFU,
-  rtcStats,
-  onClickCloser,
-}: Props) => (
-  <Modal>
-    <div css={wrapperStyle}>
-      <div css={headStyle}>
-        <IconButton name="close" onClick={onClickCloser} />
-      </div>
-      {isSFU ? (
-        <div css={scrollerStyle}>
-          <details open>
-            <summary>Stats summary</summary>
-            <StatsSummary rtcStats={rtcStats} />
-          </details>
-          <details>
-            <summary>Stats dump</summary>
-            <StatsDump rtcStats={rtcStats} />
-          </details>
+function StatsLayout({ isSFU, rtcStats, onClickCloser }: Props) {
+  return (
+    <Modal>
+      <div css={wrapperStyle}>
+        <div css={headStyle}>
+          <IconButton name="close" onClick={onClickCloser} />
         </div>
-      ) : (
-        <div css={naStyle}>Stats view is not available in p2p room type.</div>
-      )}
-    </div>
-  </Modal>
-);
+        {isSFU ? (
+          <div css={scrollerStyle}>
+            <details open>
+              <summary>Stats summary</summary>
+              <StatsSummary rtcStats={rtcStats} />
+            </details>
+            <details>
+              <summary>Stats dump</summary>
+              <StatsDump rtcStats={rtcStats} />
+            </details>
+          </div>
+        ) : (
+          <div css={naStyle}>Stats view is not available in p2p room type.</div>
+        )}
+      </div>
+    </Modal>
+  );
+}
 
 export default StatsLayout;
 

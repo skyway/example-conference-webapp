@@ -8,6 +8,8 @@ const env = dotenv.config().parsed;
 
 const rootPath = path.resolve(".");
 
+const copyPlugin = require("copy-webpack-plugin");
+
 const config = {
   mode: "development",
   devtool: false,
@@ -17,7 +19,7 @@ const config = {
     conf: "./src/conf/main.tsx",
   },
   output: {
-    path: `${rootPath}/docs`,
+    path: `${rootPath}/dist`,
     filename: "[name].bundle.js",
   },
   resolve: {
@@ -27,6 +29,9 @@ const config = {
     // .envの設定値はbuild時に埋め込まれるので、アプリケーションのシークレットキーなどを.envに記載する際は注意
     new webpack.DefinePlugin({
       "process.env": JSON.stringify(env),
+    }),
+    new copyPlugin({
+      patterns: [{ from: `${rootPath}/public`, to: `${rootPath}/dist` }],
     }),
   ],
   module: {
@@ -51,7 +56,7 @@ const config = {
   },
   devServer: {
     static: {
-      directory: `${rootPath}/docs`,
+      directory: `${rootPath}/public`,
       watch: true,
     },
     host: "0.0.0.0",

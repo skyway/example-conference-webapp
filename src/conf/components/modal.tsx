@@ -1,14 +1,13 @@
-import * as React from "react";
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css, keyframes } from "@emotion/react";
 import { zIndex } from "../utils/style";
 
 interface Props {
   children: ReactNode;
 }
-const Modal: FunctionComponent<Props> = ({ children }: Props) => (
-  <div css={wrapperStyle}>{children}</div>
-);
+function Modal({ children }: Props) {
+  return <div css={wrapperStyle}>{children}</div>;
+}
 
 const wrapperStyle = css({
   position: "absolute",

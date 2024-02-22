@@ -1,13 +1,12 @@
-import * as React from "react";
-import { FunctionComponent, ReactNode } from "react";
+import { ReactNode } from "react";
 import { css } from "@emotion/react";
 
 interface Props {
   children: ReactNode;
 }
-const Layout: FunctionComponent<Props> = ({ children }) => (
-  <div css={wrapperStyle}>{children}</div>
-);
+function Layout({ children }: Props) {
+  return <div css={wrapperStyle}>{children}</div>;
+}
 
 export default Layout;
 

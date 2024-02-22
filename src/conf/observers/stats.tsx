@@ -1,13 +1,11 @@
-import * as React from "react";
-import { useContext, useCallback } from "react";
-import { FunctionComponent } from "react";
+import { useContext, useCallback, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import { IconButton } from "../components/icon";
 import StatsLayout from "../components/stats-layout";
 import { openStats, closeStats } from "../effects/stats";
 
-export const StatsOpener: FunctionComponent<Record<string, unknown>> = () => {
+export function StatsOpener() {
   const store = useContext(StoreContext);
 
   const onClickOpenStats = useCallback(() => openStats(store), [store]);
@@ -17,9 +15,9 @@ export const StatsOpener: FunctionComponent<Record<string, unknown>> = () => {
       {() => <IconButton name="assessment" onClick={onClickOpenStats} />}
     </Observer>
   );
-};
+}
 
-export const Stats: FunctionComponent<Record<string, never>> = () => {
+export function Stats() {
   const store = useContext(StoreContext);
 
   const onClickCloseStats = useCallback(() => closeStats(store), [store]);
@@ -29,7 +27,7 @@ export const Stats: FunctionComponent<Record<string, never>> = () => {
     <Observer>
       {() => {
         if (!ui.isStatsOpen) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return (
@@ -42,4 +40,4 @@ export const Stats: FunctionComponent<Record<string, never>> = () => {
       }}
     </Observer>
   );
-};
+}

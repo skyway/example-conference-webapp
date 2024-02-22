@@ -1,4 +1,4 @@
-import * as React from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Global } from "@emotion/react";
 import debug from "debug";
@@ -14,9 +14,9 @@ const log = debug("main");
 
   const root = createRoot(document.getElementById("app-root") as HTMLElement);
   root.render(
-    <React.StrictMode>
+    <StrictMode>
       <Global styles={globalStyle} />
       <App />
-    </React.StrictMode>,
+    </StrictMode>,
   );
 })().catch((err) => console.error(err));

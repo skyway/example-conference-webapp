@@ -1,6 +1,4 @@
-import * as React from "react";
-import { useRef, useEffect, memo } from "react";
-import { FunctionComponent } from "react";
+import { useRef, useEffect, Fragment, memo } from "react";
 import debug from "debug";
 import { css } from "@emotion/react";
 
@@ -11,11 +9,7 @@ interface Props {
   isReverse?: boolean;
   isVideoOnly?: boolean;
 }
-const Video: FunctionComponent<Props> = ({
-  stream,
-  isReverse = false,
-  isVideoOnly = false,
-}) => {
+function Video({ stream, isReverse = false, isVideoOnly = false }: Props) {
   const isNoAudio = stream.getAudioTracks().length === 0;
   const isNoVideo = stream.getVideoTracks().length === 0;
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -45,7 +39,7 @@ const Video: FunctionComponent<Props> = ({
 
   log("render()", [...stream.getTracks()]);
   return (
-    <>
+    <Fragment>
       {isNoVideo ? null : (
         <video
           css={isReverse ? [videoStyle, reverseVideoStyle] : videoStyle}
@@ -57,9 +51,9 @@ const Video: FunctionComponent<Props> = ({
       {isVideoOnly || isNoAudio ? null : (
         <audio css={audioStyle} ref={audioRef} />
       )}
-    </>
+    </Fragment>
   );
-};
+}
 
 export default memo(Video);
 

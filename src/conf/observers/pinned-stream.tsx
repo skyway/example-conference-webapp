@@ -1,11 +1,9 @@
-import * as React from "react";
-import { useContext } from "react";
-import { FunctionComponent } from "react";
+import { useContext, Fragment } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import Video from "../components/video";
 
-const PinnedStream: FunctionComponent<Record<string, never>> = () => {
+function PinnedStream() {
   const store = useContext(StoreContext);
 
   const { room } = store;
@@ -13,13 +11,13 @@ const PinnedStream: FunctionComponent<Record<string, never>> = () => {
     <Observer>
       {() => {
         if (room.pinnedStream === null) {
-          return <></>;
+          return <Fragment></Fragment>;
         }
 
         return <Video stream={room.pinnedStream} isVideoOnly={true} />;
       }}
     </Observer>
   );
-};
+}
 
 export default PinnedStream;

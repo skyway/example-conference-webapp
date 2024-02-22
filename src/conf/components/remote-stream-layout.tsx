@@ -1,6 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
-import { FunctionComponent } from "react";
+import { useState, Fragment } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import { RoomStat } from "../utils/types";
@@ -17,17 +15,17 @@ interface Props {
   isPinned: boolean;
   onClickSetPinned: () => void;
 }
-const RemoteStreamLayout: FunctionComponent<Props> = ({
+function RemoteStreamLayout({
   stream,
   stat,
   isPinned,
   onClickSetPinned,
-}: Props) => {
+}: Props) {
   const isVideoDisabled = stat && stat.isVideoDisabled ? true : false;
   const [isInfoShown, setInfoShown] = useState(false);
 
   return (
-    <>
+    <Fragment>
       <div css={videoStyle}>
         <Video stream={stream} />
         <div css={actionStyle}>
@@ -53,29 +51,29 @@ const RemoteStreamLayout: FunctionComponent<Props> = ({
         ) : null}
         <div css={controllerStyle}>
           {stat !== null ? (
-            <>
+            <Fragment>
               <VADetector stream={stream} />
               <StreamController
                 displayName={stat.displayName}
                 browser={stat.browser}
                 controllers={
-                  <>
+                  <Fragment>
                     {stat.isVideoDisabled ? null : (
                       <Icon
                         name={stat.isVideoMuted ? "videocam_off" : "videocam"}
                       />
                     )}
                     <Icon name={stat.isAudioMuted ? "mic_off" : "mic"} />
-                  </>
+                  </Fragment>
                 }
               />
-            </>
+            </Fragment>
           ) : null}
         </div>
       </div>
-    </>
+    </Fragment>
   );
-};
+}
 
 export default RemoteStreamLayout;
 

@@ -1,19 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
-import { FunctionComponent } from "react";
+import { useState, Fragment } from "react";
 import { css } from "@emotion/react";
 import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
   rtcStats: WebRTCStats | null;
 }
-const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
+function StatsDump({ rtcStats }: Props) {
   const [searchKey, setSearchKey] = useState("");
   const filteredStats =
     rtcStats === null ? null : filterStats(rtcStats, searchKey.trim());
 
   return (
-    <>
+    <Fragment>
       <input
         type="text"
         placeholder="filter stat reports"
@@ -30,9 +28,9 @@ const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
               2,
             )}`}
       </pre>
-    </>
+    </Fragment>
   );
-};
+}
 
 export default StatsDump;
 
