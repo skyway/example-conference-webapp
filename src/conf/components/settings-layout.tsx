@@ -16,6 +16,8 @@ import {
 } from "./settings-device-selector";
 import StreamController from "./stream-controller";
 
+import { canUseBlurOrVirtualBackground } from "../utils/webrtc";
+
 interface Props {
   stream: MediaStream;
   defaultDisplayName: string;
@@ -140,6 +142,7 @@ const SettingsLayout: FunctionComponent<Props> = ({
                 <SettingsVideoEffectSelector
                   effectId={videoEffectId || ""}
                   onChangeVideoEffect={onChangeVideoEffect}
+                  canUseVideoEffect={canUseBlurOrVirtualBackground()}
                 />
               </>
             ) : (

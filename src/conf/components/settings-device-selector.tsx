@@ -44,13 +44,19 @@ export const SettingsDeviceToggler: FunctionComponent<TogglerProps> = ({
 interface VideoEffectProps {
   effectId: string;
   onChangeVideoEffect: (effectId: string) => void;
+  canUseVideoEffect: boolean;
 }
 export const SettingsVideoEffectSelector: FunctionComponent<
   VideoEffectProps
-> = ({ effectId, onChangeVideoEffect }: VideoEffectProps) => (
+> = ({
+  effectId,
+  onChangeVideoEffect,
+  canUseVideoEffect,
+}: VideoEffectProps) => (
   <select
     value={effectId || ""}
     onChange={(ev) => onChangeVideoEffect(ev.target.value)}
+    disabled={!canUseVideoEffect}
     css={formStyle}
   >
     {Object.keys(VideoEffects).map((effectId) => (

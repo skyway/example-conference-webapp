@@ -80,6 +80,13 @@ const getUserVideoTrackWithoutBlurBackground = async (
   return stream.getVideoTracks()[0];
 };
 
+export const canUseBlurOrVirtualBackground = (): boolean => {
+  return (
+    "MediaStreamTrackProcessor" in window &&
+    "MediaStreamTrackGenerator" in window
+  );
+};
+
 const getUserVideoTrackWithBlurBackground = async (
   constraints: MediaTrackConstraints,
   options?: { blur: number },
