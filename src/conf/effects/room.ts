@@ -7,6 +7,8 @@ import {
   LocalAudioStream,
   LocalVideoStream,
   LocalRoomMember,
+  LocalP2PRoomMember,
+  LocalSFURoomMember,
   RoomPublication,
 } from "@skyway-sdk/room";
 
@@ -40,12 +42,10 @@ export const joinRoom = async (store: RootStore) => {
 
   // publishする
   media.stream.getAudioTracks().forEach((track) => {
-    const stream = new LocalAudioStream(track);
-    localRoomMember.publish(stream);
+    publishAudio(localRoomMember, track);
   });
   media.stream.getVideoTracks().forEach((track) => {
-    const stream = new LocalVideoStream(track);
-    localRoomMember.publish(stream);
+    publishVideo(localRoomMember, track);
   });
 
   const confRoom = room.room;
@@ -95,8 +95,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // video OFF => ON
         videoTracks.forEach((track) => {
-          const stream = new LocalVideoStream(track);
-          localRoomMember.publish(stream);
+          publishVideo(localRoomMember, track);
         });
         return;
       }
@@ -131,8 +130,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // audio OFF => ON
         audioTracks.forEach((track) => {
-          const stream = new LocalAudioStream(track);
-          localRoomMember.publish(stream);
+          publishAudio(localRoomMember, track);
         });
         return;
       }
@@ -267,6 +265,26 @@ export const joinRoom = async (store: RootStore) => {
     log("subscribe published remote stream", publication);
     subscribe(localRoomMember, publication, showError);
   });
+};
+
+const publishAudio = (
+  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  track: MediaStreamTrack,
+) => {
+  log(`publishAudio(${localRoomMember.id}, ${track.id})`);
+
+  const stream = new LocalAudioStream(track);
+  localRoomMember.publish(stream);
+};
+
+const publishVideo = (
+  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  track: MediaStreamTrack,
+) => {
+  log(`publishVideo(${localRoomMember.id}, ${track.id})`);
+
+  const stream = new LocalVideoStream(track);
+  localRoomMember.publish(stream);
 };
 
 const subscribe = (
