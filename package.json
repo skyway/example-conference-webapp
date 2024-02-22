@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
+    "@skyway-sdk/room": "^1.7.0",
     "bowser": "^2.11.0",
     "debug": "^4.3.4",
     "hark": "^1.2.3",
