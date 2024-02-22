@@ -7,7 +7,7 @@ import RoomCreate from "./components/room-create";
 const App: FunctionComponent<Record<string, never>> = () => {
   const effects = {
     enterConference(room: RoomInit) {
-      location.href = `conf.html#!/${room.mode}/${room.id}`;
+      location.href = `./conf.html#!/${room.mode}/${room.id}`;
     },
   };
 

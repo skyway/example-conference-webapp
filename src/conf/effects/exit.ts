@@ -10,5 +10,5 @@ export const exitRoom = () => {
     return;
   }
 
-  location.href = "/index.html";
+  location.href = "./index.html";
 };
