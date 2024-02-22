@@ -24,7 +24,7 @@ const wrapperStyle = css({
   marginBottom: 4,
   fontSize: ".8rem",
   borderRadius: 2,
-  backgroundColor: globalColors.white,
+  backgroundColor: globalColors.gray,
   willChange: "transform",
   animation: `${keyframes`from { transform: translateX(-200%); }`} .2s ease`,
 });

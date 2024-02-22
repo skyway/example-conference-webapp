@@ -18,7 +18,7 @@ const Error: FunctionComponent<Props> = ({ error }) => (
 export default Error;
 
 const wrapperStyle = css({
-  color: globalColors.white,
+  color: globalColors.black,
   margin: 16,
 });
 

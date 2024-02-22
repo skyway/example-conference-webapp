@@ -3,8 +3,10 @@ import { css, keyframes } from "@emotion/react";
 export const fontSize = 16;
 
 export const globalColors = {
-  blue: "#005ece",
-  lightblue: "#039be5",
+  blue: "#0e367d",
+  blueAlpha: `rgba(14, 54, 125, 0.5)`,
+  lightblue: "#3178c4",
+  lightblueAlpha: `rgba(49, 120, 196, 0.5)`,
   red: "#ff6673",
   gray: "#eee",
   white: "#fff",
@@ -29,7 +31,6 @@ export const globalStyle = css({
     fontWeight: "lighter",
     lineHeight: 1.5,
     height: "100vh",
-    background: `linear-gradient(45deg, ${globalColors.lightblue}, ${globalColors.blue})`,
   },
   "#app-root": {
     height: "100vh",
