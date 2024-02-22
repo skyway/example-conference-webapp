@@ -1,4 +1,3 @@
-import { SfuRoom } from "skyway-js";
 import {
   LocalP2PRoomMember,
   LocalSFURoomMember,
@@ -32,10 +31,4 @@ export const initPeer = async (
   });
 
   return room.join({ name: memberName });
-};
-
-export const getPeerConnectionFromSfuRoom = (
-  room: SfuRoom,
-): RTCPeerConnection | null => {
-  return room.getPeerConnection();
 };

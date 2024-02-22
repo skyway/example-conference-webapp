@@ -1,14 +1,13 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
-import { SfuRoom } from "skyway-js";
 import { RoomInit, RoomStat, RoomChat, RoomReaction } from "../utils/types";
-import { getPeerConnectionFromSfuRoom } from "../utils/skyway";
 import {
   Room,
   RemoteAudioStream,
   RemoteVideoStream,
   LocalP2PRoomMember,
   LocalSFURoomMember,
+  WebRTCStats,
 } from "@skyway-sdk/room";
 
 class RoomStore {
@@ -27,7 +26,7 @@ class RoomStore {
   myLastReaction: RoomReaction | null;
   pinnedId: string | null;
   castRequestCount: number;
-  rtcStats: RTCStatsReport | null;
+  rtcStats: WebRTCStats | null;
 
   constructor() {
     // Peer instance
@@ -72,7 +71,6 @@ class RoomStore {
       addLocalChat: action,
       addRemoteChat: action,
       removeStream: action,
-      getPeerConnection: action,
       cleanUp: action,
     });
   }
@@ -132,17 +130,6 @@ class RoomStore {
     if (this.pinnedId === peerId) {
       this.pinnedId = null;
     }
-  }
-
-  getPeerConnection(): RTCPeerConnection | null {
-    if (this.mode !== "sfu") {
-      return null;
-    }
-    if (this.room === null) {
-      return null;
-    }
-
-    return getPeerConnectionFromSfuRoom(this.room as SfuRoom);
   }
 
   cleanUp() {

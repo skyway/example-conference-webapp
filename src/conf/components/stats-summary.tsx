@@ -6,9 +6,10 @@ import {
   extractOutboundRtps,
   extractInboundRtps,
 } from "../utils/stats";
+import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
-  rtcStats: RTCStatsReport | null;
+  rtcStats: WebRTCStats | null;
 }
 const StatsSummary: FunctionComponent<Props> = ({ rtcStats }: Props) => {
   const summarizedStats = rtcStats === null ? null : summarizeStats(rtcStats);
@@ -24,7 +25,7 @@ const StatsSummary: FunctionComponent<Props> = ({ rtcStats }: Props) => {
 
 export default StatsSummary;
 
-const summarizeStats = (stats: RTCStatsReport) => {
+const summarizeStats = (stats: WebRTCStats) => {
   const candidatePairs = extractCandidatePairs(stats);
   const { audioOutbounds, videoOutbounds } = extractOutboundRtps(stats);
   const { audioInbounds, videoInbounds } = extractInboundRtps(stats);

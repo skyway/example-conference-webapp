@@ -10,14 +10,18 @@ export const openStats = ({ ui, room }: RootStore) => {
 
   // 1000ms is enough(same as chrome://webrtc-internals)
   const timer = setInterval(async () => {
-    const pc = room.getPeerConnection();
-    if (pc === null) {
-      return;
-    }
+    room.room?.subscriptions.forEach(async (subscription) => {
+      const localRoomMember = room.room?.localRoomMember;
+      if (localRoomMember === undefined) return;
+      if (subscription.subscriber.id !== localRoomMember.id) return;
 
-    pc.getStats()
-      .then((statsReport) => (room.rtcStats = statsReport))
-      .catch((err) => log("getStats() error", err));
+      try {
+        const webRTCStats = await subscription.getStats();
+        room.rtcStats = webRTCStats;
+      } catch (err) {
+        log("getStats() error", err);
+      }
+    });
   }, 1000);
 
   // wait for closer

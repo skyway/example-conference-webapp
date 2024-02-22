@@ -2,9 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 import { FunctionComponent } from "react";
 import { css } from "@emotion/react";
+import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
-  rtcStats: RTCStatsReport | null;
+  rtcStats: WebRTCStats | null;
 }
 const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
   const [searchKey, setSearchKey] = useState("");
@@ -35,23 +36,25 @@ const StatsDump: FunctionComponent<Props> = ({ rtcStats }: Props) => {
 
 export default StatsDump;
 
-const filterStats = (stats: RTCStatsReport, searchKey: string) => {
+const filterStats = (stats: WebRTCStats, searchKey: string) => {
   // stats not ready
-  if (stats.size === 0) {
+  if (stats.length === 0) {
     return null;
   }
 
-  let size = 0;
+  let length = 0;
   const res: { [key: string]: unknown } = {};
-  for (const [key, value] of stats) {
+  stats.forEach((stat) => {
+    const key = stat.id;
+    const value = stat;
     const index = JSON.stringify(value);
     // empty string is treated as included
     if (index.includes(searchKey)) {
       res[key] = value;
-      size++;
+      length++;
     }
-  }
-  return { reports: res, size };
+  });
+  return { reports: res, size: length };
 };
 
 const inputStyle = css({

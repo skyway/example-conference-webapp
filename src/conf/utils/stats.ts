@@ -1,9 +1,11 @@
+import { WebRTCStats } from "@skyway-sdk/room";
+
 type MediaKind = "audio" | "video";
 interface StatsItem {
   [key: string]: number;
 }
 
-export const extractCandidatePairs = (stats: RTCStatsReport) => {
+export const extractCandidatePairs = (stats: WebRTCStats) => {
   const candidatePairs = [...stats.values()].filter(
     (stat) => stat.type === "candidate-pair",
   );
@@ -15,8 +17,12 @@ export const extractCandidatePairs = (stats: RTCStatsReport) => {
   });
 
   return selectedPairs.map(({ localCandidateId, remoteCandidateId }) => {
-    const localReport = stats.get(localCandidateId);
-    const remoteReport = stats.get(remoteCandidateId);
+    const localReport = [...stats.values()].filter(
+      (stat) => stat.id === localCandidateId,
+    )[0];
+    const remoteReport = [...stats.values()].filter(
+      (stat) => stat.id === remoteCandidateId,
+    )[0];
 
     // must not be happened
     if (!localReport) {
@@ -47,7 +53,7 @@ export const extractCandidatePairs = (stats: RTCStatsReport) => {
   });
 };
 
-export const extractOutboundRtps = (stats: RTCStatsReport) => {
+export const extractOutboundRtps = (stats: WebRTCStats) => {
   const outboundRtps = [...stats.values()].filter(
     (stat) => stat.type === "outbound-rtp",
   );
@@ -83,7 +89,7 @@ export const extractOutboundRtps = (stats: RTCStatsReport) => {
   };
 };
 
-export const extractInboundRtps = (stats: RTCStatsReport) => {
+export const extractInboundRtps = (stats: WebRTCStats) => {
   const inboundRtps = [...stats.values()].filter(
     (stat) => stat.type === "inbound-rtp",
   );
