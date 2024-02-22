@@ -6,15 +6,15 @@ import {
   roomIdRe,
 } from "../../shared/validate";
 import { getUserDevices, getUserAudioTrack } from "../utils/webrtc";
-import { initPeer } from "../utils/skyway";
+import {
+  generateMemberNameInRtcRoom,
+  initRtcContext,
+  initRtcRoom,
+} from "../utils/skyway";
 import { getToken } from "../utils/skyway-auth-token";
 import { RoomInit } from "../utils/types";
 import RootStore from "../stores";
-import {
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
-  SkyWayError,
-} from "@skyway-sdk/room";
+import { SkyWayError } from "@skyway-sdk/room";
 
 const log = debug("effect:bootstrap");
 
@@ -25,7 +25,7 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
 
   if (!isValidRoomType(roomType)) {
     throw ui.showError(
-      new Error("Invalid room type! it should be `sfu` or `mesh`."),
+      new Error("Invalid room type! it should be `SFU` or `P2P`."),
     );
   }
   if (!isValidRoomId(roomId)) {
@@ -60,16 +60,27 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   };
 
   (async () => {
-    const peer: LocalP2PRoomMember | LocalSFURoomMember | null = await initPeer(
+    const roomName = `${roomType}_${roomId}`;
+    const memberName = generateMemberNameInRtcRoom();
+
+    const rtcContext = await initRtcContext(
       roomType,
-      roomId,
+      roomName,
+      memberName,
       getToken,
       handleGetTokenError,
       handleSetTokenError,
     ).catch((err) => {
       throw ui.showError(err);
     });
-    if (peer === null) return;
+    if (rtcContext === null) return;
+
+    const rtcRoom = await initRtcRoom(rtcContext, roomType, roomName).catch(
+      (err) => {
+        throw ui.showError(err);
+      },
+    );
+    if (rtcRoom === null) return;
 
     // just log it, do not trust them
     room.load(
@@ -78,11 +89,11 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
         id: roomId,
         useH264: params.has("h264"),
       },
-      peer,
+      rtcRoom,
+      memberName,
     );
 
     log(`room: ${roomType}/${roomId}`);
-    log("peer instance created");
   })();
 };
 
@@ -135,7 +146,7 @@ export const initAudioDeviceAndClient = ({ ui, client, media }: RootStore) => {
       hasUserVideoDevice: videoInDevices.length !== 0,
       hasGetDisplayMedia:
         typeof navigator.mediaDevices.getDisplayMedia === "function",
-      name: (localStorage.getItem("SkyWayConf.dispName") || "").trim(),
+      name: (localStorage.getItem("SkyWayConf.displayName") || "").trim(),
     });
     log("client loaded", toJS(client));
   })();
@@ -190,7 +201,7 @@ export const listenStoreChanges = ({
     reaction(
       () => client.displayName,
       (name) => {
-        localStorage.setItem("SkyWayConf.dispName", name.trim());
+        localStorage.setItem("SkyWayConf.displayName", name.trim());
         notification.showInfo("Display name saved");
       },
       { delay: 2000 },

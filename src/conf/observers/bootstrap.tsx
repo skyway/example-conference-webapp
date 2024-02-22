@@ -1,6 +1,5 @@
 import * as React from "react";
-import { useContext, useEffect } from "react";
-import { FunctionComponent, ReactNode } from "react";
+import { useContext, useEffect, FunctionComponent, ReactNode } from "react";
 import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import {
@@ -21,14 +20,8 @@ const Bootstrap: FunctionComponent<Props> = ({ children }: Props) => {
 
   useEffect(() => {
     checkRoomSetting(store);
-  }, [store]);
-  useEffect(() => {
     initAudioDeviceAndClient(store);
-  }, [store]);
-  useEffect(() => {
     listenStoreChanges(store);
-  }, [store]);
-  useEffect(() => {
     listenGlobalEvents(store);
   }, [store]);
 

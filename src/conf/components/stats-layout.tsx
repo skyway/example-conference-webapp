@@ -10,12 +10,12 @@ import StatsDump from "./stats-dump";
 import { WebRTCStats } from "@skyway-sdk/room";
 
 interface Props {
-  isSfu: boolean;
+  isSFU: boolean;
   rtcStats: WebRTCStats | null;
   onClickCloser: () => void;
 }
 const StatsLayout: FunctionComponent<Props> = ({
-  isSfu,
+  isSFU,
   rtcStats,
   onClickCloser,
 }: Props) => (
@@ -24,7 +24,7 @@ const StatsLayout: FunctionComponent<Props> = ({
       <div css={headStyle}>
         <IconButton name="close" onClick={onClickCloser} />
       </div>
-      {isSfu ? (
+      {isSFU ? (
         <div css={scrollerStyle}>
           <details open>
             <summary>Stats summary</summary>
@@ -36,7 +36,7 @@ const StatsLayout: FunctionComponent<Props> = ({
           </details>
         </div>
       ) : (
-        <div css={naStyle}>Stats view is not available in mesh room type.</div>
+        <div css={naStyle}>Stats view is not available in p2p room type.</div>
       )}
     </div>
   </Modal>

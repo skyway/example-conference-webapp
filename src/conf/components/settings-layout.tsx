@@ -17,7 +17,7 @@ import StreamController from "./stream-controller";
 
 interface Props {
   stream: MediaStream;
-  defaultDispName: string;
+  defaultDisplayName: string;
   browser: ClientBrowser;
   hasGetDisplayMedia: boolean;
   hasUserVideoDevice: boolean;
@@ -28,7 +28,6 @@ interface Props {
   audioDeviceId: string;
   videoInDevices: MediaDeviceInfo[];
   audioInDevices: MediaDeviceInfo[];
-  isReEntering: boolean;
   isJoined: boolean;
   isDisplayNameValid: boolean;
   onChangeVideoDeviceId: (deviceId: string) => void;
@@ -39,13 +38,13 @@ interface Props {
   onClickDisableUserVideo: () => void;
   onClickEnableDisplayVideo: () => void;
   onClickDisableDisplayVideo: () => void;
-  onChangeDispName: (name: string) => void;
+  onChangeDisplayName: (name: string) => void;
   onClickCloseSettings: () => void;
   onClickJoinConference: () => void;
 }
 const SettingsLayout: FunctionComponent<Props> = ({
   stream,
-  defaultDispName,
+  defaultDisplayName,
   browser,
   hasGetDisplayMedia,
   hasUserVideoDevice,
@@ -56,7 +55,6 @@ const SettingsLayout: FunctionComponent<Props> = ({
   audioDeviceId,
   videoInDevices,
   audioInDevices,
-  isReEntering,
   isJoined,
   isDisplayNameValid,
   onChangeVideoDeviceId,
@@ -67,7 +65,7 @@ const SettingsLayout: FunctionComponent<Props> = ({
   onClickDisableUserVideo,
   onClickEnableDisplayVideo,
   onClickDisableDisplayVideo,
-  onChangeDispName,
+  onChangeDisplayName,
   onClickCloseSettings,
   onClickJoinConference,
 }: Props) => (
@@ -106,9 +104,9 @@ const SettingsLayout: FunctionComponent<Props> = ({
       <div css={settingsStyle}>
         <SettingsItemName label="NAME">
           <SettingsNameEdit
-            defaultDispName={defaultDispName}
+            defaultDisplayName={defaultDisplayName}
             isInvalid={!isDisplayNameValid}
-            onChangeDispName={onChangeDispName}
+            onChangeDisplayName={onChangeDisplayName}
           />
         </SettingsItemName>
         <SettingsItemDevice label="MIC.">
@@ -168,16 +166,12 @@ const SettingsLayout: FunctionComponent<Props> = ({
         <button
           css={doneButtonStyle}
           onClick={isJoined ? onClickCloseSettings : onClickJoinConference}
-          disabled={isReEntering || !isDisplayNameValid}
+          disabled={!isDisplayNameValid}
         >
-          {isReEntering ? (
-            "RE-ENTERING THE ROOM"
-          ) : (
-            <>
-              <Icon name={isJoined ? "done" : "meeting_room"} />
-              <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
-            </>
-          )}
+          <>
+            <Icon name={isJoined ? "done" : "meeting_room"} />
+            <span>{isJoined ? "CLOSE SETTINGS" : "ENTER THIS ROOM"}</span>
+          </>
         </button>
       </div>
     </div>

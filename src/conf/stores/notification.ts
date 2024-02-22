@@ -13,6 +13,7 @@ class NotificationStore {
       showInfo: action,
       showJoin: action,
       showLeave: action,
+      replaceNotification: action,
       show: action,
     });
   }
@@ -33,12 +34,16 @@ class NotificationStore {
     this.show("warning", text, 6000);
   }
 
+  replaceNotification(nextItems: NotificationItem[]) {
+    this.items.replace(nextItems);
+  }
+
   private show(type: NotificationType, text: string, duration: number) {
     const item: NotificationItem = { id: Math.random(), type, text };
     this.items.push(item);
     setTimeout(() => {
       const nextItems = this.items.filter((i) => i.id !== item.id);
-      this.items.replace(nextItems);
+      this.replaceNotification(nextItems);
     }, duration);
   }
 }

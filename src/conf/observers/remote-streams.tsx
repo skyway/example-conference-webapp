@@ -10,7 +10,7 @@ const RemoteStreams: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
   const onClickSetPinned = useCallback(
-    (id: string) => setPinned(id, store),
+    (memberId: string) => setPinned(memberId, store),
     [store],
   );
 
@@ -21,7 +21,7 @@ const RemoteStreams: FunctionComponent<Record<string, never>> = () => {
         <RemoteStreamsLayout
           streams={[...room.streams.entries()]}
           stats={[...room.stats.entries()]}
-          pinnedId={room.pinnedId || ""}
+          pinnedMemberId={room.pinnedMemberId || ""}
           onClickSetPinned={onClickSetPinned}
         />
       )}

@@ -5,7 +5,7 @@ import { Observer } from "mobx-react";
 import { StoreContext } from "../contexts";
 import SettingsLayout from "../components/settings-layout";
 import {
-  changeDispName,
+  changeDisplayName,
   enableUserVideo,
   disableUserVideo,
   enableDisplayVideo,
@@ -21,8 +21,8 @@ import {
 const Settings: FunctionComponent<Record<string, never>> = () => {
   const store = useContext(StoreContext);
 
-  const onChangeDispName = useCallback(
-    (name: string) => changeDispName(name, store),
+  const onChangeDisplayName = useCallback(
+    (name: string) => changeDisplayName(name, store),
     [store],
   );
   const onClickEnableUserVideo = useCallback(
@@ -74,11 +74,11 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
         return (
           <SettingsLayout
             stream={media.stream}
-            defaultDispName={client.displayName}
+            defaultDisplayName={client.displayName}
             browser={client.browser}
             hasGetDisplayMedia={client.hasGetDisplayMedia}
             hasUserVideoDevice={client.hasUserVideoDevice}
-            onChangeDispName={onChangeDispName}
+            onChangeDisplayName={onChangeDisplayName}
             videoType={media.videoType}
             onClickEnableUserVideo={onClickEnableUserVideo}
             onClickDisableUserVideo={onClickDisableUserVideo}
@@ -94,7 +94,6 @@ const Settings: FunctionComponent<Record<string, never>> = () => {
             isAudioTrackMuted={media.isAudioTrackMuted}
             onClickToggleVideoMuted={onClickToggleVideoMuted}
             onClickToggleAudioMuted={onClickToggleAudioMuted}
-            isReEntering={ui.isReEntering}
             isJoined={room.isJoined}
             isDisplayNameValid={client.isDisplayNameValid}
             onClickCloseSettings={onClickCloseSettings}

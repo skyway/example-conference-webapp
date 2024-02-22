@@ -1,6 +1,7 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
 import { RoomData, RoomStat, RoomCast } from "../utils/types";
+import { joinRtcRoom } from "../utils/skyway";
 import RootStore from "../stores";
 import {
   LocalAudioStream,
@@ -11,20 +12,31 @@ import {
 
 const log = debug("effect:room");
 
-export const joinRoom = (store: RootStore) => {
+export const joinRoom = async (store: RootStore) => {
   log("joinRoom()");
   const { room, ui, media, client, notification } = store;
 
   if (room.name === null || room.mode === null) {
     throw ui.showError(new Error("Room name or mode is undefined!"));
   }
-  const localRoomMember = room.peer;
-  if (localRoomMember === null) {
-    throw ui.showError(new Error("Peer is not created!"));
+  if (room.room === null) {
+    throw ui.showError(new Error("Room instance is undefined!"));
+  }
+  if (room.memberName === null) {
+    throw ui.showError(new Error("Room member name is undefined!"));
   }
 
-  // メディアをpublish/subscribeしない状態で入室済み
-  room.room = localRoomMember.room;
+  const localRoomMember = await joinRtcRoom(room.room, room.memberName).catch(
+    (err) => {
+      throw ui.showError(err);
+    },
+  );
+  if (localRoomMember === null) {
+    throw ui.showError(new Error("Member is not joined!"));
+  }
+  room.loadMember(localRoomMember);
+
+  log("member instance created");
 
   // publishする
   media.stream.getAudioTracks().forEach((track) => {
@@ -43,9 +55,6 @@ export const joinRoom = (store: RootStore) => {
   }
 
   log("joined room", confRoom);
-
-  // force set to false
-  ui.isReEntering = false;
 
   const disposers = [
     reaction(
@@ -198,10 +207,10 @@ export const joinRoom = (store: RootStore) => {
 
   // 退出時の処理
   confRoom.onMemberLeft.add(({ member }) => {
-    const peerId = member.id;
-    log("onMemberLeft", peerId);
+    const memberId = member.id;
+    log("onMemberLeft", memberId);
 
-    if (peerId === localRoomMember.id) {
+    if (memberId === localRoomMember.id) {
       // 意図した退出の場合はindexに遷移する
       // ここでは意図しない退出のためリロードしてダイアログを表示させる
       log("I left! please re-enter..");
@@ -212,11 +221,11 @@ export const joinRoom = (store: RootStore) => {
       setTimeout(() => location.reload(), 500);
     }
 
-    const stat = room.stats.get(peerId);
+    const stat = room.stats.get(memberId);
     if (stat) {
       notification.showLeave(stat.displayName);
     }
-    room.removeStream(peerId);
+    room.removeStream(memberId);
   });
 
   confRoom.onMemberMetadataUpdated.add(({ member, metadata }) => {
@@ -241,7 +250,7 @@ export const joinRoom = (store: RootStore) => {
       case "cast": {
         const cast = payload as RoomCast;
         log("on('data/cast')", cast);
-        room.pinnedId = src;
+        room.pinnedMemberId = src;
         notification.showInfo(`Video was casted by ${cast.from}`);
         break;
       }
