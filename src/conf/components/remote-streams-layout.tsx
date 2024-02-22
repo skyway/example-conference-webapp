@@ -15,30 +15,30 @@ const sortByVideo: (a: StreamEntry, b: StreamEntry) => number = (
 interface Props {
   streams: StreamEntry[];
   stats: [string, RoomStat][];
-  pinnedId: string;
-  onClickSetPinned: (id: string) => void;
+  pinnedMemberId: string;
+  onClickSetPinned: (memberId: string) => void;
 }
 const RemoteStreamsLayout: FunctionComponent<Props> = ({
   streams,
   stats,
-  pinnedId,
+  pinnedMemberId,
   onClickSetPinned,
 }: Props) => (
   <div css={wrapperStyle}>
     <div css={headStyle}>
       <span css={numberStyle}>{streams.length}</span> participant(s)
     </div>
-    {streams.sort(sortByVideo).map(([peerId, stream]) => {
-      const entry = stats.find(([id]) => id === peerId);
+    {streams.sort(sortByVideo).map(([memberId, stream]) => {
+      const entry = stats.find(([id]) => id === memberId);
       const stat = entry ? entry[1] : null;
-      const isPinned = peerId === pinnedId;
+      const isPinned = memberId === pinnedMemberId;
       return (
         <RemoteStreamLayout
-          key={peerId}
+          key={memberId}
           stream={stream}
           stat={stat}
           isPinned={isPinned}
-          onClickSetPinned={() => onClickSetPinned(peerId)}
+          onClickSetPinned={() => onClickSetPinned(memberId)}
         />
       );
     })}

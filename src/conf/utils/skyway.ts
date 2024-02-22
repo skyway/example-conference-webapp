@@ -7,7 +7,7 @@ import {
   uuidV4,
 } from "@skyway-sdk/room";
 
-export const initPeer = async (
+export const initMember = async (
   _roomType: string,
   roomId: string,
   getToken: (channelName: string, memberName: string) => Promise<string>,

@@ -6,15 +6,11 @@ import {
   roomIdRe,
 } from "../../shared/validate";
 import { getUserDevices, getUserAudioTrack } from "../utils/webrtc";
-import { initPeer } from "../utils/skyway";
+import { initMember } from "../utils/skyway";
 import { getToken } from "../utils/skyway-auth-token";
 import { RoomInit } from "../utils/types";
 import RootStore from "../stores";
-import {
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
-  SkyWayError,
-} from "@skyway-sdk/room";
+import { SkyWayError } from "@skyway-sdk/room";
 
 const log = debug("effect:bootstrap");
 
@@ -60,7 +56,7 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   };
 
   (async () => {
-    const peer: LocalP2PRoomMember | LocalSFURoomMember | null = await initPeer(
+    const member = await initMember(
       roomType,
       roomId,
       getToken,
@@ -69,7 +65,7 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
     ).catch((err) => {
       throw ui.showError(err);
     });
-    if (peer === null) return;
+    if (member === null) return;
 
     // just log it, do not trust them
     room.load(
@@ -78,11 +74,11 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
         id: roomId,
         useH264: params.has("h264"),
       },
-      peer,
+      member,
     );
 
     log(`room: ${roomType}/${roomId}`);
-    log("peer instance created");
+    log("member instance created");
   })();
 };
 
