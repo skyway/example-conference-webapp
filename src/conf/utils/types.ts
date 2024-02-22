@@ -23,6 +23,32 @@ export interface UserDevices {
 
 export type VideoType = "camera" | "display" | null;
 
+export type VideoEffectKind = "none" | "blur" | "image";
+export const VideoEffects: Record<
+  string,
+  {
+    kind: VideoEffectKind;
+    label: string;
+    blurOption?: { blur: number };
+    virtualBackgroundOption?: { image: string | HTMLImageElement };
+  }
+> = {
+  none: { kind: "none", label: "None" },
+  blur1: { kind: "blur", label: "Blur (small)", blurOption: { blur: 10 } },
+  blur2: { kind: "blur", label: "Blur (large)", blurOption: { blur: 90 } },
+  image1: {
+    kind: "image",
+    label: "Virtual Background (white)",
+    virtualBackgroundOption: { image: "/images/white_background.png" },
+  },
+  image2: {
+    kind: "image",
+    label: "Virtual Background (black)",
+    virtualBackgroundOption: { image: "/images/black_background.png" },
+  },
+};
+export type VideoEffectId = keyof typeof VideoEffects;
+
 export type RoomData = RoomDataStat | RoomDataCast;
 interface RoomDataStat {
   type: "stat";

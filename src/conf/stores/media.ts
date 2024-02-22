@@ -1,12 +1,13 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { IObservableArray } from "mobx";
-import { UserDevices, VideoType } from "../utils/types";
+import { UserDevices, VideoType, VideoEffectId } from "../utils/types";
 
 class MediaStore {
   audioInDevices: IObservableArray<MediaDeviceInfo>;
   videoInDevices: IObservableArray<MediaDeviceInfo>;
   audioDeviceId: string | null;
   videoDeviceId: string | null;
+  videoEffectId: VideoEffectId | null;
   isAudioTrackMuted: boolean;
   isVideoTrackMuted: boolean;
   videoType: VideoType;
@@ -18,6 +19,7 @@ class MediaStore {
     this.videoInDevices = observable<MediaDeviceInfo>([]);
     this.audioDeviceId = null;
     this.videoDeviceId = null;
+    this.videoEffectId = null;
     this.isVideoTrackMuted = false;
     this.isAudioTrackMuted = false;
     this.videoType = null;
@@ -29,6 +31,7 @@ class MediaStore {
       videoInDevices: observable.shallow,
       audioDeviceId: observable,
       videoDeviceId: observable,
+      videoEffectId: observable,
       isAudioTrackMuted: observable,
       isVideoTrackMuted: observable,
       videoType: observable,
@@ -81,10 +84,16 @@ class MediaStore {
     this.audioDeviceId = deviceId;
   }
 
-  setVideoTrack(track: MediaStreamTrack, type: VideoType, deviceId: string) {
+  setVideoTrack(
+    track: MediaStreamTrack,
+    type: VideoType,
+    deviceId: string,
+    effectId: VideoEffectId,
+  ) {
     this.videoTrack = track;
     this.videoType = type;
     this.videoDeviceId = deviceId;
+    this.videoEffectId = effectId;
   }
 
   releaseAudioDevice() {
@@ -106,6 +115,7 @@ class MediaStore {
     this.videoTrack = null;
     this.videoType = null;
     this.videoDeviceId = null;
+    this.videoEffectId = null;
   }
 
   setAudioDevices({ audioInDevices }: UserDevices) {

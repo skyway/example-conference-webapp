@@ -1,4 +1,5 @@
-import { UserDevices } from "./types";
+import { UserDevices, VideoEffectId, VideoEffects } from "./types";
+import { BlurBackground, VirtualBackground } from "skyway-video-processors";
 
 export const getUserDevices = async (
   options: MediaStreamConstraints,
@@ -46,6 +47,7 @@ export const getUserAudioTrack = async (
 
 export const getUserVideoTrack = async (
   deviceId: string,
+  effect: VideoEffectId,
 ): Promise<MediaStreamTrack> => {
   const constraints = {
     height: 360,
@@ -54,10 +56,54 @@ export const getUserVideoTrack = async (
     ...(deviceId === "" ? {} : { deviceId: { exact: deviceId } }),
   };
 
+  if (VideoEffects[effect].kind === "blur") {
+    return getUserVideoTrackWithBlurBackground(
+      constraints,
+      VideoEffects[effect].blurOption,
+    );
+  } else if (VideoEffects[effect].kind === "image") {
+    return getUserVideoTrackWithVirtualBackground(
+      constraints,
+      VideoEffects[effect].virtualBackgroundOption ?? { image: "" },
+    );
+  }
+
+  return getUserVideoTrackWithoutBlurBackground(constraints);
+};
+
+const getUserVideoTrackWithoutBlurBackground = async (
+  constraints: MediaTrackConstraints,
+): Promise<MediaStreamTrack> => {
   const stream = await navigator.mediaDevices.getUserMedia({
     video: constraints,
   });
   return stream.getVideoTracks()[0];
+};
+
+const getUserVideoTrackWithBlurBackground = async (
+  constraints: MediaTrackConstraints,
+  options?: { blur: number },
+): Promise<MediaStreamTrack> => {
+  const blurBackground = new BlurBackground(options);
+  await blurBackground.initialize();
+
+  const processedStream = await blurBackground.createProcessedStream({
+    constraints,
+  });
+  return processedStream.track ?? new MediaStreamTrack();
+};
+
+const getUserVideoTrackWithVirtualBackground = async (
+  constraints: MediaTrackConstraints,
+  options: { image: string | HTMLImageElement },
+): Promise<MediaStreamTrack> => {
+  const virtualBackground = new VirtualBackground(options);
+  await virtualBackground.initialize();
+
+  const processedStream = await virtualBackground.createProcessedStream({
+    constraints,
+  });
+  return processedStream.track ?? new MediaStreamTrack();
 };
 
 export const getDisplayVideoTrack = async (): Promise<MediaStreamTrack> => {
