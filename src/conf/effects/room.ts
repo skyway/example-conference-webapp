@@ -148,7 +148,7 @@ export const joinRoom = (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("onStreamPublished", publication);
-    subscribe(localRoomMember, publication);
+    subscribe(localRoomMember, publication, notification.showError);
   });
 
   // Subscribed時の対応
@@ -253,15 +253,24 @@ export const joinRoom = (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("subscribe published remote stream", publication);
-    subscribe(localRoomMember, publication);
+    subscribe(localRoomMember, publication, notification.showError);
   });
 };
 
 const subscribe = (
   localRoomMember: LocalRoomMember,
   publication: RoomPublication,
+  showError: (errorMessage: string) => void,
 ) => {
   log(`subscribe(${localRoomMember.id}, ${publication.id})`);
 
-  localRoomMember.subscribe(publication);
+  localRoomMember.subscribe(publication).catch((e) => {
+    switch (e.info.name) {
+      case "maxSubscribersExceededError":
+        showError(
+          "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
+        );
+        break;
+    }
+  });
 };
