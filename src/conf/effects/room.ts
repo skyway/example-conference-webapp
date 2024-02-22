@@ -7,6 +7,8 @@ import {
   LocalAudioStream,
   LocalVideoStream,
   LocalRoomMember,
+  LocalP2PRoomMember,
+  LocalSFURoomMember,
   RoomPublication,
 } from "@skyway-sdk/room";
 
@@ -40,12 +42,10 @@ export const joinRoom = async (store: RootStore) => {
 
   // publishする
   media.stream.getAudioTracks().forEach((track) => {
-    const stream = new LocalAudioStream(track);
-    localRoomMember.publish(stream);
+    publishAudio(localRoomMember, track);
   });
   media.stream.getVideoTracks().forEach((track) => {
-    const stream = new LocalVideoStream(track);
-    localRoomMember.publish(stream);
+    publishVideo(localRoomMember, track);
   });
 
   const confRoom = room.room;
@@ -95,8 +95,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // video OFF => ON
         videoTracks.forEach((track) => {
-          const stream = new LocalVideoStream(track);
-          localRoomMember.publish(stream);
+          publishVideo(localRoomMember, track);
         });
         return;
       }
@@ -131,8 +130,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // audio OFF => ON
         audioTracks.forEach((track) => {
-          const stream = new LocalAudioStream(track);
-          localRoomMember.publish(stream);
+          publishAudio(localRoomMember, track);
         });
         return;
       }
@@ -269,6 +267,34 @@ export const joinRoom = async (store: RootStore) => {
   });
 };
 
+const publishAudio = (
+  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  track: MediaStreamTrack,
+) => {
+  log(`publishAudio(${localRoomMember.id}, ${track.id})`);
+
+  const stream = new LocalAudioStream(track);
+  localRoomMember.publish(stream);
+};
+
+const publishVideo = (
+  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  track: MediaStreamTrack,
+) => {
+  log(`publishVideo(${localRoomMember.id}, ${track.id})`);
+
+  const stream = new LocalVideoStream(track);
+  localRoomMember.publish(stream, {
+    encodings:
+      localRoomMember.roomType === "sfu"
+        ? [
+            { scaleResolutionDownBy: 4, id: "low", maxBitrate: 100_000 },
+            { scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 },
+          ]
+        : [{ scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 }],
+  });
+};
+
 const subscribe = (
   localRoomMember: LocalRoomMember,
   publication: RoomPublication,
@@ -276,13 +302,20 @@ const subscribe = (
 ) => {
   log(`subscribe(${localRoomMember.id}, ${publication.id})`);
 
-  localRoomMember.subscribe(publication).catch((e) => {
-    switch (e.info.name) {
-      case "maxSubscribersExceededError":
-        showError(
-          "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
-        );
-        break;
-    }
-  });
+  localRoomMember
+    .subscribe(
+      publication,
+      publication.contentType === "video" && localRoomMember.roomType === "sfu"
+        ? { preferredEncodingId: "high" }
+        : undefined,
+    )
+    .catch((e) => {
+      switch (e.info.name) {
+        case "maxSubscribersExceededError":
+          showError(
+            "送信メディアの受信数が上限値を超えました。システム管理者に連絡してください。",
+          );
+          break;
+      }
+    });
 };
