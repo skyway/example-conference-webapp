@@ -53,7 +53,9 @@ export const joinRoom = (store: RootStore) => {
       () => ({ ...media.stat, ...client.stat }),
       (stat) => {
         log("reaction:send(stat)");
-        confRoom.send({ type: "stat", payload: stat });
+        localRoomMember.updateMetadata(
+          JSON.stringify({ type: "stat", payload: stat }),
+        );
       },
     ),
     reaction(
@@ -63,7 +65,9 @@ export const joinRoom = (store: RootStore) => {
           return;
         }
         log("reaction:send(chat)");
-        confRoom.send({ type: "chat", payload: chat });
+        localRoomMember.updateMetadata(
+          JSON.stringify({ type: "chat", payload: chat }),
+        );
       },
     ),
     reaction(
@@ -73,14 +77,21 @@ export const joinRoom = (store: RootStore) => {
           return;
         }
         log("reaction:send(reaction)");
-        confRoom.send({ type: "reaction", payload: reaction });
+        localRoomMember.updateMetadata(
+          JSON.stringify({ type: "reaction", payload: reaction }),
+        );
       },
     ),
     reaction(
       () => room.castRequestCount,
       () => {
         log("reaction:send(cast)");
-        confRoom.send({ type: "cast", payload: { from: client.displayName } });
+        localRoomMember.updateMetadata(
+          JSON.stringify({
+            type: "cast",
+            payload: { from: client.displayName },
+          }),
+        );
       },
     ),
     observe(media, "videoDeviceId", (change) => {
@@ -152,10 +163,12 @@ export const joinRoom = (store: RootStore) => {
     }
 
     // send back stat as welcome message
-    confRoom.send({
-      type: "stat",
-      payload: { ...client.stat, ...media.stat },
-    });
+    localRoomMember.updateMetadata(
+      JSON.stringify({
+        type: "stat",
+        payload: { ...client.stat, ...media.stat },
+      }),
+    );
   });
 
   // 退出時の処理
@@ -181,7 +194,11 @@ export const joinRoom = (store: RootStore) => {
     room.removeStream(peerId);
   });
 
-  confRoom.on("data", ({ src, data }) => {
+  confRoom.onMemberMetadataUpdated.add(({ member, metadata }) => {
+    const src = member.id;
+    if (src === localRoomMember.id) return;
+
+    const data = JSON.parse(metadata);
     const { type, payload }: RoomData = data;
 
     switch (type) {
