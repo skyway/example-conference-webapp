@@ -86,7 +86,7 @@ $ npm run build
 index.html
 index.bundle.js
 conference.html
-conf.bundle.js
+conference.bundle.js
 vendor.bundle.js
 image/
 ```
