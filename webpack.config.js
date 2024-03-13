@@ -16,7 +16,7 @@ const config = {
   context: rootPath,
   entry: {
     index: "./src/index/main.tsx",
-    conf: "./src/conf/main.tsx",
+    conf: "./src/conference/main.tsx",
   },
   output: {
     path: `${rootPath}/dist`,
