@@ -64,9 +64,10 @@ ${candidatePairs
   - ${videoInbounds.bytesReceived} bytes(${
     videoInbounds.packetsReceived
   } packets)
-  - PacketsLost: ${videoInbounds.packetsLost} / NACK: ${
-    videoInbounds.nackCount
-  } / FIR: ${videoInbounds.firCount} / PLI: ${videoInbounds.pliCount}
+  - PacketsLost: ${videoInbounds.packetsLost} /
+    NACK: ${videoInbounds.nackCount} /
+    FIR: ${videoInbounds.firCount} /
+    PLI: ${videoInbounds.pliCount}
 
 ## Details
 ${audioInbounds.items
@@ -84,9 +85,10 @@ ${videoInbounds.items
     `
 - Video ${idx + 1}: ${item.ssrc}
   - ${item.bytesReceived} bytes(${item.packetsReceived} packets)
-  - PacketsLost: ${item.packetsLost} / NACK: ${item.nackCount} / FIR: ${
-      item.firCount
-    } / PLI: ${item.pliCount}
+  - PacketsLost: ${item.packetsLost} /
+    NACK: ${item.nackCount} /
+    FIR: ${item.firCount} /
+    PLI: ${item.pliCount}
 `.trim(),
   )
   .join("\n")
