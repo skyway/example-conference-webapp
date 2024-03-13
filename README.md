@@ -88,7 +88,7 @@ index.bundle.js
 conference.html
 conference.bundle.js
 vendor.bundle.js
-image/
+images/
 ```
 
 注： SkyWay Conferenceで利用している`SkyWayStreamFactory`や`navigator.mediaDevices.getUserMedia`は、localhost以外のサイトでは、TLS/SSLにより保護されたサイトでしか利用できません。そのため、TLS/SSLにより保護されたサイトでお使い下さい。
