@@ -5,7 +5,7 @@ import RoomCreate from "./components/room-create";
 function App() {
   const effects = {
     enterConference(room: RoomInit) {
-      location.href = `./conf.html#!/${room.mode}/${room.id}`;
+      location.href = `./conference.html#!/${room.mode}/${room.id}`;
     },
   };
 
