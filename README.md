@@ -51,7 +51,7 @@ AUTH_TOKEN_SERVER=https://example.com/auth-token/
 
 サーバーは例として、[https://github.com/skyway/authentication-samples](https://github.com/skyway/authentication-samples)を参考にしてください。
 
-リクエスト方法やレスポンス形式が異なる場合は、[`src/conf/utils/skyway-auth-token.ts`](https://github.com/skyway/example-conference-webapp/blob/main/src/conf/utils/skyway-auth-token.ts)を修正してください。
+リクエスト方法やレスポンス形式が異なる場合は、[`src/conference/utils/skyway-auth-token.ts`](https://github.com/skyway/example-conference-webapp/blob/main/src/conference/utils/skyway-auth-token.ts)を修正してください。
 
 https://github.com/skyway/authentication-samples のサーバーアプリケーションをlocalhostで`npm start`した時の`.env`は以下のようになります。
 
@@ -93,7 +93,7 @@ images/
 
 注： SkyWay Conferenceで利用している`SkyWayStreamFactory`や`navigator.mediaDevices.getUserMedia`は、localhost以外のサイトでは、TLS/SSLにより保護されたサイトでしか利用できません。そのため、TLS/SSLにより保護されたサイトでお使い下さい。
 
-注： 公開サーバーにアップロードすると誰でも利用可能な状態になりますので、アクセス制限や認証を行って下さい。
+注： 公開サーバーにアップロードすると誰でも利用可能な状態になりますので、アクセス制限/認証して下さい。
 
 ## カスタマイズの参考情報
 
