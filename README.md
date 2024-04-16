@@ -4,7 +4,7 @@
 
 <p align="center"><img width="80%" alt="A ScreenShot of SkyWay Conference" src="https://github.com/skyway/example-conference-webapp/assets/85332716/0b4a25ee-9c41-4a3a-806e-03e8ac58e5f0"></p>
 
-## 前提条件
+## 📝 前提条件
 
 SkyWay Conferenceをご自身の環境で利用するためには、まずSkyWayに登録し、アプリケーションを作成する必要があります。SkyWayのアカウントをまだ持っていない場合は、以下のサイトから登録してください。
 
@@ -14,9 +14,9 @@ https://console.skyway.ntt.com/signup/
 
 [アプリケーションIDとシークレットキーの取得について、詳しくはこちら](https://skyway.ntt.com/ja/docs/user-guide/javascript-sdk/quickstart/#164)を参照してください。
 
-## ビルド方法
+## 🏗️ ビルド方法
 
-### 1. ソースコードのダウンロード
+### 1. ソースコードのダウンロード 📥
 
 - `git clone`コマンドを使用してソースコードをダウンロードする場合は、次のコマンドを実行します。
 
@@ -28,7 +28,7 @@ https://console.skyway.ntt.com/signup/
 
   - [https://github.com/skyway/example-conference-webapp/archive/master.zip](https://github.com/skyway/example-conference-webapp/archive/master.zip)
 
-### 2. SkyWay Auth Tokenを発行するサーバーの準備と設定
+### 2. SkyWay Auth Tokenを発行するサーバーの準備と設定 🔑
 
 SkyWayは、ユーザーが認証していないエンドユーザーによるSkyWayの不正利用を防ぐため、トークンベースの認証・認可機能を提供しています。 ユーザーは、自身が認証したエンドユーザーに対して適切な権限を付与したトークン（SkyWay Auth Token）を発行することで、エンドユーザーによるSkyWayの不正な利用を防ぐことができます。
 
@@ -59,7 +59,7 @@ https://github.com/skyway/authentication-samples のサーバーアプリケー�
 AUTH_TOKEN_SERVER=http://localhost:8080/authenticate
 ```
 
-### 3. ローカル環境での確認
+### 3. ローカル環境での確認 💻
 
 以下のコマンドを実行してください。
 
@@ -72,7 +72,7 @@ $ npm run dev
 
 [http://localhost:9000/](http://localhost:9000/)
 
-### 4. プロダクション環境へのデプロイ
+### 4. プロダクション環境へのデプロイ 🚀
 
 以下のコマンドで、プロダクション環境用にビルドします。
 
@@ -95,7 +95,7 @@ images/
 
 注： 公開サーバーにアップロードすると誰でも利用可能な状態になりますので、アクセス制限/認証して下さい。
 
-## カスタマイズの参考情報
+## 🛠️ カスタマイズの参考情報
 
 このWebアプリケーションは、ReactとMobXを使用してUI構築と状態管理し、Emotionでスタイル設定しています。
 
@@ -116,7 +116,7 @@ images/
 | `src/*/effects/`    | アプリケーションの状態を変更するActionを格納しているディレクトリです。 |
 | `src/*/utils/`      | ユーティリティ関数を格納しているディレクトリです。 |
 
-## 動作環境
+## 🖥️ 動作環境
 
 SkyWay Conferenceは、以下のブラウザで動作します。
 - Google Chrome（最新の安定版）
@@ -134,7 +134,7 @@ Android Chrome、Mobile Safari(iOS,iPadOS)でも利用可能ですが、画面UI
 
 原則として、このリポジトリに対してのIssueやPull Requestには対応しません。不具合修正や機能追加を行いたい場合は、ご自身でリポジトリをForkして行ってください。
 
-## License / Copyright
+## 📜 License / Copyright
 
 [MIT License](./LICENSE)  
 Copyright (c) 2024- NTT Communications Corp.
