@@ -21,7 +21,7 @@ https://console.skyway.ntt.com/signup/
 - `git clone`コマンドを使用してソースコードをダウンロードする場合は、次のコマンドを実行します。
 
   - ```shell
-    $ git clone https://github.com/skyway/example-conference-webapp.git
+    git clone https://github.com/skyway/example-conference-webapp.git
     ```
 
 - ZIP形式でソースコードをダウンロードする場合は、以下のURLからダウンロードします。
@@ -64,8 +64,8 @@ AUTH_TOKEN_SERVER=http://localhost:8080/authenticate
 以下のコマンドを実行してください。
 
 ```shell
-$ npm ci
-$ npm run dev
+npm ci
+npm run dev
 ```
 
 ブラウザで次のURLにアクセスして、動作を確認できます。
@@ -77,7 +77,7 @@ $ npm run dev
 以下のコマンドで、プロダクション環境用にビルドします。
 
 ```shell
-$ npm run build
+npm run build
 ```
 
 `dist`フォルダ内に、ビルドによって生成されたファイルが保存されます。以下のファイルをご自身が管理しているサーバーにアップロードしてください。
