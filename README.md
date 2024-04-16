@@ -1,8 +1,8 @@
 # SkyWay Conference
 
-[SkyWay](https://skyway.ntt.com/)を利用した[Web会議アプリケーション「SkyWay Conference」](https://conf.demo.skyway.ntt.com/)のソースコードです。
+[SkyWay](https://skyway.ntt.com/)を利用した[Web会議アプリケーション「SkyWay Conference」](https://conf.demo.skyway.ntt.com/)のソースコードです。 [![License][license-image]][license-url]
 
-[![License][license-image]][license-url]
+<p align="center"><img width="80%" alt="A ScreenShot of SkyWay Conference" src="https://github.com/skyway/example-conference-webapp/assets/85332716/0b4a25ee-9c41-4a3a-806e-03e8ac58e5f0"></p>
 
 ## 前提条件
 
