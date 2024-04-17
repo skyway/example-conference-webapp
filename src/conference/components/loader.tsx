@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 function Loader() {
-  return <img css={wrapperStyle} src="./images/conf/icon-loading.svg" />;
+  return <img css={wrapperStyle} src="./images/conference/icon-loading.svg" />;
 }
 
 export default Loader;

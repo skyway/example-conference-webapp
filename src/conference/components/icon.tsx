@@ -24,10 +24,10 @@ export function BrowserIcon({ name, version }: ClientBrowser) {
     case "Chrome":
     case "Firefox":
     case "Safari":
-      src = `./images/conf/icon-${name.toLowerCase()}.svg`;
+      src = `./images/conference/icon-${name.toLowerCase()}.svg`;
       break;
     case "Microsoft Edge":
-      src = "./images/conf/icon-edge.svg";
+      src = "./images/conference/icon-edge.svg";
       break;
   }
 
