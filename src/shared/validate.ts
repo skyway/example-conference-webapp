@@ -1,3 +1,4 @@
+export const errorMessageForInvalidRoomType = `Invalid room type! it should be 'SFU' or 'P2P'.`;
 export const isValidRoomType = (type: string): boolean => {
   if (type === "SFU" || type === "P2P") {
     return true;
@@ -12,8 +13,11 @@ export const isValidRoomType = (type: string): boolean => {
 // > Number of characters: 1~128 characters (0 characters are not allowed)
 // - 4 characters or more to reduce the possibility of unexpected users using the same Room Id
 // - 120 characters or less to be added prefix 'P2P_' or 'SFU_'
+const minRoomNameLength = 4;
 export const maxRoomNameLength = 120;
-export const roomIdRe = "^[a-zA-Z0-9-._%]{4,120}$";
-export const isValidRoomId = (name: string): boolean => {
-  return new RegExp(roomIdRe).test(name);
+export const messageForValidRoomName = `${minRoomNameLength}~${maxRoomNameLength} characters of half-width alphanumeric, '-', '.', '_', '%'.`;
+export const errorMessageForInvalidRoomName = `Invalid room name! it should be ${messageForValidRoomName}`;
+export const roomNameRegex = `^[a-zA-Z0-9-._%]{${minRoomNameLength},${maxRoomNameLength}}$`;
+export const isValidRoomName = (name: string): boolean => {
+  return new RegExp(roomNameRegex).test(name);
 };
