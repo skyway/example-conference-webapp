@@ -2,9 +2,10 @@ import { useState } from "react";
 import { css } from "@emotion/react";
 import { globalColors } from "../../shared/global-style";
 import {
-  maxRoomIdLength,
-  roomIdRe,
-  isValidRoomId,
+  isValidRoomName,
+  roomNameRegex,
+  maxRoomNameLength,
+  messageForValidRoomName,
 } from "../../shared/validate";
 import { RoomInit } from "../utils/types";
 
@@ -12,34 +13,34 @@ interface Props {
   onSubmit: (init: RoomInit) => void;
 }
 function RoomCreate(props: Props) {
-  const [roomId, setRoomId] = useState("");
   const [roomType, setRoomType] = useState("SFU");
-  const [isRoomIdValid, setRoomIdValid] = useState(true);
+  const [roomName, setRoomName] = useState("");
+  const [isRoomNameValid, setRoomNameValid] = useState(true);
 
   return (
     <form
       css={wrapperStyle}
       onSubmit={(ev) => {
         ev.preventDefault();
-        props.onSubmit({ mode: roomType as RoomInit["mode"], id: roomId });
+        props.onSubmit({ mode: roomType as RoomInit["mode"], id: roomName });
       }}
     >
       <div css={itemStyle}>
-        <div>ROOM ID</div>
+        <div>ROOM NAME</div>
         <input
           type="text"
-          value={roomId}
+          value={roomName}
           placeholder="room-name"
-          onChange={(ev) => setRoomId(ev.target.value)}
-          onBlur={() => setRoomIdValid(isValidRoomId(roomId))}
+          onChange={(ev) => setRoomName(ev.target.value)}
+          onBlur={() => setRoomNameValid(isValidRoomName(roomName))}
           required
-          maxLength={maxRoomIdLength}
-          pattern={roomIdRe}
-          css={roomIdStyle}
+          maxLength={maxRoomNameLength}
+          pattern={roomNameRegex}
+          css={roomNameStyle}
         />
       </div>
       <span css={tipStyle}>
-        {isRoomIdValid ? "" : "half width, 4~16 characters are required!"}
+        {isRoomNameValid ? "" : messageForValidRoomName}
       </span>
 
       <div css={itemStyle}>
@@ -64,7 +65,7 @@ function RoomCreate(props: Props) {
         <button
           css={createButtonStyle}
           type="submit"
-          disabled={!isValidRoomId(roomId)}
+          disabled={!isValidRoomName(roomName)}
         >
           CREATE ROOM
         </button>
@@ -85,12 +86,13 @@ const wrapperStyle = css({
 const itemStyle = css({
   display: "grid",
   alignItems: "center",
-  gridTemplateColumns: "88px 1fr",
+  gridTemplateColumns: "100px 1fr",
   height: 40,
   marginBottom: 4,
+  textAlign: "left",
 });
 
-const roomIdStyle = css({
+const roomNameStyle = css({
   width: "100%",
   boxSizing: "border-box",
   appearance: "none",

@@ -1,9 +1,10 @@
 import { toJS, reaction, observe } from "mobx";
 import debug from "debug";
 import {
-  isValidRoomId,
   isValidRoomType,
-  roomIdRe,
+  errorMessageForInvalidRoomType,
+  isValidRoomName,
+  errorMessageForInvalidRoomName,
 } from "../../shared/validate";
 import { getUserDevices, getUserAudioTrack } from "../utils/webrtc";
 import {
@@ -20,20 +21,14 @@ const log = debug("effect:bootstrap");
 
 export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   log("checkRoomSetting()");
-  const [, roomType, roomId] = location.hash.split("/");
+  const [, roomType, roomName] = location.hash.split("/");
   const params = new URLSearchParams(location.search);
 
   if (!isValidRoomType(roomType)) {
-    throw ui.showError(
-      new Error("Invalid room type! it should be `SFU` or `P2P`."),
-    );
+    throw ui.showError(new Error(errorMessageForInvalidRoomType));
   }
-  if (!isValidRoomId(roomId)) {
-    throw ui.showError(
-      new Error(
-        `Invalid room name! it should be match \`${roomIdRe.toString()}\`.`,
-      ),
-    );
+  if (!isValidRoomName(roomName)) {
+    throw ui.showError(new Error(errorMessageForInvalidRoomName));
   }
 
   const handleGetTokenError = (err: Error) => {
@@ -60,12 +55,12 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
   };
 
   (async () => {
-    const roomName = `${roomType}_${roomId}`;
+    const rtcRoomName = `${roomType}_${roomName}`;
     const memberName = generateMemberNameInRtcRoom();
 
     const rtcContext = await initRtcContext(
       roomType,
-      roomName,
+      rtcRoomName,
       memberName,
       getToken,
       handleGetTokenError,
@@ -75,7 +70,7 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
     });
     if (rtcContext === null) return;
 
-    const rtcRoom = await initRtcRoom(rtcContext, roomType, roomName).catch(
+    const rtcRoom = await initRtcRoom(rtcContext, roomType, rtcRoomName).catch(
       (err) => {
         throw ui.showError(err);
       },
@@ -86,14 +81,14 @@ export const checkRoomSetting = ({ ui, room, notification }: RootStore) => {
     room.load(
       {
         mode: roomType as RoomInit["mode"],
-        id: roomId,
+        id: rtcRoomName,
         useH264: params.has("h264"),
       },
       rtcRoom,
       memberName,
     );
 
-    log(`room: ${roomType}/${roomId}`);
+    log(`room: ${roomType}/${rtcRoomName}`);
   })();
 };
 
