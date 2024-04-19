@@ -86,9 +86,10 @@ const wrapperStyle = css({
 const itemStyle = css({
   display: "grid",
   alignItems: "center",
-  gridTemplateColumns: "88px 1fr",
+  gridTemplateColumns: "100px 1fr",
   height: 40,
   marginBottom: 4,
+  textAlign: "left",
 });
 
 const roomNameStyle = css({
