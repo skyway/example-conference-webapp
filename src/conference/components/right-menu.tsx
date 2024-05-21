@@ -42,7 +42,7 @@ const wrapperStyle = css({
   right: 0,
   bottom: 0,
   zIndex: zIndex.base,
-  width: wrapperWidth,
+  width: `calc(${wrapperWidth} - 15px)`,
   backgroundColor: globalColors.gray,
   height: "100%",
   transition: ".25s ease transform",
