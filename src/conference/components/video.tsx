@@ -23,8 +23,8 @@ function Video({ stream, isReverse = false, isVideoOnly = false }: Props) {
     }
 
     log("useEffect(): assign and play stream for video");
-    $video.srcObject !== stream && ($video.srcObject = stream);
-    $video.paused && $video.play();
+    if ($video.srcObject !== stream) $video.srcObject = stream;
+    if ($video.paused) $video.play();
   }, [isNoVideo, videoRef, log, stream]);
   useEffect(() => {
     const $audio = audioRef.current;
@@ -33,8 +33,8 @@ function Video({ stream, isReverse = false, isVideoOnly = false }: Props) {
     }
 
     log("useEffect(): assign and play stream for audio");
-    $audio.srcObject !== stream && ($audio.srcObject = stream);
-    $audio.paused && $audio.play();
+    if ($audio.srcObject !== stream) $audio.srcObject = stream;
+    if ($audio.paused) $audio.play();
   }, [isNoAudio, isVideoOnly, audioRef, log, stream]);
 
   log("render()", [...stream.getTracks()]);
