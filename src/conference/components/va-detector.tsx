@@ -1,8 +1,6 @@
 import { useState, useEffect, memo } from "react";
 import { css } from "@emotion/react";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const hark = require("hark") as Hark;
-import { Hark } from "../utils/types";
+import hark from "hark";
 import { globalColors } from "../../shared/global-style";
 
 interface Props {
