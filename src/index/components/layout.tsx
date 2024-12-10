@@ -18,12 +18,24 @@ function Layout({ children }: Props) {
       </p>
       <a
         css={logoStyle}
-        href="https://webrtc.ecl.ntt.com/"
+        href="https://skyway.ntt.com/"
         target="_blank"
         rel="noopener noreferrer"
       >
         <img src="./images/logo.svg" alt="SkyWay" />
       </a>
+      <div css={navCodeStyle}>
+        <a
+          css={githubLinkStyle}
+          href="https://github.com/skyway/example-conference-webapp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {`View source code on `}
+          <img src="./images/index/GitHub_Logo.png" />
+          <img src="./images/index/github-mark.svg" />
+        </a>
+      </div>
     </div>
   );
 }
@@ -63,9 +75,30 @@ const pStyle = css({
 
 const logoStyle = css({
   position: "absolute",
-  bottom: 4,
+  bottom: 24,
   right: 10,
+
   "& > img": {
     height: 60,
+  },
+});
+
+const navCodeStyle = css({
+  position: "absolute",
+  bottom: 0,
+
+  backgroundColor: globalColors.white,
+  width: "100vw",
+
+  display: "flex",
+  justifyContent: "center",
+});
+
+const githubLinkStyle = css({
+  display: "flex",
+  alignItems: "center",
+
+  "& > img": {
+    height: 20,
   },
 });
