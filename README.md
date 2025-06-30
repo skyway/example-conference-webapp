@@ -137,7 +137,7 @@ Android Chrome、Mobile Safari(iOS,iPadOS)でも利用可能ですが、画面UI
 ## 📜 License / Copyright
 
 [MIT License](./LICENSE)  
-Copyright (c) 2024- NTT Communications Corp.
+Copyright (c) 2024- NTT DOCOMO BUSINESS, Inc.
 
 ソフトウェアの一部に [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) のソフトウェアが含まれています。
 
