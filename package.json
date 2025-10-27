@@ -38,7 +38,7 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@emotion/react": "^11.14.0",
-    "@skyway-sdk/room": "^1.15.2",
+    "@skyway-sdk/room": "^2.0.0",
     "bowser": "^2.12.1",
     "debug": "^4.4.3",
     "dotenv-flow": "^4.1.0",
