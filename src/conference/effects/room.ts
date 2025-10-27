@@ -189,7 +189,7 @@ export const joinRoom = async (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("onStreamPublished", publication);
-    subscribe(localRoomMember, publication, showError);
+    subscribe(localRoomMember, publication, room.mode, showError);
   });
 
   // Subscribed時の対応
@@ -294,7 +294,7 @@ export const joinRoom = async (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("subscribe published remote stream", publication);
-    subscribe(localRoomMember, publication, showError);
+    subscribe(localRoomMember, publication, room.mode, showError);
   });
 };
 
@@ -339,6 +339,7 @@ const publishVideo = (
 const subscribe = (
   localRoomMember: LocalRoomMember,
   publication: RoomPublication,
+  mode: RoomInit["mode"] | null,
   showError: (errorMessage: string) => void,
 ) => {
   log(`subscribe(${localRoomMember.id}, ${publication.id})`);
@@ -346,7 +347,7 @@ const subscribe = (
   localRoomMember
     .subscribe(
       publication,
-      publication.contentType === "video" && localRoomMember.roomType === "sfu"
+      publication.contentType === "video" && mode === "SFU"
         ? { preferredEncodingId: "high" }
         : undefined,
     )
