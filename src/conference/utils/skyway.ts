@@ -91,12 +91,11 @@ function createConfigOption(logLevel: LogLevel) {
     rtcConfig: {
       turnPolicy: "enable",
       turnProtocol: "all",
-      encodedInsertableStreams: false,
       timeout: 30000,
       iceDisconnectBufferTimeout: 5000,
     },
     token: {
-      updateReminderSec: 30,
+      updateRemindSec: 30,
     },
     member: {
       keepaliveIntervalSec: 30,
