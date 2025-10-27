@@ -2,7 +2,7 @@ import { makeObservable, observable, computed, action } from "mobx";
 import { RoomInit, RoomStat } from "../utils/types";
 import {
   P2PRoom,
-  SfuRoom,
+  SFURoom,
   RemoteAudioStream,
   RemoteVideoStream,
   LocalP2PRoomMember,
@@ -14,7 +14,7 @@ class RoomStore {
   memberName: string | null;
   member: LocalP2PRoomMember | LocalSFURoomMember | null;
   isReady: boolean;
-  room: P2PRoom | SfuRoom | null;
+  room: P2PRoom | SFURoom | null;
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
@@ -84,7 +84,7 @@ class RoomStore {
 
   load(
     { mode, id, useH264 }: RoomInit,
-    skywayRoom: P2PRoom | SfuRoom,
+    skywayRoom: P2PRoom | SFURoom,
     memberName: string,
   ) {
     this.mode = mode;
