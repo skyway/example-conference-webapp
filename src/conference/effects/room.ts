@@ -7,8 +7,6 @@ import {
   LocalAudioStream,
   LocalVideoStream,
   LocalRoomMember,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
   RoomPublication,
 } from "@skyway-sdk/room";
 
@@ -301,7 +299,7 @@ export const joinRoom = async (store: RootStore) => {
 };
 
 const publishAudio = (
-  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  localRoomMember: LocalRoomMember,
   track: MediaStreamTrack,
 ) => {
   log(`publishAudio(${localRoomMember.id}, ${track.id})`);
@@ -311,7 +309,7 @@ const publishAudio = (
 };
 
 const publishVideo = (
-  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  localRoomMember: LocalRoomMember,
   track: MediaStreamTrack,
 ) => {
   log(`publishVideo(${localRoomMember.id}, ${track.id})`);

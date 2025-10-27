@@ -1,7 +1,6 @@
 import {
   Room,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
+  LocalRoomMember,
   SkyWayContext,
   SkyWayRoom,
   uuidV4,
@@ -60,7 +59,7 @@ export const initRtcRoom = async (
 export const joinRtcRoom = async (
   room: Room,
   memberName: string,
-): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
+): Promise<LocalRoomMember | null> => {
   return room.join({ name: memberName });
 };
 

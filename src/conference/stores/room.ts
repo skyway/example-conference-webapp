@@ -4,14 +4,13 @@ import {
   Room,
   RemoteAudioStream,
   RemoteVideoStream,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
+  LocalRoomMember,
   WebRTCStats,
 } from "@skyway-sdk/room";
 
 class RoomStore {
   memberName: string | null;
-  member: LocalP2PRoomMember | LocalSFURoomMember | null;
+  member: LocalRoomMember | null;
   isReady: boolean;
   room: Room | null;
   mode: RoomInit["mode"] | null;
@@ -90,7 +89,7 @@ class RoomStore {
     this.isReady = true;
   }
 
-  loadMember(member: LocalP2PRoomMember | LocalSFURoomMember) {
+  loadMember(member: LocalRoomMember) {
     this.member = member;
   }
 
