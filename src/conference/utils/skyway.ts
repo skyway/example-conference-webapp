@@ -1,7 +1,5 @@
 import {
-  RoomType,
-  P2PRoom,
-  SFURoom,
+  Room,
   LocalP2PRoomMember,
   LocalSFURoomMember,
   SkyWayContext,
@@ -52,17 +50,15 @@ export const initRtcRoom = async (
   context: SkyWayContext,
   _roomType: string,
   roomName: string,
-): Promise<P2PRoom | SFURoom | null> => {
-  const roomType: RoomType = _roomType === "SFU" ? "sfu" : "p2p";
-
+): Promise<Room | null> => {
   return SkyWayRoom.FindOrCreate(context, {
-    type: roomType,
+    type: "default",
     name: roomName,
   });
 };
 
 export const joinRtcRoom = async (
-  room: P2PRoom | SFURoom,
+  room: Room,
   memberName: string,
 ): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
   return room.join({ name: memberName });
