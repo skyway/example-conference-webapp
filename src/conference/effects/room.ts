@@ -1,14 +1,12 @@
 import debug from "debug";
 import { reaction, observe } from "mobx";
-import { RoomData, RoomStat, RoomCast } from "../utils/types";
+import { RoomData, RoomStat, RoomCast, RoomInit } from "../utils/types";
 import { joinRtcRoom } from "../utils/skyway";
 import RootStore from "../stores";
 import {
   LocalAudioStream,
   LocalVideoStream,
   LocalRoomMember,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
   RoomPublication,
 } from "@skyway-sdk/room";
 
@@ -42,10 +40,10 @@ export const joinRoom = async (store: RootStore) => {
 
   // publishする
   media.stream.getAudioTracks().forEach((track) => {
-    publishAudio(localRoomMember, track);
+    publishAudio(localRoomMember, track, room.mode);
   });
   media.stream.getVideoTracks().forEach((track) => {
-    publishVideo(localRoomMember, track);
+    publishVideo(localRoomMember, track, room.mode);
   });
 
   const confRoom = room.room;
@@ -95,7 +93,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // video OFF => ON
         videoTracks.forEach((track) => {
-          publishVideo(localRoomMember, track);
+          publishVideo(localRoomMember, track, room.mode);
         });
         return;
       }
@@ -163,7 +161,7 @@ export const joinRoom = async (store: RootStore) => {
       if (change.oldValue === null && change.newValue !== null) {
         // audio OFF => ON
         audioTracks.forEach((track) => {
-          publishAudio(localRoomMember, track);
+          publishAudio(localRoomMember, track, room.mode);
         });
         return;
       }
@@ -191,7 +189,7 @@ export const joinRoom = async (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("onStreamPublished", publication);
-    subscribe(localRoomMember, publication, showError);
+    subscribe(localRoomMember, publication, room.mode, showError);
   });
 
   // Subscribed時の対応
@@ -296,41 +294,52 @@ export const joinRoom = async (store: RootStore) => {
     if (publication.publisher.id === localRoomMember.id) return;
 
     log("subscribe published remote stream", publication);
-    subscribe(localRoomMember, publication, showError);
+    subscribe(localRoomMember, publication, room.mode, showError);
   });
 };
 
 const publishAudio = (
-  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  localRoomMember: LocalRoomMember,
   track: MediaStreamTrack,
+  mode: RoomInit["mode"] | null,
 ) => {
   log(`publishAudio(${localRoomMember.id}, ${track.id})`);
 
   const stream = new LocalAudioStream(track);
-  localRoomMember.publish(stream);
+  localRoomMember.publish(stream, { type: mode === "SFU" ? "sfu" : "p2p" });
 };
 
 const publishVideo = (
-  localRoomMember: LocalP2PRoomMember | LocalSFURoomMember,
+  localRoomMember: LocalRoomMember,
   track: MediaStreamTrack,
+  mode: RoomInit["mode"] | null,
 ) => {
   log(`publishVideo(${localRoomMember.id}, ${track.id})`);
 
   const stream = new LocalVideoStream(track);
-  localRoomMember.publish(stream, {
-    encodings:
-      localRoomMember.roomType === "sfu"
-        ? [
+  localRoomMember.publish(
+    stream,
+    mode === "SFU"
+      ? {
+          type: "sfu",
+          encodings: [
             { scaleResolutionDownBy: 4, id: "low", maxBitrate: 100_000 },
             { scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 },
-          ]
-        : [{ scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 }],
-  });
+          ],
+        }
+      : {
+          type: "p2p",
+          encodings: [
+            { scaleResolutionDownBy: 1, id: "high", maxBitrate: 400_000 },
+          ],
+        },
+  );
 };
 
 const subscribe = (
   localRoomMember: LocalRoomMember,
   publication: RoomPublication,
+  mode: RoomInit["mode"] | null,
   showError: (errorMessage: string) => void,
 ) => {
   log(`subscribe(${localRoomMember.id}, ${publication.id})`);
@@ -338,7 +347,7 @@ const subscribe = (
   localRoomMember
     .subscribe(
       publication,
-      publication.contentType === "video" && localRoomMember.roomType === "sfu"
+      publication.contentType === "video" && mode === "SFU"
         ? { preferredEncodingId: "high" }
         : undefined,
     )

@@ -1,20 +1,18 @@
 import { makeObservable, observable, computed, action } from "mobx";
 import { RoomInit, RoomStat } from "../utils/types";
 import {
-  P2PRoom,
-  SfuRoom,
+  Room,
   RemoteAudioStream,
   RemoteVideoStream,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
+  LocalRoomMember,
   WebRTCStats,
 } from "@skyway-sdk/room";
 
 class RoomStore {
   memberName: string | null;
-  member: LocalP2PRoomMember | LocalSFURoomMember | null;
+  member: LocalRoomMember | null;
   isReady: boolean;
-  room: P2PRoom | SfuRoom | null;
+  room: Room | null;
   mode: RoomInit["mode"] | null;
   id: RoomInit["id"] | null;
   useH264: RoomInit["useH264"];
@@ -82,11 +80,7 @@ class RoomStore {
     return this.streams.get(this.pinnedMemberId) || null;
   }
 
-  load(
-    { mode, id, useH264 }: RoomInit,
-    skywayRoom: P2PRoom | SfuRoom,
-    memberName: string,
-  ) {
+  load({ mode, id, useH264 }: RoomInit, skywayRoom: Room, memberName: string) {
     this.mode = mode;
     this.id = id;
     this.useH264 = useH264;
@@ -95,7 +89,7 @@ class RoomStore {
     this.isReady = true;
   }
 
-  loadMember(member: LocalP2PRoomMember | LocalSFURoomMember) {
+  loadMember(member: LocalRoomMember) {
     this.member = member;
   }
 

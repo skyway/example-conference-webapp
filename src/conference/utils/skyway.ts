@@ -1,9 +1,6 @@
 import {
-  RoomType,
-  P2PRoom,
-  SfuRoom,
-  LocalP2PRoomMember,
-  LocalSFURoomMember,
+  Room,
+  LocalRoomMember,
   SkyWayContext,
   SkyWayRoom,
   uuidV4,
@@ -52,19 +49,17 @@ export const initRtcRoom = async (
   context: SkyWayContext,
   _roomType: string,
   roomName: string,
-): Promise<P2PRoom | SfuRoom | null> => {
-  const roomType: RoomType = _roomType === "SFU" ? "sfu" : "p2p";
-
+): Promise<Room | null> => {
   return SkyWayRoom.FindOrCreate(context, {
-    type: roomType,
+    type: "default",
     name: roomName,
   });
 };
 
 export const joinRtcRoom = async (
-  room: P2PRoom | SfuRoom,
+  room: Room,
   memberName: string,
-): Promise<LocalP2PRoomMember | LocalSFURoomMember | null> => {
+): Promise<LocalRoomMember | null> => {
   return room.join({ name: memberName });
 };
 
@@ -91,12 +86,11 @@ function createConfigOption(logLevel: LogLevel) {
     rtcConfig: {
       turnPolicy: "enable",
       turnProtocol: "all",
-      encodedInsertableStreams: false,
       timeout: 30000,
       iceDisconnectBufferTimeout: 5000,
     },
     token: {
-      updateReminderSec: 30,
+      updateRemindSec: 30,
     },
     member: {
       keepaliveIntervalSec: 30,
