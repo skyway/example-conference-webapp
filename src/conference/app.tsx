@@ -11,13 +11,21 @@ import ErrorDetail from "./components/error-detail";
 import Main from "./components/main";
 import LeftBottom from "./components/left-bottom";
 import RightMenu from "./components/right-menu";
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 
 function App() {
-  function fallbackRender({ error }: { error: Error }) {
+  function fallbackRender({ error }: FallbackProps) {
+    if (error instanceof Error) {
+      return (
+        <Layout>
+          <ErrorDetail error={error} />
+        </Layout>
+      );
+    }
+
     return (
       <Layout>
-        <ErrorDetail error={error} />
+        <ErrorDetail error={new Error("Unknown error")} />
       </Layout>
     );
   }
