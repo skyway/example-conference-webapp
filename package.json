@@ -5,41 +5,42 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --mode=production",
-    "lint": "eslint --ext .ts,.tsx . && tsc --project . --noEmit"
+    "lint": "eslint . && tsc --project . --noEmit"
   },
   "author": "NTT DOCOMO BUSINESS, Inc.",
   "license": "MIT",
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^11.12.0",
+    "@eslint/js": "^10.0.1",
     "@types/debug": "^4.1.13",
     "@types/hark": "^1.2.5",
-    "@types/node": "^24.13.3",
+    "@types/node": "^24.19.2",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
-    "@types/sdp-transform": "^2.15.0",
+    "@types/sdp-transform": "^3.0.0",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.67.0",
-    "@typescript-eslint/parser": "^8.67.0",
     "babel-loader": "^10.1.1",
     "copy-webpack-plugin": "^14.0.0",
-    "eslint": "^8.57.1",
+    "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "prettier": "^3.9.6",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
     "typescript": "^5.9.3",
-    "webpack": "^5.109.2",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.6"
+    "typescript-eslint": "^8.73.0",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1",
+    "webpack-dev-server": "^6.1.0"
   },
   "dependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^7.29.13",
     "@babel/preset-react": "^7.29.7",
     "@babel/preset-typescript": "^7.29.7",
     "@emotion/react": "^11.14.0",
-    "@skyway-sdk/room": "^2.5.1",
-    "bowser": "^2.14.1",
+    "@skyway-sdk/room": "^2.5.2",
+    "bowser": "^2.15.0",
     "debug": "^4.4.3",
     "dotenv-flow": "^4.1.0",
     "hark": "^1.2.3",
@@ -47,7 +48,7 @@
     "mobx-react": "^9.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-error-boundary": "^6.1.2",
+    "react-error-boundary": "^6.1.6",
     "skyway-video-processors": "^1.1.0"
   },
   "babel": {
@@ -56,5 +57,10 @@
       "@babel/preset-typescript",
       "@emotion/babel-preset-css-prop"
     ]
+  },
+  "overrides": {
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    }
   }
 }
